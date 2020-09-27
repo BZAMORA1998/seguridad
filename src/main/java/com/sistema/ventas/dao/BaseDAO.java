@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.persistence.*;
 
+import com.sistema.ventas.model.UsuarioSistema;
+
 import lombok.NonNull;
 
 public abstract class BaseDAO<T, K> {
@@ -31,5 +33,4 @@ public abstract class BaseDAO<T, K> {
 		T t = em.find(clazz, id);
 		return Optional.ofNullable(t);
 	}
-	
 }
