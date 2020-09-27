@@ -23,7 +23,7 @@ public class SeguridadUtil {
 	public static String[] obtenerBasicAuth(String strAuthorization, String strTipoAuth) throws BOException {
 		String[] values = null;
 		// VALIDA TIPO DE AUTORIZACION = BASIC
-		if (strTipoAuth == AuthenticationScheme.BASIC.toString()) {
+		if (strTipoAuth.equalsIgnoreCase(AuthenticationScheme.BASIC.toString())) {
 			try {
 				// DECODIFICA EL STRING BASE64
 				String base64Credentials = strAuthorization.substring(AuthenticationScheme.BASIC.toString().length()).trim();
@@ -37,10 +37,10 @@ public class SeguridadUtil {
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, null, e);
 				// ERROR AL DECODIFICAR LAS CREDENCIALES
-				throw new BOException("seg.error.errorDecodeAuth");
+				throw new BOException("ven.error.errorDecodeAuth");
 			}
 		}
 		// TIPO DE AUTORIZACION NO SOPORTADA
-		throw new BOException("seg.warn.tipoAutorizacionNoSoportada");
+		throw new BOException("ven.warn.tipoAutorizacionNoSoportada");
 	}
 }

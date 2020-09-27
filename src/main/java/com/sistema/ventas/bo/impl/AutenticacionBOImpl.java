@@ -2,6 +2,8 @@ package com.sistema.ventas.bo.impl;
 
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sistema.ventas.bo.IAutenticacionBO;
@@ -20,6 +22,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 	private UsuarioSistemaDAO objUsuarioSistemaDAO;
 	
 	@Override
+	@Transactional
 	public AutenticacionDTO login(String strBasic, String strApplication) throws BOException {
 
 		String[] strAuth=SeguridadUtil.obtenerBasicAuth(strBasic,AuthenticationScheme.BASIC.name());
@@ -27,16 +30,22 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		
 		UsuarioSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
 		
-		if(objUsuario!=null && strAuth[1].equals(/*GeneralUtil.decodificaBase64(*/objUsuario.getContraseña())) {
+		if(objUsuario==null)
+			throw new BOException("ven.warn.usuarioIncorrecto", new Object[] {strAuth[0]});
+		
+		if(objUsuario!=null && strAuth[1].equals(GeneralUtil.decodificaBase64(objUsuario.getContraseña()))) {
 			String strToken=UUID.randomUUID().toString();
 			objUsuario.setToken(strToken);
 			objUsuarioSistemaDAO.update(objUsuario);
 			
 			objAut=new AutenticacionDTO();
+			objAut.setSecuenciaSistemaUsuario(objUsuario.getSecuenciaUsuarioSistema());
 			objAut.setPrimerApellido(objUsuario.getPersona().getPrimerApellido());
 			objAut.setPrimerNombre(objUsuario.getPersona().getPrimerNombre());
-			objAut.setPrimerNombre(objUsuario.getPersona().getPrimerNombre());
+			objAut.setUsuario(objUsuario.getUsuario());
 			objAut.setToken(strToken);
+		}else {
+			throw new BOException("ven.warn.usuarioIncorrecto");
 		}
 		
 		return objAut;

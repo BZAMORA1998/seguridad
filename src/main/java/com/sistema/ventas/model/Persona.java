@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "USUARIO_SISTEMA")
+@Table(name = "PERSONA")
 public class Persona implements Serializable {
 
 	private static final long serialVersionUID = 1L;

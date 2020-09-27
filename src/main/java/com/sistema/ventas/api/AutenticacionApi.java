@@ -45,6 +45,7 @@ public class AutenticacionApi {
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					objLogin), HttpStatus.OK);
 		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(null));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 		

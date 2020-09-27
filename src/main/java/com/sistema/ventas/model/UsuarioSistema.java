@@ -46,6 +46,6 @@ public class UsuarioSistema  implements Serializable {
 	 private String token;
 	
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "SECUENCIA_PERSONA", referencedColumnName = "SECUENCIA_PERSONA", insertable = true, updatable = true)
+	@JoinColumn(name = "SECUENCIA_PERSONA", referencedColumnName = "SECUENCIA_PERSONA")
 	private Persona persona;
 }

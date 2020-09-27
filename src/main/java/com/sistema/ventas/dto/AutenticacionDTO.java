@@ -11,5 +11,6 @@ public class AutenticacionDTO {
 	private Integer secuenciaSistemaUsuario;
 	private String primerNombre;
 	private String primerApellido;
+	private String usuario;
 	private String token;
 }
