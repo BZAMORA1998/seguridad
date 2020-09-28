@@ -31,7 +31,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		UsuarioSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
 		
 		if(objUsuario==null)
-			throw new BOException("ven.warn.usuarioIncorrecto", new Object[] {strAuth[0]});
+			throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strAuth[0]});
 		
 		if(objUsuario!=null && strAuth[1].equals(GeneralUtil.decodificaBase64(objUsuario.getContraseña()))) {
 			String strToken=UUID.randomUUID().toString();
