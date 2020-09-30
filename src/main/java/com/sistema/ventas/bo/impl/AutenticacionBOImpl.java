@@ -23,8 +23,8 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 	
 	@Override
 	@Transactional
-	public AutenticacionDTO login(String strBasic, String strApplication) throws BOException {
-
+	public AutenticacionDTO login(String strBasic) throws BOException {
+				
 		String[] strAuth=SeguridadUtil.obtenerBasicAuth(strBasic,AuthenticationScheme.BASIC.name());
 		AutenticacionDTO objAut=null; 
 		

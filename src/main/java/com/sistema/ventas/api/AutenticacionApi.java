@@ -1,8 +1,5 @@
 package com.sistema.ventas.api;
 
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.core.HttpHeaders;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +29,12 @@ public class AutenticacionApi {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> login(
-			@HeaderParam(HttpHeaders.AUTHORIZATION) String strAuthorization, 
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
-			@RequestHeader(	value = "Application", 	required = false) String strApplication,
-			@RequestHeader("Authorization") String strToken) throws BOException {
+			@RequestHeader(value = "Authorization",required = true) String strAuth) throws BOException {
 		
 		try {
 
-			AutenticacionDTO objLogin = objIAutenticacionBO.login(strToken,strApplication);
+			AutenticacionDTO objLogin = objIAutenticacionBO.login(strAuth);
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
