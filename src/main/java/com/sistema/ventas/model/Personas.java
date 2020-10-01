@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "PERSONA")
-public class Persona implements Serializable {
+@Table(name = "PERSONAS")
+public class Personas implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

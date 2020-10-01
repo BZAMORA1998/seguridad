@@ -23,8 +23,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "USUARIO_SISTEMA")
-public class UsuarioSistema  implements Serializable {
+@Table(name = "USUARIOS_SISTEMA")
+public class UsuariosSistema  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,5 +47,5 @@ public class UsuarioSistema  implements Serializable {
 	
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SECUENCIA_PERSONA", referencedColumnName = "SECUENCIA_PERSONA")
-	private Persona persona;
+	private Personas personas;
 }

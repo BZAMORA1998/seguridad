@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import javax.persistence.*;
 
-import com.sistema.ventas.model.UsuarioSistema;
+import com.sistema.ventas.model.UsuariosSistema;
 
 import lombok.NonNull;
 

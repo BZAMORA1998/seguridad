@@ -9,12 +9,12 @@ import javax.persistence.PersistenceException;
 
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.model.UsuarioSistema;
+import com.sistema.ventas.model.UsuariosSistema;
 
 import lombok.NonNull;
 
 @Service
-public class UsuarioSistemaDAO extends BaseDAO<UsuarioSistema, Integer>{
+public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 
 	@PersistenceContext
 	EntityManager em;
@@ -25,32 +25,32 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuarioSistema, Integer>{
 	}
 	
 	protected UsuarioSistemaDAO() {
-		super(UsuarioSistema.class);
+		super(UsuariosSistema.class);
 	}
 
 	@Override
-	public void persist(UsuarioSistema t) throws PersistenceException {
+	public void persist(UsuariosSistema t) throws PersistenceException {
 		super.persist(t);
 	}
 
 	@Override
-	public void update(UsuarioSistema t) throws PersistenceException {
+	public void update(UsuariosSistema t) throws PersistenceException {
 		super.update(t);
 	}
 
 	@Override
-	public Optional<UsuarioSistema> find(@NonNull Integer id) {
+	public Optional<UsuariosSistema> find(@NonNull Integer id) {
 		return super.find(id);
 	}
 	
-	public UsuarioSistema  consultarUsuarioSistema(String strUsuario) {
+	public UsuariosSistema  consultarUsuarioSistema(String strUsuario) {
 		try {	
 			return em.createQuery(
 						"SELECT us \n" +
-						"  FROM UsuarioSistema us \n" +
+						"  FROM UsuariosSistema us \n" +
 						"  WHERE us.usuario=:usuario \n" +
-						"  AND us.esActivo = 'S'",UsuarioSistema.class)
-						.setParameter("usuario",strUsuario)
+						"  AND us.esActivo = 'S'",UsuariosSistema.class)
+						.setParameter("usuario",strUsuario.toUpperCase())
 						.getSingleResult();
 		} catch (NoResultException e) {
 			return null;

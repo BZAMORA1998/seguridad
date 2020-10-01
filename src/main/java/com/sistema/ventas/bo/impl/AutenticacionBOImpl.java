@@ -10,7 +10,7 @@ import com.sistema.ventas.bo.IAutenticacionBO;
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.dto.AutenticacionDTO;
 import com.sistema.ventas.exceptions.BOException;
-import com.sistema.ventas.model.UsuarioSistema;
+import com.sistema.ventas.model.UsuariosSistema;
 import com.sistema.ventas.util.AuthenticationScheme;
 import com.sistema.ventas.util.GeneralUtil;
 import com.sistema.ventas.util.SeguridadUtil;
@@ -28,7 +28,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		String[] strAuth=SeguridadUtil.obtenerBasicAuth(strBasic,AuthenticationScheme.BASIC.name());
 		AutenticacionDTO objAut=null; 
 		
-		UsuarioSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
+		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
 		
 		if(objUsuario==null)
 			throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strAuth[0]});
@@ -40,8 +40,8 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 			
 			objAut=new AutenticacionDTO();
 			objAut.setSecuenciaSistemaUsuario(objUsuario.getSecuenciaUsuarioSistema());
-			objAut.setPrimerApellido(objUsuario.getPersona().getPrimerApellido());
-			objAut.setPrimerNombre(objUsuario.getPersona().getPrimerNombre());
+			objAut.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
+			objAut.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
 			objAut.setUsuario(objUsuario.getUsuario());
 			objAut.setToken(strToken);
 		}else {

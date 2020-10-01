@@ -33,7 +33,6 @@ public class AutenticacionApi {
 			@RequestHeader(value = "Authorization",required = true) String strAuth) throws BOException {
 		
 		try {
-
 			AutenticacionDTO objLogin = objIAutenticacionBO.login(strAuth);
 
 			return new ResponseEntity<>(new ResponseOk(
