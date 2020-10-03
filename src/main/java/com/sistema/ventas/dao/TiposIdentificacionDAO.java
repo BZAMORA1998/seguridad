@@ -6,11 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.TiposIdentificacion;
-
-import lombok.NonNull;
 
 @Service
 public class TiposIdentificacionDAO extends BaseDAO<TiposIdentificacion, Integer>{

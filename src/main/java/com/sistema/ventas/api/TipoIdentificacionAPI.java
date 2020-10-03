@@ -29,7 +29,8 @@ public class TipoIdentificacionAPI {
 	private ITipoIdentificacionBO objITipoIdentificacionBO;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<?> listarTipoItentificacion() throws BOException {
+	public ResponseEntity<?> listarTipoItentificacion(
+			) throws BOException {
 		
 		try {
 

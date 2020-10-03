@@ -1,8 +1,7 @@
 package com.sistema.ventas.dto;
 
-import java.io.Serializable;
-
 import javax.ws.rs.core.Response.Status;
+import java.io.Serializable;
 
 public class ResponseOk implements Serializable {
 

@@ -2,9 +2,8 @@ package com.sistema.ventas.exceptions;
 
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
-
 import com.sistema.ventas.util.MensajesUtil;
+import com.sun.istack.NotNull;
 
 
 public class RestClientException extends Exception {

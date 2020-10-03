@@ -2,10 +2,12 @@ package com.sistema.ventas.util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import com.sistema.ventas.exceptions.BOException;
-import java.util.logging.Logger;
-import org.jboss.resteasy.util.Base64;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.jboss.resteasy.util.Base64;
+
+import com.sistema.ventas.exceptions.BOException;
 
 public class SeguridadUtil {
 	

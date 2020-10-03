@@ -18,7 +18,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_241">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -43,51 +43,6 @@
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 			<attribute name="m2e-apt" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/HP/.m2/repository/javax/javaee-api/8.0/javaee-api-8.0.jar" sourcepath="C:/Users/HP/.m2/repository/javax/javaee-api/8.0/javaee-api-8.0-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="javax"/>
-			<attribute name="maven.artifactId" value="javaee-api"/>
-			<attribute name="maven.version" value="8.0"/>
-			<attribute name="maven.scope" value="provided"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/HP/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar" sourcepath="C:/Users/HP/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="org.projectlombok"/>
-			<attribute name="maven.artifactId" value="lombok"/>
-			<attribute name="maven.version" value="1.18.12"/>
-			<attribute name="maven.scope" value="provided"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/HP/.m2/repository/org/springframework/data/spring-data-jpa/2.3.1.RELEASE/spring-data-jpa-2.3.1.RELEASE.jar" sourcepath="C:/Users/HP/.m2/repository/org/springframework/data/spring-data-jpa/2.3.1.RELEASE/spring-data-jpa-2.3.1.RELEASE-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="org.springframework.data"/>
-			<attribute name="maven.artifactId" value="spring-data-jpa"/>
-			<attribute name="maven.version" value="2.3.1.RELEASE"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/HP/.m2/repository/io/jsonwebtoken/jjwt/0.9.1/jjwt-0.9.1.jar" sourcepath="C:/Users/HP/.m2/repository/io/jsonwebtoken/jjwt/0.9.1/jjwt-0.9.1-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="io.jsonwebtoken"/>
-			<attribute name="maven.artifactId" value="jjwt"/>
-			<attribute name="maven.version" value="0.9.1"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/HP/.m2/repository/org/jboss/resteasy/resteasy-jaxrs/3.11.2.Final/resteasy-jaxrs-3.11.2.Final.jar" sourcepath="C:/Users/HP/.m2/repository/org/jboss/resteasy/resteasy-jaxrs/3.11.2.Final/resteasy-jaxrs-3.11.2.Final-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="org.jboss.resteasy"/>
-			<attribute name="maven.artifactId" value="resteasy-jaxrs"/>
-			<attribute name="maven.version" value="3.11.2.Final"/>
-			<attribute name="maven.scope" value="compile"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>

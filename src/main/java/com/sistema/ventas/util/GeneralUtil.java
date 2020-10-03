@@ -1,9 +1,12 @@
 package com.sistema.ventas.util;
 
+
 import java.io.IOException;
 import java.nio.charset.Charset;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.resteasy.util.Base64;
+
 import com.sistema.ventas.exceptions.BOException;
 
 public class GeneralUtil {

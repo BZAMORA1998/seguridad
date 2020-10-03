@@ -2,11 +2,10 @@ package com.sistema.ventas.dao;
 
 import java.util.Optional;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
-import com.sistema.ventas.model.UsuariosSistema;
-
-import lombok.NonNull;
+import org.springframework.lang.NonNull;
 
 public abstract class BaseDAO<T, K> {
 
