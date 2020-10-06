@@ -3,7 +3,6 @@ package com.sistema.ventas.bo.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.bo.ITipoIdentificacionBO;

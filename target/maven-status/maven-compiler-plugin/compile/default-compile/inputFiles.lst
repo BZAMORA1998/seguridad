@@ -5,6 +5,7 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\Resp
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\RestClientException.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\AutenticacionApi.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\UsuarioSistemaDAO.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\WebSecurity.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\TipoIdentificacionAPI.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\TiposIdentificacionDAO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\ApiErrorResponse.java
@@ -17,6 +18,8 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\Aut
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\TiposIdentificacion.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\CustomExceptionHandler.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\bo\ITipoIdentificacionBO.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\JwtFilter.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\JwtUtil.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\GeneralUtil.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\SeguridadUtil.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\UnauthorizedException.java
@@ -24,5 +27,6 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\Us
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\AutenticacionDTO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\bo\impl\TipoIdentificacionBOImpl.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\ITiposIdentificacionDAO.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\CustomUserDetailsService.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\RestExceptionHandler.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\SistemaVentasApiApplication.java
