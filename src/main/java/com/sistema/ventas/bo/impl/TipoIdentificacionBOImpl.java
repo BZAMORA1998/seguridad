@@ -3,6 +3,7 @@ package com.sistema.ventas.bo.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.bo.ITipoIdentificacionBO;
@@ -18,8 +19,13 @@ public class TipoIdentificacionBOImpl implements ITipoIdentificacionBO{
 	
 	@Override
 	public List<TiposIdentificacion> findAll() throws BOException {
-		// TODO Auto-generated method stub
-		return objITiposIdenticacionDAO.findAll();
+		
+		try {
+			return objITiposIdenticacionDAO.findAll();
+		}catch(Exception e) {
+			System.out.print("=========>"+e.getMessage());
+		}
+		return null;
 	}
 
 }

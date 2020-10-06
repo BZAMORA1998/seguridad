@@ -10,5 +10,5 @@ public class SistemaVentasApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaVentasApiApplication.class, args);
 	}
-
+	
 }

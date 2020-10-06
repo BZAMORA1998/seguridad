@@ -21,15 +21,18 @@ public class GeneralUtil {
 	 */
 	public static String decodificaBase64(String stringBase64) throws BOException{
 		String decodeString = null;
-		try {
+
 			// VALIDA Y DECODIFICA EL STRING BASE64
 			if (!StringUtils.isBlank(stringBase64)) {
-				decodeString = new String(Base64.decode(stringBase64.getBytes()), Charset.forName("UTF-8"));
+				try {
+					decodeString = new String(Base64.decode(stringBase64.getBytes()), Charset.forName("UTF-8"));
+				} catch (IOException e) {
+					throw new BOException("ven.error.errorDecodeAuth");
+				}
 			}
-		} catch (IOException e) {
-			throw new BOException("ven.error.errorDecodeAuth");
-		}
+	
 		// RETORNA EL STRING stringBase64
 		return decodeString;
 	}
+	
 }
