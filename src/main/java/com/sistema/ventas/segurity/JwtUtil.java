@@ -1,18 +1,17 @@
 package com.sistema.ventas.segurity;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import com.sistema.ventas.exceptions.BOException;
-import com.sistema.ventas.exceptions.CustomExceptionHandler;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtUtil {
@@ -20,7 +19,6 @@ public class JwtUtil {
     private String secret = "javatechie";
 
     public String extractUsername(String token) {
-  
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -53,10 +51,7 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        String username = null;
-
-		username = extractUsername(token);
-
+        final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
