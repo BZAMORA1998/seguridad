@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.bo.ITipoIdentificacionBO;
+import com.sistema.ventas.bo.IServiciosUtilBO;
 import com.sistema.ventas.dao.ITiposIdentificacionDAO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.TiposIdentificacion;
 
 @Service
-public class TipoIdentificacionBOImpl implements ITipoIdentificacionBO{
+public class ServiciosUtilBOImpl implements IServiciosUtilBO{
 
 	@Autowired
 	private ITiposIdentificacionDAO objITiposIdenticacionDAO;
@@ -19,12 +19,7 @@ public class TipoIdentificacionBOImpl implements ITipoIdentificacionBO{
 	@Override
 	public List<TiposIdentificacion> findAll() throws BOException {
 		
-		try {
-			return objITiposIdenticacionDAO.findAll();
-		}catch(Exception e) {
-			System.out.print("=========>"+e.getMessage());
-		}
-		return null;
+		return objITiposIdenticacionDAO.findAll();
 	}
 
 }

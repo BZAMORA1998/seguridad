@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException{
 	    try {
 	        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-	        String[] arrServiciosSinSeguridad = { "/ventas/v1/tipoIdentificacion" };	
+	        String[] arrServiciosSinSeguridad = { "/ventas/v1/tipoIdentificacion","/ventas/v1/genero" };	
 	        
 	        String token = null;
 	        String userName = null;
