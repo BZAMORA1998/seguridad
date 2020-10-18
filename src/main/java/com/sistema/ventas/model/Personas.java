@@ -29,7 +29,7 @@ public class Personas implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "SECUENCIA_PERSONA")
     private Integer secuenciaPersona;
 	
@@ -51,8 +51,15 @@ public class Personas implements Serializable {
     @Column(name = "FECHA_NACIMIENTO")
     private Date fechaNacimiento;
     
+	@Column(name = "ES_ACTIVO")
+	private String esActivo;
+    
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CODIGO_TIPO_IDENTIFICACION", referencedColumnName = "CODIGO_TIPO_IDENTIFICACION", insertable = true, updatable = true)
 	private TiposIdentificacion tiposIdentificacion;
+    
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CODIGO_GENERO", referencedColumnName = "CODIGO_GENERO", insertable = true, updatable = true)
+	private Genero genero;
 }
 

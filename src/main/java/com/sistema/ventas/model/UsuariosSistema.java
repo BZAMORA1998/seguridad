@@ -28,7 +28,7 @@ public class UsuariosSistema  implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "SECUENCIA_USUARIO_SISTEMA")
     private Integer secuenciaUsuarioSistema;
 	
@@ -41,9 +41,6 @@ public class UsuariosSistema  implements Serializable {
 	 @Column(name = "ES_ACTIVO")
 	 private String esActivo;
 	 
-	 @Column(name = "TOKEN")
-	 private String token;
-	
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SECUENCIA_PERSONA", referencedColumnName = "SECUENCIA_PERSONA")
 	private Personas personas;

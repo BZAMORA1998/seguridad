@@ -1,4 +1,4 @@
-package com.sistema.ventas.util;
+package com.sistema.ventas.enumm;
 
 
 public enum AuthenticationScheme {

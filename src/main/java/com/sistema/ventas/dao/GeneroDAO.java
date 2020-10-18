@@ -10,7 +10,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.Genero;
-import com.sistema.ventas.model.TiposIdentificacion;
 
 @Service
 public class GeneroDAO extends BaseDAO<Genero, Integer>{

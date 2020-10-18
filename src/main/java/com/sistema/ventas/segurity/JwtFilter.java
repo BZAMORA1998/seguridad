@@ -7,11 +7,10 @@ import java.util.logging.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.core.Response.Status;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException{
 	    try {
 	        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-	        String[] arrServiciosSinSeguridad = { "/ventas/v1/tipoIdentificacion","/ventas/v1/genero" };	
+	        String[] arrServiciosSinSeguridad = { "/ventas/v1/tipoIdentificacion","/ventas/v1/genero","/ventas/v1/usuariosSistema/crearUsuario"};	
 	        
 	        String token = null;
 	        String userName = null;
