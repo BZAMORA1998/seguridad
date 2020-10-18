@@ -76,7 +76,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		
 		// fechaNacimiento.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getFechaNacimiento())) 
-			throw new BOException("age.warn.campoObligatorio", new Object[] { "ven.campos.fechaNacimiento"});
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.fechaNacimiento"});
 		
 		// Usuario.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getUser())) 
