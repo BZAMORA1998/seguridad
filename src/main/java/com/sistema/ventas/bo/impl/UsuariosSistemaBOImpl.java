@@ -92,10 +92,12 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.contraseña"});
 		
 		Personas objPersona=new Personas();
-		objPersona.setPrimerNombre(objUsuariosDTO.getPrimerNombre());
-		objPersona.setSegundoNombre(objUsuariosDTO.getSegundoNombre());
-		objPersona.setPrimerApellido(objUsuariosDTO.getPrimerApellido());
-		objPersona.setSegundoApellido(objUsuariosDTO.getSegundoNombre());
+		objPersona.setPrimerNombre(objUsuariosDTO.getPrimerNombre().toUpperCase());
+		if(objPersona.getSegundoNombre()!=null)
+			objPersona.setSegundoNombre(objUsuariosDTO.getSegundoNombre().toUpperCase());
+		objPersona.setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
+		if(objPersona.getSegundoApellido()!=null)
+			objPersona.setSegundoApellido(objUsuariosDTO.getSegundoNombre().toUpperCase());
 		objPersona.setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.DD_MM_YYYY));
 		objPersona.setTiposIdentificacion(objTiposIdentificacion.get());
 		objPersona.setNumeroIdentificacion(objUsuariosDTO.getNumeroIdentificacion());
