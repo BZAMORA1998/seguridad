@@ -47,7 +47,7 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 			return em.createQuery(
 						"SELECT us \n" +
 						"  FROM UsuariosSistema us \n" +
-						"  WHERE us.usuario=:usuario \n" +
+						"  WHERE us.user=:usuario \n" +
 						"  AND us.esActivo = 'S'",UsuariosSistema.class)
 						.setParameter("usuario",strUsuario.toUpperCase())
 						.getSingleResult();
