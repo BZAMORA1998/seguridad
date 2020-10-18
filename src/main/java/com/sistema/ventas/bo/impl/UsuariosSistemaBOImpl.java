@@ -80,7 +80,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		
 		// Usuario.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getUser())) 
-			throw new BOException("age.warn.campoObligatorio", new Object[] { "ven.campos.usuario"});
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.usuario"});
 		
 		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
 		
