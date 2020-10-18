@@ -32,11 +32,11 @@ public class UsuariosSistema  implements Serializable {
     @Column(name = "SECUENCIA_USUARIO_SISTEMA")
     private Integer secuenciaUsuarioSistema;
 	
-	 @Column(name = "USUARIO")
-	 private String usuario;
+	 @Column(name = "USER")
+	 private String user;
 		
-	 @Column(name = "CONTRASEÑA")
-	 private String contraseña;
+	 @Column(name = "PASSWORD")
+	 private String password;
 	 
 	 @Column(name = "ES_ACTIVO")
 	 private String esActivo;

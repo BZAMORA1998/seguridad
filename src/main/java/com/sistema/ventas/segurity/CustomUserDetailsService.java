@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(username);
 		
 		try {
-			return new User(objUsuario.getUsuario(),GeneralUtil.decodificaBase64(objUsuario.getContraseña()),new ArrayList());
+			return new User(objUsuario.getUser(),GeneralUtil.decodificaBase64(objUsuario.getPassword()),new ArrayList());
 		} catch (BOException e) {
 			e.printStackTrace();
 		}

@@ -47,7 +47,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 				objAut.setSecuenciaSistemaUsuario(objUsuario.getSecuenciaUsuarioSistema());
 				objAut.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
 				objAut.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
-				objAut.setUsuario(objUsuario.getUsuario());
+				objAut.setUsuario(objUsuario.getUser());
 				objAut.setToken(jwUtil.generateToken(strAuth[0]));
 			}
 		

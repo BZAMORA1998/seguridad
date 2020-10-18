@@ -79,16 +79,16 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			throw new BOException("age.warn.campoObligatorio", new Object[] { "ven.campos.fechaNacimiento"});
 		
 		// Usuario.
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getUsuario())) 
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getUser())) 
 			throw new BOException("age.warn.campoObligatorio", new Object[] { "ven.campos.usuario"});
 		
-		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(objUsuariosDTO.getUsuario());
+		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
 		
 		if(objUsuario!=null)
-			throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUsuario()});
+			throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});
 		
 		// Contraseña.
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getContraseña())) 
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getPassword())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.contraseña"});
 		
 		Personas objPersona=new Personas();
@@ -104,8 +104,8 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objIPersonasDAO.save(objPersona);
 		
 		UsuariosSistema objUsuariosSistema=new UsuariosSistema();
-		objUsuariosSistema.setUsuario(objUsuariosDTO.getUsuario());
-		objUsuariosSistema.setContraseña(objUsuariosDTO.getContraseña());
+		objUsuariosSistema.setUser(objUsuariosDTO.getUser());
+		objUsuariosSistema.setPassword(objUsuariosDTO.getPassword());
 		objUsuariosSistema.setPersonas(objPersona);
 		objUsuariosSistema.setEsActivo("S");
 		objIUsuarioSistemaDAO.save(objUsuariosSistema);
