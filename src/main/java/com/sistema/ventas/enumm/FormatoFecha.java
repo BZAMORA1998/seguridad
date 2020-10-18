@@ -3,8 +3,8 @@ package com.sistema.ventas.enumm;
 
 public enum FormatoFecha {
 
-	DD_MM_YYYY("dd/MM/yyyy"),
-	DD_MM_YYYY_HH_MM("dd/MM/yyyy HH:mm"),
+	DD_MM_YYYY("dd-MM-yyyy"),
+	DD_MM_YYYY_HH_MM("dd-MM-yyyy HH:mm"),
 	DD_MM_YYYY_HH_MM_SS("dd/MM/yyyy HH:mm:ss"),
 	YYYY_MM_DD("yyyy/MM/dd"),
 	YYYY_MM_DD_HH_MM("yyyy/MM/dd HH:mm"),
