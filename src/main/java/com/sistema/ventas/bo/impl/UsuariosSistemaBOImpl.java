@@ -1,5 +1,7 @@
 package com.sistema.ventas.bo.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -12,6 +14,7 @@ import com.sistema.ventas.dao.IPersonasDAO;
 import com.sistema.ventas.dao.ITiposIdentificacionDAO;
 import com.sistema.ventas.dao.IUsuarioSistemaDAO;
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
+import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.enumm.FormatoFecha;
 import com.sistema.ventas.exceptions.BOException;
@@ -112,5 +115,24 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objUsuariosSistema.setEsActivo("S");
 		objIUsuarioSistemaDAO.save(objUsuariosSistema);
 		
+	}
+
+	@Override
+	public List<ConsultarUsuarioDTO> consultarUsuarios() {
+		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
+		List<UsuariosSistema> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema();
+		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
+		
+		for(UsuariosSistema objUsuario:lsUsuario) {
+			objConsultarUsuarioDTO=new ConsultarUsuarioDTO();
+			objConsultarUsuarioDTO.setNumeroIdentificacion(objUsuario.getPersonas().getNumeroIdentificacion());
+			objConsultarUsuarioDTO.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
+			objConsultarUsuarioDTO.setSegundoNombre(objUsuario.getPersonas().getSegundoNombre());
+			objConsultarUsuarioDTO.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
+			objConsultarUsuarioDTO.setSegundoApellido(objUsuario.getPersonas().getSegundoApellido());
+			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
+		}
+		
+		return lsConsultarUsuarioDTO;
 	}
 }

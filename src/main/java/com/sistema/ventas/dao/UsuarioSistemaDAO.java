@@ -1,5 +1,6 @@
 package com.sistema.ventas.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -51,6 +52,18 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 						"  AND us.esActivo = 'S'",UsuariosSistema.class)
 						.setParameter("usuario",strUsuario.toUpperCase())
 						.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	public List<UsuariosSistema>  consultarUsuarioSistema() {
+		try {	
+			return em.createQuery(
+						"SELECT us \n" +
+						"  FROM UsuariosSistema us \n" +
+						"  WHERE us.esActivo = 'S'",UsuariosSistema.class)
+						.getResultList();
 		} catch (NoResultException e) {
 			return null;
 		}
