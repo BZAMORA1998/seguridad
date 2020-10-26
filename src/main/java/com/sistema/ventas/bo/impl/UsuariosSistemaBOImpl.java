@@ -99,10 +99,10 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		
 		Personas objPersona=new Personas();
 		objPersona.setPrimerNombre(objUsuariosDTO.getPrimerNombre().toUpperCase());
-		if(objPersona.getSegundoNombre()!=null)
+		if(ObjectUtils.isEmpty(objPersona.getSegundoNombre()))
 			objPersona.setSegundoNombre(objUsuariosDTO.getSegundoNombre().toUpperCase());
 		objPersona.setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
-		if(objPersona.getSegundoApellido()!=null)
+		if(!ObjectUtils.isEmpty(objPersona.getSegundoApellido()!=null))
 			objPersona.setSegundoApellido(objUsuariosDTO.getSegundoNombre().toUpperCase());
 		objPersona.setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.DD_MM_YYYY));
 		objPersona.setTiposIdentificacion(objTiposIdentificacion.get());
