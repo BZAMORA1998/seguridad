@@ -1,12 +1,16 @@
 package com.sistema.ventas.api;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +67,26 @@ public class UsuariosSistemaApi {
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					lsConsultarUsuarioDTO), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(null));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+		}
+	}
+	
+	@RequestMapping(value="/{idUsuario}/usuarios",method = RequestMethod.DELETE)
+	@Transactional 
+	public ResponseEntity<?> eliminarUsuario(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario
+			) throws BOException {
+		
+		try {
+
+			objIUsuariosSistemaBO.eliminarUsuario(intIdUsuario);
+
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(null));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());

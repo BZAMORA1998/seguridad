@@ -13,7 +13,9 @@ public class ConsultarUsuarioDTO {
     private String segundoNombre;
     private String primerApellido;
     private String segundoApellido;
+    private String usuario;
     private String fechaNacimiento;
     private Integer codigoTipoIdentificacion;
     private Integer codigoGenero;
+	public Integer secuenciaUsuarioSistema;
 }

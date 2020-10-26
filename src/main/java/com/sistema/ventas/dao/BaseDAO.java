@@ -27,6 +27,12 @@ public abstract class BaseDAO<T, K> {
 		em.merge(t);
 	}
 	
+	public void remove(T t) throws PersistenceException {
+		EntityManager em = getEntityManager();
+		em.remove(t);
+		em.getTransaction().commit();
+	}
+	
 	public Optional<T> find(@NonNull K id) {
 		EntityManager em = getEntityManager();
 		T t = em.find(clazz, id);

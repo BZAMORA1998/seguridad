@@ -39,6 +39,12 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 	}
 
 	@Override
+	public void remove(UsuariosSistema t) throws PersistenceException {
+		super.remove(t);
+	}
+
+	
+	@Override
 	public Optional<UsuariosSistema> find(@NonNull Integer id) {
 		return super.find(id);
 	}

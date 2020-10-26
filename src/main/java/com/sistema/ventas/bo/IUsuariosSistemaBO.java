@@ -12,4 +12,6 @@ public interface IUsuariosSistemaBO {
 
 	public List<ConsultarUsuarioDTO> consultarUsuarios() throws BOException;
 
+	public void eliminarUsuario(Integer intIdUsuario)  throws BOException;;
+
 }

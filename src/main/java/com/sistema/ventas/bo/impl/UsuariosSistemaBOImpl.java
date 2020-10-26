@@ -13,6 +13,7 @@ import com.sistema.ventas.dao.IGeneroDAO;
 import com.sistema.ventas.dao.IPersonasDAO;
 import com.sistema.ventas.dao.ITiposIdentificacionDAO;
 import com.sistema.ventas.dao.IUsuarioSistemaDAO;
+import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -37,6 +38,8 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	private IGeneroDAO objIGeneroDAO;
 	@Autowired
 	private ITiposIdentificacionDAO objITiposIdentificacionDAO;
+	@Autowired
+	private PersonasDAO objPersonasDAO;
 	
 	@Override
 	public void crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
@@ -125,14 +128,23 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		
 		for(UsuariosSistema objUsuario:lsUsuario) {
 			objConsultarUsuarioDTO=new ConsultarUsuarioDTO();
+			objConsultarUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.getSecuenciaUsuarioSistema());
 			objConsultarUsuarioDTO.setNumeroIdentificacion(objUsuario.getPersonas().getNumeroIdentificacion());
 			objConsultarUsuarioDTO.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
 			objConsultarUsuarioDTO.setSegundoNombre(objUsuario.getPersonas().getSegundoNombre());
 			objConsultarUsuarioDTO.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
 			objConsultarUsuarioDTO.setSegundoApellido(objUsuario.getPersonas().getSegundoApellido());
+			objConsultarUsuarioDTO.setUsuario(objUsuario.getUser());
 			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
 		}
 		
 		return lsConsultarUsuarioDTO;
+	}
+
+	@Override
+	public void eliminarUsuario(Integer intIdUsuario) throws BOException {
+		Optional<UsuariosSistema> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		objIUsuarioSistemaDAO.deleteById(intIdUsuario);
+		objIPersonasDAO.deleteById(objUsuario.get().getPersonas().getSecuenciaPersona());
 	}
 }
