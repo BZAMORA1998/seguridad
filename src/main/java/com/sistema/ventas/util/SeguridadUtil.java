@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import org.jboss.resteasy.util.Base64;
 
-import com.sistema.ventas.enumm.AuthenticationScheme;
+import com.sistema.ventas.enums.AuthenticationScheme;
 import com.sistema.ventas.exceptions.BOException;
 
 public class SeguridadUtil {

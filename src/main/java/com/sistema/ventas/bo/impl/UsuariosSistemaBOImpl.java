@@ -17,7 +17,9 @@ import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
-import com.sistema.ventas.enumm.FormatoFecha;
+import com.sistema.ventas.enums.AlgoritmosIdentificacion;
+import com.sistema.ventas.enums.FormatoFecha;
+import com.sistema.ventas.enums.TipoIdentificacion;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Genero;
 import com.sistema.ventas.model.Personas;
@@ -44,6 +46,8 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	@Override
 	public void crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
 		
+		UsuariosSistema objUsuario=null;
+		
 		// primerNombre.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerNombre"});
@@ -68,6 +72,21 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.numeroIdentificacion"});
 
+		Boolean booNumeroIdentificacion=false;
+		
+		if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+			booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
+		else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+			booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
+		
+		if(!booNumeroIdentificacion) 
+			throw new BOException("ven.warn.numeroIdentificacionInvalida");
+		
+		objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistemaPorCedula(objUsuariosDTO.getNumeroIdentificacion());
+		
+		if(!ObjectUtils.isEmpty(objUsuario)) 
+			throw new BOException("ven.warn.numeroIdentificacionExiste");
+		
 		// codigoGenero.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getCodigoGenero())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.codigoGenero"});
@@ -88,7 +107,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getUser())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.usuario"});
 		
-		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
+		objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
 		
 		if(objUsuario!=null)
 			throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});

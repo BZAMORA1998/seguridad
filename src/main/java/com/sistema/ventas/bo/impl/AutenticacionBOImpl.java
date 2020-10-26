@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.sistema.ventas.bo.IAutenticacionBO;
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.dto.AutenticacionDTO;
-import com.sistema.ventas.enumm.AuthenticationScheme;
+import com.sistema.ventas.enums.AuthenticationScheme;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.UsuariosSistema;
 import com.sistema.ventas.segurity.JwtUtil;

@@ -74,4 +74,20 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 			return null;
 		}
 	}
+
+	public UsuariosSistema consultarUsuarioSistemaPorCedula(String numeroIdentificacion) {
+		try {	
+			return em.createQuery(
+						"SELECT us \n" +
+						"  FROM UsuariosSistema us \n" +
+						"  JOIN us.personas pe \n" +
+						"  WHERE pe.numeroIdentificacion=:numeroIdentificacion \n" +
+						"  AND pe.esActivo = 'S' \n" +
+						"  AND us.esActivo = 'S'",UsuariosSistema.class)
+						.setParameter("numeroIdentificacion",numeroIdentificacion)
+						.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }
