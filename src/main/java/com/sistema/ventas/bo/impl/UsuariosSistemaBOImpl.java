@@ -143,8 +143,22 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 
 	@Override
 	public void eliminarUsuario(Integer intIdUsuario) throws BOException {
+		
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intIdUsuario)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
+		
 		Optional<UsuariosSistema> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		
+		if(!objUsuario.isPresent())
+			throw new BOException("ven.warn.idUsuarioNoExiste");
+		
+		if(!("S").equalsIgnoreCase(objUsuario.get().getEsActivo()))
+			throw new BOException("ven.warn.idUsuarioInactivo");
+		
+		//Elimina el usuario
 		objIUsuarioSistemaDAO.deleteById(intIdUsuario);
+		//Elimina a la persona
 		objIPersonasDAO.deleteById(objUsuario.get().getPersonas().getSecuenciaPersona());
 	}
 }
