@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.sistema.ventas.bo.IUsuariosSistemaBO;
 import com.sistema.ventas.dao.IGeneroDAO;
 import com.sistema.ventas.dao.IPersonasDAO;
+import com.sistema.ventas.dao.IRolSistemaDAO;
 import com.sistema.ventas.dao.ITiposIdentificacionDAO;
 import com.sistema.ventas.dao.IUsuarioSistemaDAO;
 import com.sistema.ventas.dao.PersonasDAO;
@@ -23,6 +24,7 @@ import com.sistema.ventas.enums.TipoIdentificacion;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Genero;
 import com.sistema.ventas.model.Personas;
+import com.sistema.ventas.model.RolSistema;
 import com.sistema.ventas.model.TiposIdentificacion;
 import com.sistema.ventas.model.UsuariosSistema;
 import com.sistema.ventas.util.GeneralUtil;
@@ -41,7 +43,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	@Autowired
 	private ITiposIdentificacionDAO objITiposIdentificacionDAO;
 	@Autowired
-	private PersonasDAO objPersonasDAO;
+	private IRolSistemaDAO objIRolSistemaDAO;
 	
 	@Override
 	public void crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
@@ -135,6 +137,11 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objUsuariosSistema.setPassword(objUsuariosDTO.getPassword());
 		objUsuariosSistema.setPersonas(objPersona);
 		objUsuariosSistema.setEsActivo("S");
+		
+		Optional<RolSistema> objRolSistema =objIRolSistemaDAO.findById(2);
+		
+		objUsuariosSistema.setRolSistema(objRolSistema.get());
+		
 		objIUsuarioSistemaDAO.save(objUsuariosSistema);
 		
 	}
