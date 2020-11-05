@@ -131,7 +131,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objIPersonasDAO.save(objPersona);
 		
 		UsuariosSistema objUsuariosSistema=new UsuariosSistema();
-		objUsuariosSistema.setUser(objUsuariosDTO.getUser());
+		objUsuariosSistema.setUser(objUsuariosDTO.getUser().toUpperCase());
 		objUsuariosSistema.setPassword(objUsuariosDTO.getPassword());
 		objUsuariosSistema.setPersonas(objPersona);
 		objUsuariosSistema.setEsActivo("S");
