@@ -180,4 +180,38 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		//Elimina a la persona
 		objIPersonasDAO.deleteById(objUsuario.get().getPersonas().getSecuenciaPersona());
 	}
+
+	@Override
+	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario) throws BOException {
+		
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intIdUsuario)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
+		
+		Optional<UsuariosSistema> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		
+		if(!objUsuario.isPresent())
+			throw new BOException("ven.warn.idUsuarioNoExiste");
+		
+		if(!("S").equalsIgnoreCase(objUsuario.get().getEsActivo()))
+			throw new BOException("ven.warn.idUsuarioInactivo");
+		
+		ConsultarUsuarioDTO objUsuarioDTO=new ConsultarUsuarioDTO();
+		objUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.get().getSecuenciaUsuarioSistema());
+		if(objUsuario.get().getPersonas()!=null) {
+			objUsuarioDTO.setCodigoTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getCodigoTipoIdentificacion());
+			objUsuarioDTO.setNumeroIdentificacion(objUsuario.get().getPersonas().getNumeroIdentificacion());
+			objUsuarioDTO.setPrimerNombre(objUsuario.get().getPersonas().getPrimerNombre());
+			objUsuarioDTO.setSegundoNombre(objUsuario.get().getPersonas().getSegundoNombre());
+			objUsuarioDTO.setPrimerApellido(objUsuario.get().getPersonas().getPrimerApellido());
+			objUsuarioDTO.setSegundoApellido(objUsuario.get().getPersonas().getSegundoApellido());
+			objUsuarioDTO.setFechaNacimiento(GeneralUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.DD_MM_YYYY));
+			objUsuarioDTO.setCodigoGenero(objUsuario.get().getPersonas().getGenero().getCodigoGenero());
+		}
+		
+		if(objUsuario.get().getRolSistema()!=null)
+			objUsuarioDTO.setRolSistema(objUsuario.get().getRolSistema().getAbreviatura());
+		
+		return objUsuarioDTO;
+	}
 }

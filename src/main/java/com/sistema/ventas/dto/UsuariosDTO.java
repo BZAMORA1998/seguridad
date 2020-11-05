@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UsuariosDTO {
 
+	private Integer secuenciaUsuarioSistema;
 	private String numeroIdentificacion;
     private String primerNombre;
     private String segundoNombre;
@@ -19,5 +20,6 @@ public class UsuariosDTO {
     private Integer codigoGenero;
     private String user;
     private String password;
+    private String rolSistema;
     
 }

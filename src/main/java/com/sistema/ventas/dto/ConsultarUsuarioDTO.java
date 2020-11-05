@@ -18,4 +18,5 @@ public class ConsultarUsuarioDTO {
     private Integer codigoTipoIdentificacion;
     private Integer codigoGenero;
 	public Integer secuenciaUsuarioSistema;
+    private String rolSistema;
 }

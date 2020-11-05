@@ -44,4 +44,8 @@ public class UsuariosSistema  implements Serializable {
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SECUENCIA_PERSONA", referencedColumnName = "SECUENCIA_PERSONA")
 	private Personas personas;
+	
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "SECUENCIA_ROL_SISTEMA", referencedColumnName = "SECUENCIA_ROL_SISTEMA")
+	private RolSistema rolSistema;
 }

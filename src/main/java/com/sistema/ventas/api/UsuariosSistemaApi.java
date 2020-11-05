@@ -1,6 +1,5 @@
 package com.sistema.ventas.api;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IUsuariosSistemaBO;
@@ -92,4 +90,24 @@ public class UsuariosSistemaApi {
 			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
 		}
 	}
+	
+	@RequestMapping(value="/{idUsuario}/basica",method = RequestMethod.GET)
+	public ResponseEntity<?> consultarUsuarioXId(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario
+			) throws BOException {
+		
+		try {
+
+			ConsultarUsuarioDTO objUsuario=objIUsuariosSistemaBO.consultarUsuarioXId(intIdUsuario);
+
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					objUsuario), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(null));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+		}
+	}
+	
 }

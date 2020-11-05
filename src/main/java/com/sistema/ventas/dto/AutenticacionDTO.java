@@ -13,4 +13,5 @@ public class AutenticacionDTO {
 	private String primerApellido;
 	private String usuario;
 	private String token;
+	private String rolSistema;
 }

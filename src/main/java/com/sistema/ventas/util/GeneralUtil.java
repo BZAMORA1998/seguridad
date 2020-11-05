@@ -342,4 +342,17 @@ public class GeneralUtil {
 		return input.matches(regx);
 	}
 	
+	/**
+	 * Convierte una fecha Date a String
+	 * 
+	 * @author Brian Torres
+	 * @param datFecha
+	 * @param formatoFecha
+	 * @return
+	 */
+	public static String dateToString(Date datFecha, FormatoFecha formatoFecha) {
+		SimpleDateFormat formatter = new SimpleDateFormat(formatoFecha.getName());
+		return formatter.format(datFecha);
+	}
+	
 }
