@@ -35,12 +35,13 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		AutenticacionDTO objAut=null; 
 		
 		try {
+			strAuth[0]=strAuth[0].toUpperCase();
 			UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
 			
 			if(objUsuario==null) {
 				throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strAuth[0]});
 			}else {
-				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(strAuth[0],
+				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(strAuth[0].toUpperCase(),
 						strAuth[1]));
 				
 				objAut=new AutenticacionDTO();

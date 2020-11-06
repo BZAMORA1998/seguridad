@@ -125,7 +125,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objPersona.setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
 		if(!ObjectUtils.isEmpty(objPersona.getSegundoApellido()!=null))
 			objPersona.setSegundoApellido(objUsuariosDTO.getSegundoNombre().toUpperCase());
-		objPersona.setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.DD_MM_YYYY));
+		objPersona.setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
 		objPersona.setTiposIdentificacion(objTiposIdentificacion.get());
 		objPersona.setNumeroIdentificacion(objUsuariosDTO.getNumeroIdentificacion());
 		objPersona.setGenero(objGenero.get());
@@ -212,7 +212,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			objUsuarioDTO.setSegundoNombre(objUsuario.get().getPersonas().getSegundoNombre());
 			objUsuarioDTO.setPrimerApellido(objUsuario.get().getPersonas().getPrimerApellido());
 			objUsuarioDTO.setSegundoApellido(objUsuario.get().getPersonas().getSegundoApellido());
-			objUsuarioDTO.setFechaNacimiento(GeneralUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.DD_MM_YYYY));
+			objUsuarioDTO.setFechaNacimiento(GeneralUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
 			objUsuarioDTO.setCodigoGenero(objUsuario.get().getPersonas().getGenero().getCodigoGenero());
 		}
 		
