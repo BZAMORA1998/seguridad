@@ -29,11 +29,7 @@ public class GeneralUtil {
 
 			// VALIDA Y DECODIFICA EL STRING BASE64
 			if (!StringUtils.isBlank(stringBase64)) {
-				try {
-					decodeString = new String(Base64.decode(stringBase64.getBytes()), Charset.forName("UTF-8"));
-				} catch (IOException e) {
-					throw new BOException("ven.error.errorDecodeAuth");
-				}
+				decodeString = new String(Base64.encodeBytes(stringBase64.getBytes()));
 			}
 	
 		// RETORNA EL STRING stringBase64

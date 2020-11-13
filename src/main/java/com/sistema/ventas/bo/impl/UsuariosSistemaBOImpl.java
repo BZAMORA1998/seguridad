@@ -145,6 +145,108 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objIUsuarioSistemaDAO.save(objUsuariosSistema);
 		
 	}
+	
+	@Override
+	public void actualizarUsuario(Integer intIdUsuario,UsuariosDTO objUsuariosDTO) throws BOException {
+		UsuariosSistema objUsuario=null;
+		Optional<TiposIdentificacion> objTiposIdentificacion=null;
+		
+		// codigoIdentificacion
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getCodigoTipoIdentificacion())) { 
+		
+			objTiposIdentificacion=objITiposIdentificacionDAO.findById(objUsuariosDTO.getCodigoTipoIdentificacion());
+			
+			if(!objTiposIdentificacion.isPresent()) 
+				throw new BOException("ven.warn.tipoIdentificacionNoExiste");
+			
+			if(!("S").equalsIgnoreCase(objTiposIdentificacion.get().getEsActivo())) 
+				throw new BOException("ven.warn.tipoIdentificacionInactivo");
+		}
+		
+		// codigoIdentificacion
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion())) {
+			Boolean booNumeroIdentificacion=false;
+			
+			if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+				booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
+			else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+				booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
+			
+			if(!booNumeroIdentificacion) 
+				throw new BOException("ven.warn.numeroIdentificacionInvalida");
+		}
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion())) {
+			objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistemaPorCedula(objUsuariosDTO.getNumeroIdentificacion());
+			
+			if(ObjectUtils.isEmpty(objUsuario)) 
+				throw new BOException("ven.warn.numeroIdentificacionNoExiste");
+		}
+		
+		// codigoGenero.
+		Optional<Genero> objGenero=null;
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getCodigoGenero())) {
+			
+			objGenero=objIGeneroDAO.findById(objUsuariosDTO.getCodigoGenero());
+			
+			if(!objGenero.isPresent()) 
+				throw new BOException("ven.warn.generoNoExiste");
+			
+			if(!("S").equalsIgnoreCase(objGenero.get().getEsActivo())) 
+				throw new BOException("ven.warn.generoInactivo");
+		}
+		
+		// Usuario.
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getUser())) {
+		
+			objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
+			
+			if(objUsuario!=null)
+				throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});
+		}
+		
+		
+		
+		Optional<UsuariosSistema> objUsuariosSistema=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		
+		if(!objUsuariosSistema.isPresent())
+			throw new BOException("ven.warn.usuarioNoExiste");
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getUser()))
+			objUsuariosSistema.get().setUser(objUsuariosDTO.getUser().toUpperCase());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getPassword()))
+			objUsuariosSistema.get().setPassword(objUsuariosDTO.getPassword());
+		
+		Optional<Personas> objPersona=objIPersonasDAO.findById(objUsuariosSistema.get().getPersonas().getSecuenciaPersona());
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre()))
+			objPersona.get().setPrimerNombre(objUsuariosDTO.getPrimerNombre().toUpperCase());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoNombre()))
+			objPersona.get().setSegundoNombre(objUsuariosDTO.getSegundoNombre().toUpperCase());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getPrimerApellido()))
+			objPersona.get().setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getFechaNacimiento()))
+			objPersona.get().setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
+		
+		if(!ObjectUtils.isEmpty(objTiposIdentificacion.get()))
+			objPersona.get().setTiposIdentificacion(objTiposIdentificacion.get());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion()))
+			objPersona.get().setNumeroIdentificacion(objUsuariosDTO.getNumeroIdentificacion());
+		
+		if(!ObjectUtils.isEmpty(objGenero.get()))
+			objPersona.get().setGenero(objGenero.get());
+		
+		objPersona.get().setEsActivo("S");
+		
+		objUsuariosSistema.get().setPersonas(objPersona.get());
+		objUsuariosSistema.get().setEsActivo("S");
+		
+		objIUsuarioSistemaDAO.save(objUsuariosSistema.get());
+	}
 
 	@Override
 	public List<ConsultarUsuarioDTO> consultarUsuarios() {

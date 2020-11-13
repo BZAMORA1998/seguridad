@@ -16,4 +16,6 @@ public interface IUsuariosSistemaBO {
 
 	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario)  throws BOException;
 
+	public void actualizarUsuario(Integer intIdUsuario, UsuariosDTO objUsuariosDTO)throws BOException;
+
 }

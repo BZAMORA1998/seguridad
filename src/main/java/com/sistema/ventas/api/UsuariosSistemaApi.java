@@ -53,6 +53,26 @@ public class UsuariosSistemaApi {
 		}
 	}
 	
+	@RequestMapping(value="/{idUsuario}/actualizarUsuario",method = RequestMethod.PUT)
+	public ResponseEntity<?> actualizarUsuario(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
+			@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario,
+			@RequestBody UsuariosDTO objUsuariosDTO
+			) throws BOException {
+		
+		try {
+
+			objIUsuariosSistemaBO.actualizarUsuario(intIdUsuario,objUsuariosDTO);
+
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
+					null), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(null));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+		}
+	}
+	
 	@RequestMapping(value="/usuarios",method = RequestMethod.GET)
 	public ResponseEntity<?> consultarUsuarios(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage
