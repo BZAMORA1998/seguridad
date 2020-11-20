@@ -41,7 +41,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 			if(objUsuario==null) {
 				throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strAuth[0]});
 			}else {
-				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(strAuth[0].toUpperCase(),
+				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(strAuth[0],
 						strAuth[1]));
 				
 				objAut=new AutenticacionDTO();

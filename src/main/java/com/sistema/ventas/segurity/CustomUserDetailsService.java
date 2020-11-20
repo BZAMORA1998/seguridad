@@ -1,5 +1,6 @@
 package com.sistema.ventas.segurity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,15 @@ public class CustomUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username){
 		// TODO Auto-generated method stub
 		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(username);
-		
+		String strPassword;
 		try {
-			return new User(objUsuario.getUser(),GeneralUtil.decodificaBase64(objUsuario.getPassword()),new ArrayList());
-		} catch (BOException e) {
+			strPassword = GeneralUtil.decodificaBase64(objUsuario.getPassword());
+			return new User(objUsuario.getUser(),strPassword,new ArrayList());
+		} catch (BOException | IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+		
 	}
 }

@@ -23,13 +23,14 @@ public class GeneralUtil {
 	 * @param stringBase64
 	 * @return
 	 * @throws BOException
+		 * @throws IOException 
 	 */
-	public static String decodificaBase64(String stringBase64) throws BOException{
+	public static String decodificaBase64(String stringBase64) throws BOException, IOException{
 		String decodeString = null;
 
 			// VALIDA Y DECODIFICA EL STRING BASE64
 			if (!StringUtils.isBlank(stringBase64)) {
-				decodeString = new String(Base64.encodeBytes(stringBase64.getBytes()));
+				decodeString = new String(Base64.decode(stringBase64.getBytes()));
 			}
 	
 		// RETORNA EL STRING stringBase64
