@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -63,13 +65,37 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 		}
 	}
 	
-	public List<UsuariosSistema>  consultarUsuarioSistema() {
+	@SuppressWarnings("unchecked")
+	public List<UsuariosSistema>  consultarUsuarioSistema(Integer intPage, Integer intPerPage) {
 		try {	
+			
+			Query query =em.createQuery(
+					"SELECT us \n" +
+					"  FROM UsuariosSistema us \n" +
+					"  WHERE us.esActivo = 'S'"+
+					"  order by us.personas.primerApellido");
+			
+			query.setFirstResult(intPage * intPerPage - intPerPage)
+			.setMaxResults(intPerPage);
+			
+			
+			
+			return query.getResultList();
+					
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Long  contarConsultarUsuarioSistema() {
+		try {	
+			
 			return em.createQuery(
-						"SELECT us \n" +
-						"  FROM UsuariosSistema us \n" +
-						"  WHERE us.esActivo = 'S'",UsuariosSistema.class)
-						.getResultList();
+					"SELECT count(us) \n" +
+					"  FROM UsuariosSistema us \n" +
+					"  WHERE us.esActivo = 'S'",Long.class)
+					.getSingleResult();		
 		} catch (NoResultException e) {
 			return null;
 		}

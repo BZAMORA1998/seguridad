@@ -1,7 +1,9 @@
 package com.sistema.ventas.bo.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -14,7 +16,6 @@ import com.sistema.ventas.dao.IPersonasDAO;
 import com.sistema.ventas.dao.IRolSistemaDAO;
 import com.sistema.ventas.dao.ITiposIdentificacionDAO;
 import com.sistema.ventas.dao.IUsuarioSistemaDAO;
-import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -205,8 +206,6 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 				throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});
 		}
 		
-		
-		
 		Optional<UsuariosSistema> objUsuariosSistema=objIUsuarioSistemaDAO.findById(intIdUsuario);
 		
 		if(!objUsuariosSistema.isPresent())
@@ -251,10 +250,21 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objIUsuarioSistemaDAO.save(objUsuariosSistema.get());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<ConsultarUsuarioDTO> consultarUsuarios() {
+	public Map<String,Object> consultarUsuarios(Integer intPage, Integer intPerPage) throws BOException {
 		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
-		List<UsuariosSistema> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema();
+		
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intPage)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.page"});
+		
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intPerPage)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.perPage"});
+		
+		List<UsuariosSistema> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(intPage,intPerPage);
+		Long lngUsuario=objUsuarioSistemaDAO.contarConsultarUsuarioSistema();
 		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
 		
 		for(UsuariosSistema objUsuario:lsUsuario) {
@@ -268,8 +278,12 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			objConsultarUsuarioDTO.setUsuario(objUsuario.getUser());
 			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
 		}
+
+		Map<String, Object> mapResult = new HashMap();
+		mapResult.put("row",lsConsultarUsuarioDTO);
+		mapResult.put("totalRow",lngUsuario);
 		
-		return lsConsultarUsuarioDTO;
+		return mapResult;
 	}
 
 	@Override

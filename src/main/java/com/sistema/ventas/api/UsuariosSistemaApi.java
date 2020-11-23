@@ -1,6 +1,6 @@
 package com.sistema.ventas.api;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IUsuariosSistemaBO;
@@ -75,16 +76,21 @@ public class UsuariosSistemaApi {
 	
 	@RequestMapping(value="/usuarios",method = RequestMethod.GET)
 	public ResponseEntity<?> consultarUsuarios(
-			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam(	value = "page", 	required = false) Integer intPage,
+			@RequestParam(	value = "perPage", 	required = false) Integer intPerPage
 			) throws BOException {
 		
 		try {
 
-			List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=objIUsuariosSistemaBO.consultarUsuarios();
+			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosSistemaBO.consultarUsuarios(intPage,intPerPage);
 
+			System.out.println(mapConsultarUsuarioDTO.get("row"));
+			System.out.println(mapConsultarUsuarioDTO.get("totalRow"));
+			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-					lsConsultarUsuarioDTO), HttpStatus.OK);
+					mapConsultarUsuarioDTO), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(null));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
