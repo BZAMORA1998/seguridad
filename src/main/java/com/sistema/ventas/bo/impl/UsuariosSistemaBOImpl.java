@@ -280,8 +280,8 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		}
 
 		Map<String, Object> mapResult = new HashMap();
-		mapResult.put("row",lsConsultarUsuarioDTO);
-		mapResult.put("totalRow",lngUsuario);
+		mapResult.put("rows",lsConsultarUsuarioDTO);
+		mapResult.put("totalRows",lngUsuario);
 		
 		return mapResult;
 	}
