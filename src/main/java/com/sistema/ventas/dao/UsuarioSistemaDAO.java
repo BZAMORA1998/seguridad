@@ -10,6 +10,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -75,8 +76,8 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 					"  WHERE us.esActivo = 'S'"+
 					"  order by us.personas.primerApellido");
 			
-			query.setFirstResult(intPage * intPerPage - intPerPage)
-			.setMaxResults(intPerPage);
+			if(!ObjectUtils.isEmpty(intPage) && !ObjectUtils.isEmpty(intPerPage))
+				query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
 			
 			
 			

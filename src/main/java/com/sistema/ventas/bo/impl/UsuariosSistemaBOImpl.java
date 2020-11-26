@@ -255,13 +255,13 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	public Map<String,Object> consultarUsuarios(Integer intPage, Integer intPerPage) throws BOException {
 		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
 		
-		//Valida que el campo usuario sea obligatorio
-		if (ObjectUtils.isEmpty(intPage)) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.page"});
-		
-		//Valida que el campo usuario sea obligatorio
-		if (ObjectUtils.isEmpty(intPerPage)) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.perPage"});
+//		//Valida que el campo usuario sea obligatorio
+//		if (ObjectUtils.isEmpty(intPage)) 
+//			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.page"});
+//		
+//		//Valida que el campo usuario sea obligatorio
+//		if (ObjectUtils.isEmpty(intPerPage)) 
+//			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.perPage"});
 		
 		List<UsuariosSistema> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(intPage,intPerPage);
 		Long lngUsuario=objUsuarioSistemaDAO.contarConsultarUsuarioSistema();
