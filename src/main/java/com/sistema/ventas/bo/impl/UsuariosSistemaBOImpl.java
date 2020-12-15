@@ -337,6 +337,9 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 
 	@Override
 	public void guardarPhoto(MultipartFile photo,Integer intIdPersona)throws BOException, IOException{
+		
+		System.out.print("=>"+photo.getBytes());
+		
 		//Valida que el campo usuario sea obligatorio
 		if (ObjectUtils.isEmpty(intIdPersona)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idPersona"});

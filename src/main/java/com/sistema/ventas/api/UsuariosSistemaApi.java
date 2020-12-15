@@ -138,11 +138,11 @@ public class UsuariosSistemaApi {
 		}
 	}
 	
-	@RequestMapping(value="/photo/{idPersona}",method = RequestMethod.POST)
+	@RequestMapping(value="/photo",method = RequestMethod.POST)
 	public ResponseEntity<?> guardarPhoto(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
 			@RequestParam("photo") MultipartFile photo,
-			@PathVariable(value="idPersona", required = false)  Integer  intIdPersona
+			@RequestParam(value="idPersona", required = false)  Integer  intIdPersona
 			) throws BOException, IOException {
 		
 		try {
