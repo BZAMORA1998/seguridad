@@ -45,11 +45,11 @@ public class UsuariosSistemaApi {
 		
 		try {
 
-			objIUsuariosSistemaBO.crearUsuario(objUsuariosDTO);
+			Map<String,Object> objMap=objIUsuariosSistemaBO.crearUsuario(objUsuariosDTO);
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
-					null), HttpStatus.OK);
+					objMap), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(null));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
