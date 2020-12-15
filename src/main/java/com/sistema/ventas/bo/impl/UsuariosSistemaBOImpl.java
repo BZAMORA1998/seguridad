@@ -1,5 +1,6 @@
 package com.sistema.ventas.bo.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosSistemaBO;
 import com.sistema.ventas.dao.IGeneroDAO;
@@ -254,15 +256,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	@Override
 	public Map<String,Object> consultarUsuarios(Integer intPage, Integer intPerPage) throws BOException {
 		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
-		
-//		//Valida que el campo usuario sea obligatorio
-//		if (ObjectUtils.isEmpty(intPage)) 
-//			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.page"});
-//		
-//		//Valida que el campo usuario sea obligatorio
-//		if (ObjectUtils.isEmpty(intPerPage)) 
-//			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.perPage"});
-		
+				
 		List<UsuariosSistema> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(intPage,intPerPage);
 		Long lngUsuario=objUsuarioSistemaDAO.contarConsultarUsuarioSistema();
 		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
@@ -339,5 +333,23 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			objUsuarioDTO.setRolSistema(objUsuario.get().getRolSistema().getAbreviatura());
 		
 		return objUsuarioDTO;
+	}
+
+	@Override
+	public void guardarPhoto(MultipartFile photo,Integer intIdPersona)throws BOException, IOException{
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intIdPersona)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idPersona"});
+		
+		Optional<Personas> objPersona=objIPersonasDAO.findById(intIdPersona);
+		
+		if(!objPersona.isPresent())
+			throw new BOException("ven.warn.idPersonaNoExiste");
+		
+		if(!("S").equalsIgnoreCase(objPersona.get().getEsActivo()))
+			throw new BOException("ven.warn.idPersonaInactivo");
+		
+		objPersona.get().setPhoto(photo.getBytes());
+		objIPersonasDAO.save(objPersona.get());
 	}
 }

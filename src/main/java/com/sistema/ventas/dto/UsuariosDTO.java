@@ -20,6 +20,5 @@ public class UsuariosDTO {
     private Integer codigoGenero;
     private String user;
     private String password;
-    private String rolSistema;
-    
+    private String rolSistema;    
 }

@@ -1,6 +1,9 @@
 package com.sistema.ventas.bo;
 
+import java.io.IOException;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -17,5 +20,7 @@ public interface IUsuariosSistemaBO {
 	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario)  throws BOException;
 
 	public void actualizarUsuario(Integer intIdUsuario, UsuariosDTO objUsuariosDTO)throws BOException;
+
+	public void guardarPhoto(MultipartFile photo, Integer intIdPersona)throws BOException, IOException;
 
 }

@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,6 +55,9 @@ public class Personas implements Serializable {
     
 	@Column(name = "ES_ACTIVO")
 	private String esActivo;
+	
+	@Column(name = "PHOTO")
+	private byte[] photo;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CODIGO_TIPO_IDENTIFICACION", referencedColumnName = "CODIGO_TIPO_IDENTIFICACION", insertable = true, updatable = true)

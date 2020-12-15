@@ -1,5 +1,6 @@
 package com.sistema.ventas.api;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosSistemaBO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
@@ -130,6 +132,26 @@ public class UsuariosSistemaApi {
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					objUsuario), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(null));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+		}
+	}
+	
+	@RequestMapping(value="/photo/{idPersona}",method = RequestMethod.POST)
+	public ResponseEntity<?> guardarPhoto(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam("photo") MultipartFile photo,
+			@PathVariable(value="idPersona", required = false)  Integer  intIdPersona
+			) throws BOException, IOException {
+		
+		try {
+
+			objIUsuariosSistemaBO.guardarPhoto(photo,intIdPersona);
+
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(null));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
