@@ -49,7 +49,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	private IRolSistemaDAO objIRolSistemaDAO;
 	
 	@Override
-	public void crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
+	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
 		
 		UsuariosSistema objUsuario=null;
 		
@@ -147,6 +147,9 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		
 		objIUsuarioSistemaDAO.save(objUsuariosSistema);
 		
+		Map<String,Object> objMap=new HashMap<String,Object>();
+		objMap.put("secuenciaPersona",objPersona.getSecuenciaPersona());
+		return objMap;
 	}
 	
 	@Override

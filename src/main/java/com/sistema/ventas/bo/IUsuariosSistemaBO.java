@@ -11,7 +11,7 @@ import com.sistema.ventas.exceptions.BOException;
 
 public interface IUsuariosSistemaBO {
 
-	public void crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException;
+	public Map<String, Object> crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException;
 
 	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage) throws BOException;
 
