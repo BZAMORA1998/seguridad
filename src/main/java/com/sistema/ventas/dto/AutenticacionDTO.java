@@ -14,4 +14,5 @@ public class AutenticacionDTO {
 	private String usuario;
 	private String token;
 	private String rolSistema;
+	private byte[] photo;
 }
