@@ -14,26 +14,31 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity implementation class for Entity: Empresas
+ *
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "ROL_SISTEMA")
-public class RolSistema implements Serializable {
+@Table(name = "tbl_empresas")
+public class Empresa implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "SECUENCIA_ROL_SISTEMA  ")
-    private Integer secuenciaRolSistema;
+    @Column(name = "secuencia_empresa")
+    private Integer secuenciaEmpresa;
 	
-	@Column(name = "ABREVIATURA")
-    private String abreviatura;
+	@Column(name = "nombre")
+    private String nombreGenero;
 	
-	@Column(name = "DESCRIPCION")
+	@Column(name = "descripcion")
     private String descripcion;
 	
-	@Column(name = "ES_ACTIVO")
+	@Column(name = "es_activo")
     private String esActivo;
 }

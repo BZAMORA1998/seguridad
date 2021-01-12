@@ -14,10 +14,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.model.UsuariosSistema;
+import com.sistema.ventas.model.Usuarios;
 
 @Service
-public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
+public class UsuarioSistemaDAO extends BaseDAO<Usuarios, Integer>{
 
 	@PersistenceContext
 	EntityManager em;
@@ -28,37 +28,37 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 	}
 	
 	protected UsuarioSistemaDAO() {
-		super(UsuariosSistema.class);
+		super(Usuarios.class);
 	}
 
 	@Override
-	public void persist(UsuariosSistema t) throws PersistenceException {
+	public void persist(Usuarios t) throws PersistenceException {
 		super.persist(t);
 	}
 
 	@Override
-	public void update(UsuariosSistema t) throws PersistenceException {
+	public void update(Usuarios t) throws PersistenceException {
 		super.update(t);
 	}
 
 	@Override
-	public void remove(UsuariosSistema t) throws PersistenceException {
+	public void remove(Usuarios t) throws PersistenceException {
 		super.remove(t);
 	}
 
 	
 	@Override
-	public Optional<UsuariosSistema> find(@NonNull Integer id) {
+	public Optional<Usuarios> find(@NonNull Integer id) {
 		return super.find(id);
 	}
 	
-	public UsuariosSistema  consultarUsuarioSistema(String strUsuario) {
+	public Usuarios  consultarUsuarioSistema(String strUsuario) {
 		try {	
 			return em.createQuery(
 						"SELECT us \n" +
 						"  FROM UsuariosSistema us \n" +
 						"  WHERE us.user=:usuario \n" +
-						"  AND us.esActivo = 'S'",UsuariosSistema.class)
+						"  AND us.esActivo = 'S'",Usuarios.class)
 						.setParameter("usuario",strUsuario.toUpperCase())
 						.getSingleResult();
 		} catch (NoResultException e) {
@@ -67,7 +67,7 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UsuariosSistema>  consultarUsuarioSistema(Integer intPage, Integer intPerPage) {
+	public List<Usuarios>  consultarUsuarioSistema(Integer intPage, Integer intPerPage) {
 		try {	
 			
 			Query query =em.createQuery(
@@ -102,7 +102,7 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 		}
 	}
 
-	public UsuariosSistema consultarUsuarioSistemaPorCedula(String numeroIdentificacion) {
+	public Usuarios consultarUsuarioSistemaPorCedula(String numeroIdentificacion) {
 		try {	
 			return em.createQuery(
 						"SELECT us \n" +
@@ -110,7 +110,7 @@ public class UsuarioSistemaDAO extends BaseDAO<UsuariosSistema, Integer>{
 						"  JOIN us.personas pe \n" +
 						"  WHERE pe.numeroIdentificacion=:numeroIdentificacion \n" +
 						"  AND pe.esActivo = 'S' \n" +
-						"  AND us.esActivo = 'S'",UsuariosSistema.class)
+						"  AND us.esActivo = 'S'",Usuarios.class)
 						.setParameter("numeroIdentificacion",numeroIdentificacion)
 						.getSingleResult();
 		} catch (NoResultException e) {

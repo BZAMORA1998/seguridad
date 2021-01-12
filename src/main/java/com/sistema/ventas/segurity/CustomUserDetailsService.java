@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.exceptions.BOException;
-import com.sistema.ventas.model.UsuariosSistema;
+import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.GeneralUtil;
 
 @Service
@@ -24,11 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username){
 		// TODO Auto-generated method stub
-		UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(username);
+		Usuarios objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(username);
 		String strPassword;
 		try {
-			strPassword = GeneralUtil.decodificaBase64(objUsuario.getPassword());
-			return new User(objUsuario.getUser(),strPassword,new ArrayList());
+			strPassword = GeneralUtil.decodificaBase64(objUsuario.getContrasenia());
+			return new User(objUsuario.getUsuario(),strPassword,new ArrayList());
 		} catch (BOException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

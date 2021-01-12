@@ -27,9 +27,9 @@ import com.sistema.ventas.enums.TipoIdentificacion;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Genero;
 import com.sistema.ventas.model.Personas;
-import com.sistema.ventas.model.RolSistema;
+import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.TiposIdentificacion;
-import com.sistema.ventas.model.UsuariosSistema;
+import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.GeneralUtil;
 
 @Service
@@ -51,7 +51,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	@Override
 	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
 		
-		UsuariosSistema objUsuario=null;
+		Usuarios objUsuario=null;
 		
 		// primerNombre.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre())) 
@@ -135,15 +135,15 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		objPersona.setEsActivo("S");
 		objIPersonasDAO.save(objPersona);
 		
-		UsuariosSistema objUsuariosSistema=new UsuariosSistema();
-		objUsuariosSistema.setUser(objUsuariosDTO.getUser().toUpperCase());
-		objUsuariosSistema.setPassword(objUsuariosDTO.getPassword());
+		Usuarios objUsuariosSistema=new Usuarios();
+		objUsuariosSistema.setUsuario(objUsuariosDTO.getUser().toUpperCase());
+		objUsuariosSistema.setContrasenia(objUsuariosDTO.getPassword());
 		objUsuariosSistema.setPersonas(objPersona);
 		objUsuariosSistema.setEsActivo("S");
 		
-		Optional<RolSistema> objRolSistema =objIRolSistemaDAO.findById(2);
+		Optional<Roles> objRolSistema =objIRolSistemaDAO.findById(2);
 		
-		objUsuariosSistema.setRolSistema(objRolSistema.get());
+		objUsuariosSistema.setRoles(objRolSistema.get());
 		
 		objIUsuarioSistemaDAO.save(objUsuariosSistema);
 		
@@ -154,7 +154,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	
 	@Override
 	public void actualizarUsuario(Integer intIdUsuario,UsuariosDTO objUsuariosDTO) throws BOException {
-		UsuariosSistema objUsuario=null;
+		Usuarios objUsuario=null;
 		Optional<TiposIdentificacion> objTiposIdentificacion=null;
 		
 		// codigoIdentificacion
@@ -211,16 +211,16 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 				throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});
 		}
 		
-		Optional<UsuariosSistema> objUsuariosSistema=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		Optional<Usuarios> objUsuariosSistema=objIUsuarioSistemaDAO.findById(intIdUsuario);
 		
 		if(!objUsuariosSistema.isPresent())
 			throw new BOException("ven.warn.usuarioNoExiste");
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getUser()))
-			objUsuariosSistema.get().setUser(objUsuariosDTO.getUser().toUpperCase());
+			objUsuariosSistema.get().setUsuario(objUsuariosDTO.getUser().toUpperCase());
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getPassword()))
-			objUsuariosSistema.get().setPassword(objUsuariosDTO.getPassword());
+			objUsuariosSistema.get().setContrasenia(objUsuariosDTO.getPassword());
 		
 		Optional<Personas> objPersona=objIPersonasDAO.findById(objUsuariosSistema.get().getPersonas().getSecuenciaPersona());
 		if (!ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre()))
@@ -260,19 +260,19 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 	public Map<String,Object> consultarUsuarios(Integer intPage, Integer intPerPage) throws BOException {
 		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
 				
-		List<UsuariosSistema> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(intPage,intPerPage);
+		List<Usuarios> lsUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(intPage,intPerPage);
 		Long lngUsuario=objUsuarioSistemaDAO.contarConsultarUsuarioSistema();
 		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
 		
-		for(UsuariosSistema objUsuario:lsUsuario) {
+		for(Usuarios objUsuario:lsUsuario) {
 			objConsultarUsuarioDTO=new ConsultarUsuarioDTO();
-			objConsultarUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.getSecuenciaUsuarioSistema());
+			objConsultarUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.getSecuenciaUsuario());
 			objConsultarUsuarioDTO.setNumeroIdentificacion(objUsuario.getPersonas().getNumeroIdentificacion());
 			objConsultarUsuarioDTO.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
 			objConsultarUsuarioDTO.setSegundoNombre(objUsuario.getPersonas().getSegundoNombre());
 			objConsultarUsuarioDTO.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
 			objConsultarUsuarioDTO.setSegundoApellido(objUsuario.getPersonas().getSegundoApellido());
-			objConsultarUsuarioDTO.setUsuario(objUsuario.getUser());
+			objConsultarUsuarioDTO.setUsuario(objUsuario.getUsuario());
 			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
 		}
 
@@ -290,7 +290,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		if (ObjectUtils.isEmpty(intIdUsuario)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
 		
-		Optional<UsuariosSistema> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		Optional<Usuarios> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
 		
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
@@ -311,7 +311,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		if (ObjectUtils.isEmpty(intIdUsuario)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
 		
-		Optional<UsuariosSistema> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
+		Optional<Usuarios> objUsuario=objIUsuarioSistemaDAO.findById(intIdUsuario);
 		
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
@@ -320,7 +320,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			throw new BOException("ven.warn.idUsuarioInactivo");
 		
 		ConsultarUsuarioDTO objUsuarioDTO=new ConsultarUsuarioDTO();
-		objUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.get().getSecuenciaUsuarioSistema());
+		objUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.get().getSecuenciaUsuario());
 		if(objUsuario.get().getPersonas()!=null) {
 			objUsuarioDTO.setCodigoTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getCodigoTipoIdentificacion());
 			objUsuarioDTO.setNumeroIdentificacion(objUsuario.get().getPersonas().getNumeroIdentificacion());
@@ -332,8 +332,8 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 			objUsuarioDTO.setCodigoGenero(objUsuario.get().getPersonas().getGenero().getCodigoGenero());
 		}
 		
-		if(objUsuario.get().getRolSistema()!=null)
-			objUsuarioDTO.setRolSistema(objUsuario.get().getRolSistema().getAbreviatura());
+		if(objUsuario.get().getRoles()!=null)
+			objUsuarioDTO.setRolSistema(objUsuario.get().getRoles().getAbreviatura());
 		
 		return objUsuarioDTO;
 	}
@@ -355,7 +355,7 @@ public class UsuariosSistemaBOImpl implements IUsuariosSistemaBO{
 		if(!("S").equalsIgnoreCase(objPersona.get().getEsActivo()))
 			throw new BOException("ven.warn.idPersonaInactivo");
 		
-		objPersona.get().setPhoto(photo.getBytes());
+		objPersona.get().setFoto(photo.getBytes());
 		objIPersonasDAO.save(objPersona.get());
 	}
 }

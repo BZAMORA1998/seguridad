@@ -22,23 +22,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "USUARIOS_SISTEMA")
-public class UsuariosSistema  implements Serializable {
+@Table(name = "tbl_usuarios")
+public class Usuarios  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "SECUENCIA_USUARIO_SISTEMA")
-    private Integer secuenciaUsuarioSistema;
+    @Column(name = "SECUENCIA_USUARIO")
+    private Integer secuenciaUsuario;
 	
-	 @Column(name = "USER")
-	 private String user;
+	 @Column(name = "usuario")
+	 private String usuario;
 		
-	 @Column(name = "PASSWORD")
-	 private String password;
+	 @Column(name = "contrasenia")
+	 private String contrasenia;
 	 
-	 @Column(name = "ES_ACTIVO")
+	 @Column(name = "es_activo")
 	 private String esActivo;
 	 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
@@ -46,6 +46,6 @@ public class UsuariosSistema  implements Serializable {
 	private Personas personas;
 	
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "SECUENCIA_ROL_SISTEMA", referencedColumnName = "SECUENCIA_ROL_SISTEMA")
-	private RolSistema rolSistema;
+	@JoinColumn(name = "SECUENCIA_ROL", referencedColumnName = "SECUENCIA_ROL")
+	private Roles roles;
 }

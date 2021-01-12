@@ -39,7 +39,8 @@ public class JwtFilter extends OncePerRequestFilter {
 	        String[] arrServiciosSinSeguridad = { "/ventas/v1/tipoIdentificacion",
 	        		"/ventas/v1/genero",
 	        		"/ventas/v1/usuariosSistema/crearUsuario"
-	        		,"/ventas/v1/usuariosSistema/photo"};	
+	        		,"/ventas/v1/usuariosSistema/photo"
+	        		,"/ventas/v1/empresa"};	
 	        
 	        String token = null;
 	        String userName = null;

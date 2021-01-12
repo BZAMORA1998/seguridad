@@ -13,7 +13,7 @@ import com.sistema.ventas.dao.UsuarioSistemaDAO;
 import com.sistema.ventas.dto.AutenticacionDTO;
 import com.sistema.ventas.enums.AuthenticationScheme;
 import com.sistema.ventas.exceptions.BOException;
-import com.sistema.ventas.model.UsuariosSistema;
+import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.segurity.JwtUtil;
 import com.sistema.ventas.util.SeguridadUtil;
 
@@ -36,7 +36,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		
 		try {
 			strAuth[0]=strAuth[0].toUpperCase();
-			UsuariosSistema objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
+			Usuarios objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
 			
 			if(objUsuario==null) {
 				throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strAuth[0]});
@@ -45,13 +45,13 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 						strAuth[1]));
 				
 				objAut=new AutenticacionDTO();
-				objAut.setSecuenciaSistemaUsuario(objUsuario.getSecuenciaUsuarioSistema());
+				objAut.setSecuenciaSistemaUsuario(objUsuario.getSecuenciaUsuario());
 				objAut.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
 				objAut.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
-				objAut.setUsuario(objUsuario.getUser());
+				objAut.setUsuario(objUsuario.getUsuario());
 				objAut.setToken(jwUtil.generateToken(strAuth[0]));
-				objAut.setRolSistema(objUsuario.getRolSistema().getAbreviatura());
-				objAut.setPhoto(objUsuario.getPersonas().getPhoto());
+				objAut.setRolSistema(objUsuario.getRoles().getAbreviatura());
+				objAut.setPhoto(objUsuario.getPersonas().getFoto());
 			}
 		
 		} catch (BadCredentialsException e) {

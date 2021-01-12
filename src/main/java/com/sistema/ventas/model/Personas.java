@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "PERSONAS")
+@Table(name = "tbl_personas")
 public class Personas implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -56,15 +56,15 @@ public class Personas implements Serializable {
 	@Column(name = "ES_ACTIVO")
 	private String esActivo;
 	
-	@Column(name = "PHOTO")
-	private byte[] photo;
+	@Column(name = "foto")
+	private byte[] foto;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "CODIGO_TIPO_IDENTIFICACION", referencedColumnName = "CODIGO_TIPO_IDENTIFICACION", insertable = true, updatable = true)
+	@JoinColumn(name = "secuencia_TIPO_IDENTIFICACION", referencedColumnName = "secuencia_TIPO_IDENTIFICACION", insertable = true, updatable = true)
 	private TiposIdentificacion tiposIdentificacion;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "CODIGO_GENERO", referencedColumnName = "CODIGO_GENERO", insertable = true, updatable = true)
+	@JoinColumn(name = "secuencia_GENERO", referencedColumnName = "secuencia_GENERO", insertable = true, updatable = true)
 	private Genero genero;
 }
 

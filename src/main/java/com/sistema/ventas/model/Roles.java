@@ -14,27 +14,25 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Entity implementation class for Entity: GENERO
- *
- */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "tbl_generos")
-public class Genero implements Serializable {
-
+@Table(name = "tbl_roles")
+public class Roles implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "CODIGO_GENERO")
-    private Integer codigoGenero;
+    @Column(name = "SECUENCIA_ROL_SISTEMA  ")
+    private Integer secuenciaRolSistema;
 	
-	@Column(name = "NOMBRE_GENERO")
-    private String nombreGenero;
+	@Column(name = "ABREVIATURA")
+    private String abreviatura;
+	
+	@Column(name = "DESCRIPCION")
+    private String descripcion;
 	
 	@Column(name = "ES_ACTIVO")
     private String esActivo;
