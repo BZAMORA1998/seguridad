@@ -1,27 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.sistema.ventas.SistemaVentasApiApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 54.12 s <<< FAILURE! - in com.sistema.ventas.SistemaVentasApiApplicationTests
-contextLoads  Time elapsed: 0.016 s  <<< ERROR!
-java.lang.IllegalStateException: Failed to load ApplicationContext
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: 
-Error creating bean with name 'autenticacionApi': Unsatisfied dependency expressed through field 'objIAutenticacionBO'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'autenticacionBOImpl': Unsatisfied dependency expressed through field 'jwUtil'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jwtUtil' defined in file [C:\workspace_ventas\sistema-ventas-api\target\classes\com\sistema\ventas\segurity\JwtUtil.class]: Instantiation of bean failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.sistema.ventas.segurity.JwtUtil]: Constructor threw exception; nested exception is java.lang.Error: Unresolved compilation problem: 
-	The declared package "" does not match the expected package "com.sistema.ventas.segurity"
-
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: 
-Error creating bean with name 'autenticacionBOImpl': Unsatisfied dependency expressed through field 'jwUtil'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jwtUtil' defined in file [C:\workspace_ventas\sistema-ventas-api\target\classes\com\sistema\ventas\segurity\JwtUtil.class]: Instantiation of bean failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.sistema.ventas.segurity.JwtUtil]: Constructor threw exception; nested exception is java.lang.Error: Unresolved compilation problem: 
-	The declared package "" does not match the expected package "com.sistema.ventas.segurity"
-
-Caused by: org.springframework.beans.factory.BeanCreationException: 
-Error creating bean with name 'jwtUtil' defined in file [C:\workspace_ventas\sistema-ventas-api\target\classes\com\sistema\ventas\segurity\JwtUtil.class]: Instantiation of bean failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.sistema.ventas.segurity.JwtUtil]: Constructor threw exception; nested exception is java.lang.Error: Unresolved compilation problem: 
-	The declared package "" does not match the expected package "com.sistema.ventas.segurity"
-
-Caused by: org.springframework.beans.BeanInstantiationException: 
-Failed to instantiate [com.sistema.ventas.segurity.JwtUtil]: Constructor threw exception; nested exception is java.lang.Error: Unresolved compilation problem: 
-	The declared package "" does not match the expected package "com.sistema.ventas.segurity"
-
-Caused by: java.lang.Error: 
-Unresolved compilation problem: 
-	The declared package "" does not match the expected package "com.sistema.ventas.segurity"
-
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.84 s - in com.sistema.ventas.SistemaVentasApiApplicationTests

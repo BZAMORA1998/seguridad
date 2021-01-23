@@ -23,19 +23,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "TIPOS_IDENTIFICACION")
+@Table(name = "tbl_tipos_identificacion")
 public class TiposIdentificacion implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "CODIGO_TIPO_IDENTIFICACION")
-    private Integer codigoTipoIdentificacion;
+    @Column(name = "secuencia_tipo_identificacion")
+    private Integer secuenciaTipoIdentificacion;
 	
-	@Column(name = "NOMBRE_TIPO_IDENTIFICACION")
-    private String nombreTipoIdentificacion;
+	@Column(name = "nombre")
+    private String nombre;
 	
-	@Column(name = "ES_ACTIVO")
+	@Column(name = "es_activo")
     private String esActivo;
 }

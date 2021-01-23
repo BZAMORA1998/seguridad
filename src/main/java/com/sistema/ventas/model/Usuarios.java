@@ -42,10 +42,10 @@ public class Usuarios  implements Serializable {
 	 private String esActivo;
 	 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "SECUENCIA_PERSONA", referencedColumnName = "SECUENCIA_PERSONA")
+	@JoinColumn(name = "secuencia_persona", referencedColumnName = "secuencia_persona")
 	private Personas personas;
 	
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "SECUENCIA_ROL", referencedColumnName = "SECUENCIA_ROL")
+	@JoinColumn(name = "secuencia_rol", referencedColumnName = "secuencia_rol")
 	private Roles roles;
 }

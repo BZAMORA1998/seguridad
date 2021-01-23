@@ -32,39 +32,39 @@ public class Personas implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "SECUENCIA_PERSONA")
+    @Column(name = "secuencia_persona")
     private Integer secuenciaPersona;
 	
-	@Column(name = "NUMERO_IDENTIFICACION")
+	@Column(name = "numero_identificacion")
 	private String numeroIdentificacion;
 	 
-    @Column(name = "PRIMER_NOMBRE")
+    @Column(name = "primer_nombre")
     private String primerNombre;
 	
-    @Column(name = "SEGUNDO_NOMBRE")
+    @Column(name = "segundo_nombre")
     private String segundoNombre;
 		
-    @Column(name = "PRIMER_APELLIDO")
+    @Column(name = "primer_apellido")
     private String primerApellido;
 	
-    @Column(name = "SEGUNDO_APELLIDO")
+    @Column(name = "segundo_apellido")
     private String segundoApellido;
 	
-    @Column(name = "FECHA_NACIMIENTO")
+    @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
     
-	@Column(name = "ES_ACTIVO")
+	@Column(name = "es_activo")
 	private String esActivo;
 	
 	@Column(name = "foto")
 	private byte[] foto;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "secuencia_TIPO_IDENTIFICACION", referencedColumnName = "secuencia_TIPO_IDENTIFICACION", insertable = true, updatable = true)
+	@JoinColumn(name = "secuencia_tipo_identificacion", referencedColumnName = "secuencia_tipo_identificacion", insertable = true, updatable = true)
 	private TiposIdentificacion tiposIdentificacion;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "secuencia_GENERO", referencedColumnName = "secuencia_GENERO", insertable = true, updatable = true)
-	private Genero genero;
+	private Generos genero;
 }
 

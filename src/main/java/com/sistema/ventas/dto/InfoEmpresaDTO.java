@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class InfoEmpresaDTO {
+	private String nemonico;
 	private String nombre;
 	private String descripcion;
 }

@@ -25,15 +25,15 @@ public class Roles implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "SECUENCIA_ROL_SISTEMA  ")
-    private Integer secuenciaRolSistema;
+    @Column(name = "secuencia_rol")
+    private Integer secuenciaRol;
 	
-	@Column(name = "ABREVIATURA")
+	@Column(name = "abreviatura")
     private String abreviatura;
 	
-	@Column(name = "DESCRIPCION")
+	@Column(name = "descripcion")
     private String descripcion;
 	
-	@Column(name = "ES_ACTIVO")
+	@Column(name = "es_activo")
     private String esActivo;
 }

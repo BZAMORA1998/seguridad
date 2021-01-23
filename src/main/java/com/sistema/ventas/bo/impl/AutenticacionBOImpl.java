@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.bo.IAutenticacionBO;
-import com.sistema.ventas.dao.UsuarioSistemaDAO;
+import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.AutenticacionDTO;
 import com.sistema.ventas.enums.AuthenticationScheme;
 import com.sistema.ventas.exceptions.BOException;
@@ -21,7 +21,7 @@ import com.sistema.ventas.util.SeguridadUtil;
 public class AutenticacionBOImpl implements IAutenticacionBO{
 
 	@Autowired
-	private UsuarioSistemaDAO objUsuarioSistemaDAO;
+	private UsuariosDAO objUsuarioSistemaDAO;
 	@Autowired
 	private JwtUtil jwUtil;
 	@Autowired

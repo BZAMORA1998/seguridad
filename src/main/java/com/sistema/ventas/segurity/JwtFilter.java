@@ -36,10 +36,10 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException{
 	    try {
 	        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-	        String[] arrServiciosSinSeguridad = { "/ventas/v1/tipoIdentificacion",
-	        		"/ventas/v1/genero",
-	        		"/ventas/v1/usuariosSistema/crearUsuario"
-	        		,"/ventas/v1/usuariosSistema/photo"
+	        String[] arrServiciosSinSeguridad = { "/ventas/v1/general/tipoIdentificacion",
+	        		"/ventas/v1/general/genero",
+	        		"/ventas/v1/usuarios/crearUsuario"
+	        		,"/ventas/v1/usuarios/photo"
 	        		,"/ventas/v1/empresa"};	
 	        
 	        String token = null;
