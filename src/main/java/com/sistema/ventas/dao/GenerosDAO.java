@@ -42,17 +42,17 @@ public class GenerosDAO extends BaseDAO<Generos, Integer>{
 	public Optional<Generos> find(@NonNull Integer id) {
 		return super.find(id);
 	}
-	
-	
+
 	public List<Generos> findAll() {
-		try {	
+		try {
 			return em.createQuery(
-						"SELECT g \n" +
-						"  FROM Generos g \n" +
-						"  WHERE g.esActivo = 'S'",Generos.class)
-						.getResultList();
+					"SELECT g " +
+					"FROM Generos g " +
+					"WHERE g.esActivo='S' ", Generos.class)
+					.getResultList();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
+
 }

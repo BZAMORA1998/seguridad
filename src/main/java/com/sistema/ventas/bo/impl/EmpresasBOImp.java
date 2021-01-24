@@ -22,12 +22,12 @@ public class EmpresasBOImp implements IEmpresasBO{
 	public List<InfoEmpresaDTO> infoEmpresa(Integer intCodigoEmpresa, String strVariable) throws BOException {
 		// Valida que el campo CodigoEmpresas diferente a null.
 		if (ObjectUtils.isEmpty(intCodigoEmpresa)){
-			throw new BOException("moc.warn.campoObligatorio", new Object[] { "moc.campos.secuenciaEmpresa" });
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaEmpresa" });
 		}
 		
 		// Valida que el campo strVariable diferente a null.
 		if (ObjectUtils.isEmpty(strVariable)) {
-			throw new BOException("moc.warn.campoObligatorio", new Object[] { "moc.campos.variable" });
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.variable" });
 		}
 		
 		String [] items = strVariable.toUpperCase().split(",");

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private RolesDAO objRolesDAO;
 	
 	@Override
+	@Transactional
 	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
 		
 		Usuarios objUsuario=null;

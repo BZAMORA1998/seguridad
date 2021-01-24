@@ -45,5 +45,14 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/HP/.m2/repository/org/springframework/data/spring-data-jpa/2.3.3.RELEASE/spring-data-jpa-2.3.3.RELEASE.jar" sourcepath="C:/Users/HP/.m2/repository/org/springframework/data/spring-data-jpa/2.3.3.RELEASE/spring-data-jpa-2.3.3.RELEASE-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.springframework.data"/>
+			<attribute name="maven.artifactId" value="spring-data-jpa"/>
+			<attribute name="maven.version" value="2.3.3.RELEASE"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
