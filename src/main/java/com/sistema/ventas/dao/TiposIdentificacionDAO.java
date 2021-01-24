@@ -12,7 +12,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.TiposIdentificacion;
-import com.sistema.ventas.model.Usuarios;
 
 @Service
 public class TiposIdentificacionDAO extends BaseDAO<TiposIdentificacion, Integer>{

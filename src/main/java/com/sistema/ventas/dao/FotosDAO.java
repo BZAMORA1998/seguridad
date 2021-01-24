@@ -86,6 +86,7 @@ public class FotosDAO extends BaseDAO<Fotos,FotosCPK>{
 					.foto(tuple.get("foto",byte[].class))
 					.build();})
 					.collect(Collectors.toList());
+
 		} catch (NoResultException e) {
 			return null;
 		}
