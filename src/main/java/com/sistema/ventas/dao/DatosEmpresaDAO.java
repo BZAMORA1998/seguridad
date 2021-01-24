@@ -55,10 +55,11 @@ public class DatosEmpresaDAO extends BaseDAO<DatosEmpresa, DatosEmpresaCPK>{
 
 		try {
 			strJPQL.append(" SELECT de.datosEmpresaCPK.nombre as nombre, ");
-			strJPQL.append("    	de.descripcion as descripcion");
+			strJPQL.append("    	de.descripcion as descripcion,");
+			strJPQL.append("    	de.datosEmpresaCPK.nemonico as nemonico");
 			strJPQL.append(" FROM 	DatosEmpresa de");
 			strJPQL.append(" WHERE 	de.datosEmpresaCPK.secuenciaEmpresa=:secuenciaEmpresa");
-			strJPQL.append(" AND  	de.datosEmpresaCPK.nombre in (:nombres)");
+			strJPQL.append(" AND  	de.datosEmpresaCPK.nemonico in (:nombres)");
 			strJPQL.append(" AND  	de.esActivo ='S'");
 			
 			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createQuery(strJPQL.toString(), Tuple.class);
@@ -71,6 +72,7 @@ public class DatosEmpresaDAO extends BaseDAO<DatosEmpresa, DatosEmpresaCPK>{
 					.map(tuple -> {return InfoEmpresaDTO.builder()
 					.nombre(tuple.get("nombre",String.class))
 					.descripcion(tuple.get("descripcion",String.class))
+					.nemonico(tuple.get("nemonico",String.class))
 					.build();})
 					.collect(Collectors.toList());
 
