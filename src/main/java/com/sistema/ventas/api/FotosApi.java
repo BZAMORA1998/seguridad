@@ -19,7 +19,7 @@ import com.sistema.ventas.exceptions.CustomExceptionHandler;
 import com.sistema.ventas.util.MensajesUtil;
 
 @RestController
-@RequestMapping("/foto")
+@RequestMapping("/fotos")
 public class FotosApi {
 	
 	@SuppressWarnings("unused")
@@ -28,12 +28,12 @@ public class FotosApi {
 	@Autowired
 	private IFotosBO objFotosBO;
 
-	@RequestMapping(value="/{secuenciaEmpresa}",method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> consultarFotos(@RequestHeader(	
 			value = "Accept-Language", 	required = false) String strLanguage,
 			@RequestParam(name = "nemonico", required = false) String strNemonico,
 			@RequestParam(name = "nombre", required = false) String strNombre,
-			@PathVariable(value="secuenciaEmpresa", required = false)  Integer  intCodigoEmpresa
+			@RequestParam(value="secuenciaEmpresa", required = false)  Integer  intCodigoEmpresa
 			) throws BOException {
 		
 		try {

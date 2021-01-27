@@ -41,6 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	        		"/ventas/v1/usuarios/crearUsuario"
 	        		,"/ventas/v1/usuarios/photo"
 	        		,"/ventas/v1/empresas/datosEmpresa"
+	        		,"/ventas/v1/fotos"
 	        		,"/ventas/v1/empresas"};	
 	        
 	        String token = null;
