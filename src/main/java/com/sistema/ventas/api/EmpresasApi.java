@@ -46,10 +46,10 @@ public class EmpresasApi {
 		
 	}
 	
-	@RequestMapping(value="/{secuenciaEmpresa}",method = RequestMethod.GET)
+	@RequestMapping(value="/datosEmpresa",method = RequestMethod.GET)
 	public ResponseEntity<?> consultarEmpresa(@RequestHeader(	
 			value = "Accept-Language", 	required = false) String strLanguage,
-			@PathVariable(value="secuenciaEmpresa", required = false)  Integer  intCodigoEmpresa
+			@RequestParam(value="secuenciaEmpresa", required = false)  Integer  intCodigoEmpresa
 			) throws BOException {
 		
 		try {

@@ -50,7 +50,7 @@ public class EmpresasBOImp implements IEmpresasBO{
 		
 		// Valida que el campo CodigoEmpresas diferente a null.
 		if (ObjectUtils.isEmpty(intCodigoEmpresa)){
-			throw new BOException("moc.warn.campoObligatorio", new Object[] { "moc.campos.secuenciaEmpresa" });
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaEmpresa" });
 		}
 		
 		EmpresaDTO objEmpresaDTO=null;
