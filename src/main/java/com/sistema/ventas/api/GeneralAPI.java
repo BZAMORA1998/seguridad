@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IGeneralBO;
@@ -62,6 +63,24 @@ public class GeneralAPI {
 			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
 		}
 	}
+	
+	
+	@RequestMapping(value="/opciones_menu",method = RequestMethod.GET)
+	public ResponseEntity<?> opcionesMenu(
+			@RequestParam(value="nemonico", required = false)  String  strNemonico,
+			@RequestParam(value="secuenciaEmpresa", required = false)  Integer  intCodigoEmpresa
+			) throws BOException {
+		
+		try {
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
+					objIGeneralBO.opcionesMenu(strNemonico,intCodigoEmpresa)), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(null));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+		}
+	}
+	
 	
 
 }
