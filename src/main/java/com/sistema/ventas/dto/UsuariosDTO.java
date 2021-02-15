@@ -16,8 +16,8 @@ public class UsuariosDTO {
     private String primerApellido;
     private String segundoApellido;
     private String fechaNacimiento;
-    private Integer codigoTipoIdentificacion;
-    private Integer codigoGenero;
+    private Integer secuenciaTipoIdentificacion;
+    private Integer secuenciaGenero;
     private String user;
     private String password;
     private String rolSistema;    

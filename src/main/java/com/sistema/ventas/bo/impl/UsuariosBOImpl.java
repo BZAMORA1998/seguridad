@@ -62,10 +62,10 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerApellido"});
 		
 		// codigoIdentificacion
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.codigoTipoIdentificacion"});
 		
-		Optional<TiposIdentificacion> objTiposIdentificacion=objTiposIdentificacionDAO.find(objUsuariosDTO.getCodigoTipoIdentificacion());
+		Optional<TiposIdentificacion> objTiposIdentificacion=objTiposIdentificacionDAO.find(objUsuariosDTO.getSecuenciaTipoIdentificacion());
 		
 		if(!objTiposIdentificacion.isPresent()) 
 			throw new BOException("ven.warn.tipoIdentificacionNoExiste");
@@ -79,9 +79,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 
 		Boolean booNumeroIdentificacion=false;
 		
-		if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+		if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 			booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
-		else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+		else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 			booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
 		
 		if(!booNumeroIdentificacion) 
@@ -93,10 +93,10 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			throw new BOException("ven.warn.numeroIdentificacionExiste");
 		
 		// codigoGenero.
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getCodigoGenero())) 
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaGenero())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.codigoGenero"});
 		
-		Optional<Generos> objGenero=objGenerosDAO.find(objUsuariosDTO.getCodigoGenero());
+		Optional<Generos> objGenero=objGenerosDAO.find(objUsuariosDTO.getSecuenciaGenero());
 		
 		if(!objGenero.isPresent()) 
 			throw new BOException("ven.warn.generoNoExiste");
@@ -158,9 +158,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		Optional<TiposIdentificacion> objTiposIdentificacion=null;
 		
 		// codigoIdentificacion
-		if (!ObjectUtils.isEmpty(objUsuariosDTO.getCodigoTipoIdentificacion())) { 
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaTipoIdentificacion())) { 
 		
-			objTiposIdentificacion=objTiposIdentificacionDAO.find(objUsuariosDTO.getCodigoTipoIdentificacion());
+			objTiposIdentificacion=objTiposIdentificacionDAO.find(objUsuariosDTO.getSecuenciaTipoIdentificacion());
 			
 			if(!objTiposIdentificacion.isPresent()) 
 				throw new BOException("ven.warn.tipoIdentificacionNoExiste");
@@ -173,9 +173,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if (!ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion())) {
 			Boolean booNumeroIdentificacion=false;
 			
-			if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+			if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 				booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
-			else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getCodigoTipoIdentificacion())) 
+			else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 				booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
 			
 			if(!booNumeroIdentificacion) 
@@ -191,9 +191,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		
 		// codigoGenero.
 		Optional<Generos> objGenero=null;
-		if (!ObjectUtils.isEmpty(objUsuariosDTO.getCodigoGenero())) {
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaGenero())) {
 			
-			objGenero=objGenerosDAO.find(objUsuariosDTO.getCodigoGenero());
+			objGenero=objGenerosDAO.find(objUsuariosDTO.getSecuenciaGenero());
 			
 			if(!objGenero.isPresent()) 
 				throw new BOException("ven.warn.generoNoExiste");
@@ -311,6 +311,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
+	@Transactional
 	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario) throws BOException {
 		
 		//Valida que el campo usuario sea obligatorio
