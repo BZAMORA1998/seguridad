@@ -80,22 +80,21 @@ public class UsuariosApi {
 	public ResponseEntity<?> consultarUsuarios(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
 			@RequestParam(	value = "page", 	required = false) Integer intPage,
-			@RequestParam(	value = "perPage", 	required = false) Integer intPerPage
+			@RequestParam(	value = "perPage", 	required = false) Integer intPerPage,
+			@RequestParam(	value = "cedulaCodigoUsuario", 	required = false) String strCedulaCodigoUsuario,
+			@RequestParam(	value = "estado", 	required = false) String strEstado
 			) throws BOException {
 		
 		try {
 
-			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosBO.consultarUsuarios(intPage,intPerPage);
-
-			System.out.println(mapConsultarUsuarioDTO.get("row"));
-			System.out.println(mapConsultarUsuarioDTO.get("totalRow"));
+			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosBO.consultarUsuarios(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
 			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					mapConsultarUsuarioDTO), HttpStatus.OK);
 		} catch (BOException be) {
-			logger.error(" ERROR => " + be.getTranslatedMessage(null));
-			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
 	

@@ -255,33 +255,6 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuariosDAO.persist(objUsuariosSistema.get());
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String,Object> consultarUsuarios(Integer intPage, Integer intPerPage) throws BOException {
-		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
-				
-		List<Usuarios> lsUsuario=objUsuariosDAO.consultarUsuarioSistema(intPage,intPerPage);
-		Long lngUsuario=objUsuariosDAO.contarConsultarUsuarioSistema();
-		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
-		
-		for(Usuarios objUsuario:lsUsuario) {
-			objConsultarUsuarioDTO=new ConsultarUsuarioDTO();
-			objConsultarUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.getSecuenciaUsuario());
-			objConsultarUsuarioDTO.setNumeroIdentificacion(objUsuario.getPersonas().getNumeroIdentificacion());
-			objConsultarUsuarioDTO.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
-			objConsultarUsuarioDTO.setSegundoNombre(objUsuario.getPersonas().getSegundoNombre());
-			objConsultarUsuarioDTO.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
-			objConsultarUsuarioDTO.setSegundoApellido(objUsuario.getPersonas().getSegundoApellido());
-			objConsultarUsuarioDTO.setUsuario(objUsuario.getUsuario());
-			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
-		}
-
-		Map<String, Object> mapResult = new HashMap();
-		mapResult.put("rows",lsConsultarUsuarioDTO);
-		mapResult.put("totalRows",lngUsuario);
-		
-		return mapResult;
-	}
 
 	@Override
 	public void eliminarUsuario(Integer intIdUsuario) throws BOException {
@@ -364,5 +337,34 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		
 		objPersona.get().setFoto(photo.getBytes());
 		objPersonasDAO.persist(objPersona.get());
+	}
+
+	@Override
+	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage,String strCedulaCodigoUsuario, String strEstado)
+			throws BOException {
+
+		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
+				
+		List<Usuarios> lsUsuario=objUsuariosDAO.consultarUsuarioSistema(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
+		Long lngUsuario=objUsuariosDAO.contarConsultarUsuarioSistema(strCedulaCodigoUsuario,strEstado);
+		
+		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
+		for(Usuarios objUsuario:lsUsuario) {
+			objConsultarUsuarioDTO=new ConsultarUsuarioDTO();
+			objConsultarUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.getSecuenciaUsuario());
+			objConsultarUsuarioDTO.setNumeroIdentificacion(objUsuario.getPersonas().getNumeroIdentificacion());
+			objConsultarUsuarioDTO.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
+			objConsultarUsuarioDTO.setSegundoNombre(objUsuario.getPersonas().getSegundoNombre());
+			objConsultarUsuarioDTO.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
+			objConsultarUsuarioDTO.setSegundoApellido(objUsuario.getPersonas().getSegundoApellido());
+			objConsultarUsuarioDTO.setUsuario(objUsuario.getUsuario());
+			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
+		}
+
+		Map<String, Object> mapResult = new HashMap();
+		mapResult.put("rows",lsConsultarUsuarioDTO);
+		mapResult.put("totalRows",lngUsuario);
+		
+		return mapResult;
 	}
 }

@@ -66,7 +66,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Usuarios>  consultarUsuarioSistema(Integer intPage, Integer intPerPage) {
+	public List<Usuarios>  consultarUsuarioSistema(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado) {
 		try {	
 			
 			Query query =em.createQuery(
@@ -88,7 +88,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Long  contarConsultarUsuarioSistema() {
+	public Long  contarConsultarUsuarioSistema(String strCedulaCodigoUsuario, String strEstado) {
 		try {	
 			
 			return em.createQuery(
