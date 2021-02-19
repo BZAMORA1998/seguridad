@@ -2,18 +2,23 @@ package com.sistema.ventas.dao;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.model.Usuarios;
+import com.sistema.ventas.util.GeneralUtil;
 
 @Service
 public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
@@ -66,22 +71,50 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Usuarios>  consultarUsuarioSistema(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado) {
+	public List<ConsultarUsuarioDTO>  consultarUsuarioSistema(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado) {
+		
+		StringBuilder strJPQL = new StringBuilder();
+		
 		try {	
 			
-			Query query =em.createQuery(
-					"SELECT us \n" +
-					"  FROM Usuarios us \n" +
-					"  WHERE us.esActivo = 'S'"+
-					"  order by us.personas.primerApellido");
+			strJPQL.append(" SELECT per.numeroIdentificacion as numeroIdentificacion, ");
+			strJPQL.append("    	per.primerApellido as primerApellido,");
+			strJPQL.append("    	per.segundoApellido as segundoApellido,");
+			strJPQL.append("    	per.primerNombre as primerNombre,");
+			strJPQL.append("    	per.segundoNombre as segundoNombre,");
+			strJPQL.append("    	u.usuario as usuario,");
+			strJPQL.append("    	ro.abreviatura as rol");
+			strJPQL.append(" FROM 	Usuarios u");
+			strJPQL.append(" 	JOIN 	u.personas per");
+			strJPQL.append(" 	JOIN 	u.roles ro");
+			strJPQL.append(" WHERE u.esActivo is not null");
+			
+			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
+				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
+			
+			if("ACTIVO".equalsIgnoreCase(strEstado))
+				strJPQL.append(" AND u.esActivo ='S'");
+			else if("INACTIVO".equalsIgnoreCase(strEstado))
+				strJPQL.append(" AND u.esActivo ='N'");
+			
+			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createQuery(strJPQL.toString(), Tuple.class);
+			
+			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
+				query.setParameter("valor",strCedulaCodigoUsuario);
 			
 			if(!ObjectUtils.isEmpty(intPage) && !ObjectUtils.isEmpty(intPerPage))
 				query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
 			
-			
-			
-			return query.getResultList();
-					
+			return query	
+					.getResultList()
+					.stream()
+					.map(tuple -> {return ConsultarUsuarioDTO.builder()
+					.numeroIdentificacion(tuple.get("numeroIdentificacion",String.class))
+					.nombresCompletos(GeneralUtil.concatenarApellidosNombres(tuple.get("primerApellido",String.class), tuple.get("segundoApellido",String.class), tuple.get("primerNombre",String.class), tuple.get("segundoNombre",String.class)))
+					.usuario(tuple.get("usuario",String.class))
+					.rol(tuple.get("rol",String.class))
+					.build();})
+					.collect(Collectors.toList());
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -89,15 +122,35 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 	
 	@SuppressWarnings("unchecked")
 	public Long  contarConsultarUsuarioSistema(String strCedulaCodigoUsuario, String strEstado) {
+		StringBuilder strJPQL = new StringBuilder();
+		
 		try {	
 			
-			return em.createQuery(
-					"SELECT count(us) \n" +
-					"  FROM Usuarios us \n" +
-					"  WHERE us.esActivo = 'S'",Long.class)
-					.getSingleResult();		
+			strJPQL.append(" SELECT count(u) ");
+			strJPQL.append(" FROM 	Usuarios u");
+			strJPQL.append(" 	JOIN 	u.personas per");
+			strJPQL.append(" 	JOIN 	u.roles ro");
+			strJPQL.append(" WHERE u.esActivo is not null");
+			
+			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
+				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
+			
+			if("ACTIVO".equalsIgnoreCase(strEstado))
+				strJPQL.append(" AND u.esActivo ='S'");
+			else if("INACTIVO".equalsIgnoreCase(strEstado))
+				strJPQL.append(" AND u.esActivo ='N'");
+			
+			Query query =  em.createQuery(strJPQL.toString());
+			
+			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
+				query.setParameter("valor",strCedulaCodigoUsuario);
+			
+			Long lonUsuarios=(Long) query.getSingleResult();
+			
+			return lonUsuarios;
+			
 		} catch (NoResultException e) {
-			return null;
+			return new Long(0);
 		}
 	}
 

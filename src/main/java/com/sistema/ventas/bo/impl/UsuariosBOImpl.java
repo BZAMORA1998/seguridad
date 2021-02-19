@@ -1,7 +1,6 @@
 package com.sistema.ventas.bo.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -299,23 +298,23 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if(!("S").equalsIgnoreCase(objUsuario.get().getEsActivo()))
 			throw new BOException("ven.warn.idUsuarioInactivo");
 		
-		ConsultarUsuarioDTO objUsuarioDTO=new ConsultarUsuarioDTO();
-		objUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.get().getSecuenciaUsuario());
-		if(objUsuario.get().getPersonas()!=null) {
-			objUsuarioDTO.setCodigoTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getSecuenciaTipoIdentificacion());
-			objUsuarioDTO.setNumeroIdentificacion(objUsuario.get().getPersonas().getNumeroIdentificacion());
-			objUsuarioDTO.setPrimerNombre(objUsuario.get().getPersonas().getPrimerNombre());
-			objUsuarioDTO.setSegundoNombre(objUsuario.get().getPersonas().getSegundoNombre());
-			objUsuarioDTO.setPrimerApellido(objUsuario.get().getPersonas().getPrimerApellido());
-			objUsuarioDTO.setSegundoApellido(objUsuario.get().getPersonas().getSegundoApellido());
-			objUsuarioDTO.setFechaNacimiento(GeneralUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
-			objUsuarioDTO.setCodigoGenero(objUsuario.get().getPersonas().getGenero().getSecuenciaGenero());
-		}
+//		ConsultarUsuarioDTO objUsuarioDTO=new ConsultarUsuarioDTO();
+//		objUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.get().getSecuenciaUsuario());
+//		if(objUsuario.get().getPersonas()!=null) {
+//			objUsuarioDTO.setCodigoTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getSecuenciaTipoIdentificacion());
+//			objUsuarioDTO.setNumeroIdentificacion(objUsuario.get().getPersonas().getNumeroIdentificacion());
+//			objUsuarioDTO.setPrimerNombre(objUsuario.get().getPersonas().getPrimerNombre());
+//			objUsuarioDTO.setSegundoNombre(objUsuario.get().getPersonas().getSegundoNombre());
+//			objUsuarioDTO.setPrimerApellido(objUsuario.get().getPersonas().getPrimerApellido());
+//			objUsuarioDTO.setSegundoApellido(objUsuario.get().getPersonas().getSegundoApellido());
+//			objUsuarioDTO.setFechaNacimiento(GeneralUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
+//			objUsuarioDTO.setCodigoGenero(objUsuario.get().getPersonas().getGenero().getSecuenciaGenero());
+//		}
 		
-		if(objUsuario.get().getRoles()!=null)
-			objUsuarioDTO.setRolSistema(objUsuario.get().getRoles().getAbreviatura());
-		
-		return objUsuarioDTO;
+//		if(objUsuario.get().getRoles()!=null)
+//			objUsuarioDTO.setRolSistema(objUsuario.get().getRoles().getAbreviatura());
+//		
+		return null;
 	}
 
 	@Override
@@ -342,27 +341,21 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	@Override
 	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage,String strCedulaCodigoUsuario, String strEstado)
 			throws BOException {
-
-		List<ConsultarUsuarioDTO> lsConsultarUsuarioDTO=new ArrayList<ConsultarUsuarioDTO>();
-				
-		List<Usuarios> lsUsuario=objUsuariosDAO.consultarUsuarioSistema(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
+		
+		//intPage.
+		if (ObjectUtils.isEmpty(intPage)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.page"});
+		
+		//intPerPage.
+		if (ObjectUtils.isEmpty(intPerPage)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.perPage"});
+		
+	
+		List<ConsultarUsuarioDTO> lsUsuario=objUsuariosDAO.consultarUsuarioSistema(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
 		Long lngUsuario=objUsuariosDAO.contarConsultarUsuarioSistema(strCedulaCodigoUsuario,strEstado);
 		
-		ConsultarUsuarioDTO objConsultarUsuarioDTO=null;
-		for(Usuarios objUsuario:lsUsuario) {
-			objConsultarUsuarioDTO=new ConsultarUsuarioDTO();
-			objConsultarUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.getSecuenciaUsuario());
-			objConsultarUsuarioDTO.setNumeroIdentificacion(objUsuario.getPersonas().getNumeroIdentificacion());
-			objConsultarUsuarioDTO.setPrimerNombre(objUsuario.getPersonas().getPrimerNombre());
-			objConsultarUsuarioDTO.setSegundoNombre(objUsuario.getPersonas().getSegundoNombre());
-			objConsultarUsuarioDTO.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
-			objConsultarUsuarioDTO.setSegundoApellido(objUsuario.getPersonas().getSegundoApellido());
-			objConsultarUsuarioDTO.setUsuario(objUsuario.getUsuario());
-			lsConsultarUsuarioDTO.add(objConsultarUsuarioDTO);
-		}
-
 		Map<String, Object> mapResult = new HashMap();
-		mapResult.put("rows",lsConsultarUsuarioDTO);
+		mapResult.put("rows",lsUsuario);
 		mapResult.put("totalRows",lngUsuario);
 		
 		return mapResult;

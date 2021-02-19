@@ -351,4 +351,24 @@ public class GeneralUtil {
 		return formatter.format(datFecha);
 	}
 	
+	/**
+	 * Concatena apellidos y nombres.
+	 * 
+	 * @author Bryan Zamora
+	 * @param primerApellido
+	 * @param segundoApellido
+	 * @param primerNombre
+	 * @param segundoNombre
+	 * @return
+	 */
+	public static String concatenarApellidosNombres(String primerApellido, String segundoApellido, String primerNombre,
+			String segundoNombre) {
+		String strNombreCompleto = "";
+		strNombreCompleto = primerApellido != null && !primerApellido.trim().equals("") ? primerApellido : "";
+		strNombreCompleto = strNombreCompleto + (segundoApellido != null && !segundoApellido.trim().equals("") ? " " + segundoApellido : "");
+		strNombreCompleto = strNombreCompleto + (primerNombre != null && !primerNombre.trim().equals("") ? " " + primerNombre : "");
+		strNombreCompleto = strNombreCompleto + (segundoNombre != null && !segundoNombre.trim().equals("") ? " " + segundoNombre : "");
+		return strNombreCompleto.trim().toUpperCase();
+	}
+	
 }
