@@ -83,7 +83,8 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append("    	per.primerNombre as primerNombre,");
 			strJPQL.append("    	per.segundoNombre as segundoNombre,");
 			strJPQL.append("    	u.usuario as usuario,");
-			strJPQL.append("    	ro.abreviatura as rol");
+			strJPQL.append("    	ro.abreviatura as rol,");
+			strJPQL.append("    	u.esActivo as estado");
 			strJPQL.append(" FROM 	Usuarios u");
 			strJPQL.append(" 	JOIN 	u.personas per");
 			strJPQL.append(" 	JOIN 	u.roles ro");
@@ -113,6 +114,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 					.nombresCompletos(GeneralUtil.concatenarApellidosNombres(tuple.get("primerApellido",String.class), tuple.get("segundoApellido",String.class), tuple.get("primerNombre",String.class), tuple.get("segundoNombre",String.class)))
 					.usuario(tuple.get("usuario",String.class))
 					.rol(tuple.get("rol",String.class))
+					.estado(tuple.get("estado")!=null && "S".equalsIgnoreCase(tuple.get("estado",String.class))?"ACTIVO":"INACTIVO")
 					.build();})
 					.collect(Collectors.toList());
 		} catch (NoResultException e) {

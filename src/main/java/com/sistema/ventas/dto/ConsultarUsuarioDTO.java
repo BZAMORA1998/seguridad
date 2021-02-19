@@ -19,4 +19,5 @@ public class ConsultarUsuarioDTO implements Serializable {
 	private String nombresCompletos;
     private String usuario;
     private String rol;
+    private String estado;
 }
