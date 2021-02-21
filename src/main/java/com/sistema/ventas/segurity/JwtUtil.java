@@ -9,7 +9,10 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.sistema.ventas.exceptions.BOException;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -50,8 +53,13 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails) throws BOException {
         final String username = extractUsername(token);
+       
+        if(!isTokenExpired(token))
+        	throw new ExpiredJwtException(null,null,"Token caducado");
+        
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        
     }
 }

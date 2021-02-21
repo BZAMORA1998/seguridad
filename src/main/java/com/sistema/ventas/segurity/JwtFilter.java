@@ -2,14 +2,12 @@ package com.sistema.ventas.segurity;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,14 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException{
 	    try {
 	        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-	        String[] arrServiciosSinSeguridad = { "/ventas/v1/general/tipoIdentificacion",
-	        		"/ventas/v1/general/genero",
-	        		"/ventas/v1/usuarios/crearUsuario"
-	        		,"/ventas/v1/usuarios/photo"
-	        		,"/ventas/v1/empresas/datosEmpresa"
-	        		,"/ventas/v1/fotos"
-	        		,"/ventas/v1/empresas"
-	        		,"/ventas/v1/general/opciones_menu"};	
+	        String[] arrServiciosSinSeguridad = {};	
 	        
 	        String token = null;
 	        String userName = null;
@@ -84,9 +75,9 @@ public class JwtFilter extends OncePerRequestFilter {
 				e.printStackTrace();
 				httpServletResponse.setStatus(Status.UNAUTHORIZED.getStatusCode());
 				httpServletResponse.setHeader("msgAutorizadorException", e.getMessage());
-				logger.log(Level.SEVERE, null, e);
-				throw new ClientErrorException(e.getMessage()!=null?e.getMessage():"Exception SecurityRequestFilter: ", Status.UNAUTHORIZED ,e);
-			}
+ 			}
+	    
 	    filterChain.doFilter(httpServletRequest, httpServletResponse);
+	    
     }
 }

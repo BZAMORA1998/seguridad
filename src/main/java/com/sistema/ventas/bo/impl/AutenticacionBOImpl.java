@@ -36,6 +36,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		
 		try {
 			strAuth[0]=strAuth[0].toUpperCase();
+			
 			Usuarios objUsuario=objUsuarioSistemaDAO.consultarUsuarioSistema(strAuth[0]);
 			
 			if(objUsuario==null) {

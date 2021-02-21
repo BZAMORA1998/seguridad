@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.sistema.ventas.exceptions.CustomAuthenticationEntryPoint;
 
 @EnableWebSecurity
 @Configuration
@@ -22,6 +23,8 @@ class WebSecurity extends WebSecurityConfigurerAdapter {
 	private CustomUserDetailsService userDetailsService;
 	@Autowired
     private JwtFilter jwtFilter;
+	@Autowired
+	private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,9 +45,14 @@ class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers("/autenticacion/login")
-                .permitAll().anyRequest().authenticated()
-                .and().exceptionHandling().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        		.permitAll().
+				// Cualquier solicitud a la aplicación debe ser autenticado
+				anyRequest().authenticated().and().
+				// Un solo punto de entrada para autenticar
+				exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).and().
+				// No se creará ni utilizará ninguna sesión
+				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);;
     }
 }
