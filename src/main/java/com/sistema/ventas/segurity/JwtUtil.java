@@ -45,7 +45,10 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) throws BOException {
-    	    	
+    	
+    	System.out.print("Fecha: Expiracion: "+extractExpiration(token));
+    	System.out.print("Fecha: Actual: "+new Date());
+    	
     	if(extractExpiration(token).before(new Date())) 
     		 throw new ExpiredJwtException(null,null,"Token caducado");
     	
@@ -59,12 +62,17 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
 
+    	System.out.print("Fecha Inicio: "+new Date(System.currentTimeMillis()));
+    	System.out.print("Fecha Expiracion: "+new Date(System.currentTimeMillis() +3600000 ));
+    	
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000 ))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) throws BOException {
+    	
+    	System.out.print("Validar Token: "+!isTokenExpired(token));
     	
         final String username = extractUsername(token);
         
