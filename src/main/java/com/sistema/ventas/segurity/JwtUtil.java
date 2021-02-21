@@ -46,11 +46,11 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) throws BOException {
-    	
-    	if(!extractExpiration(token).before(new Date())) 
+    	    	
+    	if(extractExpiration(token).before(new Date())) 
     		 throw new ExpiredJwtException(null,null,"Token caducado");
     	
-        return true;
+        return false;
     }
 
     public String generateToken(String username) {
