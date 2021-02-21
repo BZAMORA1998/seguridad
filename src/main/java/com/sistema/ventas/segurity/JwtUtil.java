@@ -56,10 +56,10 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) throws BOException {
         final String username = extractUsername(token);
        
-        if(!isTokenExpired(token))
+        if(isTokenExpired(token))
         	throw new ExpiredJwtException(null,null,"Token caducado");
         
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()));
         
     }
 }
