@@ -26,7 +26,7 @@ public class JwtUtil {
     }
 
     public Date extractExpiration(String token) throws BOException {
-        return extractClaim(token, Claims::getExpiration);
+       return extractClaim(token, Claims::getExpiration); 
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws BOException {
@@ -37,7 +37,9 @@ public class JwtUtil {
     	Claims claims = null ;
     	 try {
         	 claims=Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-    	 }catch(Exception e){
+    	 }catch(ExpiredJwtException ex) {
+     		throw new BOException("ven.warn.tokenCaducado");
+     	}catch(Exception e){
     		 throw new BOException("ven.warn.tokenInvalido");
     	 }
     	 
@@ -45,14 +47,7 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) throws BOException {
-    	
-    	System.out.print("Fecha: Expiracion: "+extractExpiration(token));
-    	System.out.print("Fecha: Actual: "+new Date());
-    	
-    	if(extractExpiration(token).before(new Date())) 
-    		 throw new ExpiredJwtException(null,null,"Token caducado");
-    	
-        return false;
+        return extractExpiration(token).before(new Date());
     }
 
     public String generateToken(String username) {
@@ -62,20 +57,14 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
 
-    	System.out.print("Fecha Inicio: "+new Date(System.currentTimeMillis()));
-    	System.out.print("Fecha Expiracion: "+new Date(System.currentTimeMillis() +3600000 ));
-    	
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000 ))
+                .setExpiration(new Date(System.currentTimeMillis()+3600000))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) throws BOException {
     	
-    	System.out.print("Validar Token: "+!isTokenExpired(token));
-    	
         final String username = extractUsername(token);
-        
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         
     }
