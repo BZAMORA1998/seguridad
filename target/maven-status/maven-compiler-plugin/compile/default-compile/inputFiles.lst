@@ -1,5 +1,3 @@
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\DatosEmpresa.java
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\DatosEmpresaCPK.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\Personas.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\BOException.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\bo\impl\AutenticacionBOImpl.java
@@ -20,7 +18,6 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\Usua
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\BaseDAO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\CustomExceptionHandler.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\UsuariosDAO.java
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\OpcionesMenuCPK.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\enums\AuthenticationScheme.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\Generos.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\JwtUtil.java
@@ -39,7 +36,6 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\Aute
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\CustomAuthenticationEntryPoint.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\WebSecurity.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\TiposIdentificacionDAO.java
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\FotosCPK.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\RolesDAO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\ApiErrorResponse.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\bo\IFotosBO.java
@@ -48,14 +44,12 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\Ti
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\IGenerosDAO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\JwtFilter.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\enums\TipoIdentificacion.java
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\OpcionesMenuDAO.java
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\DatosEmpresaDAO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\enums\FormatoFecha.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\GeneralAPI.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\OpcionesMenuDTO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\SeguridadUtil.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\UsuarioLogin.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\ConsultarUsuarioDTO.java
-C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\OpcionesMenu.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\bo\impl\GeneralBOImpl.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\UsuariosDTO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\InfoEmpresaDTO.java

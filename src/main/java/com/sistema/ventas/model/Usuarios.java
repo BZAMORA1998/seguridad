@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,14 +33,17 @@ public class Usuarios  implements Serializable {
     @Column(name = "SECUENCIA_USUARIO")
     private Integer secuenciaUsuario;
 	
-	 @Column(name = "usuario")
-	 private String usuario;
-		
-	 @Column(name = "contrasenia")
-	 private String contrasenia;
+	@Size(max=50)
+	@Column(name = "usuario")
+	private String usuario;
+	
+	@Size(max=50)
+	@Column(name = "contrasenia")
+	private String contrasenia;
 	 
-	 @Column(name = "es_activo")
-	 private String esActivo;
+	@Size(max=1)
+	@Column(name = "es_activo")
+	private String esActivo;
 	 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "secuencia_persona", referencedColumnName = "secuencia_persona")

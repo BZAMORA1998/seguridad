@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,12 +29,15 @@ public class Roles implements Serializable {
     @Column(name = "secuencia_rol")
     private Integer secuenciaRol;
 	
+	@Size(max=5)
 	@Column(name = "abreviatura")
     private String abreviatura;
 	
+	@Size(max=50)
 	@Column(name = "descripcion")
     private String descripcion;
 	
+	@Size(max=1)
 	@Column(name = "es_activo")
     private String esActivo;
 }

@@ -82,7 +82,7 @@ public class UsuariosApi {
 		}
 	}
 	
-	@RequestMapping(value="/usuarios",method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> consultarUsuarios(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
 			@RequestParam(	value = "page", 	required = false) Integer intPage,

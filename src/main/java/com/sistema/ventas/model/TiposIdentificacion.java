@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,9 +34,11 @@ public class TiposIdentificacion implements Serializable {
     @Column(name = "secuencia_tipo_identificacion")
     private Integer secuenciaTipoIdentificacion;
 	
+	@Size(max=50)
 	@Column(name = "nombre")
     private String nombre;
 	
+	@Size(max=1)
 	@Column(name = "es_activo")
     private String esActivo;
 }

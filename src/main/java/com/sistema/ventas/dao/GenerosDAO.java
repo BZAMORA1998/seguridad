@@ -43,6 +43,12 @@ public class GenerosDAO extends BaseDAO<Generos, Integer>{
 		return super.find(id);
 	}
 
+	/*
+	 * Consulta los generos 
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Return
+	 */
 	public List<Generos> findAll() {
 		try {
 			return em.createQuery(

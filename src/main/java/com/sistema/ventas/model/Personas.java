@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,24 +34,30 @@ public class Personas implements Serializable {
     @Column(name = "secuencia_persona")
     private Integer secuenciaPersona;
 	
+	@Size(max=50)
 	@Column(name = "numero_identificacion")
 	private String numeroIdentificacion;
-	 
+	
+	@Size(max=50)
     @Column(name = "primer_nombre")
     private String primerNombre;
 	
+	@Size(max=50)
     @Column(name = "segundo_nombre")
     private String segundoNombre;
-		
+	
+	@Size(max=50)
     @Column(name = "primer_apellido")
     private String primerApellido;
 	
+	@Size(max=50)
     @Column(name = "segundo_apellido")
     private String segundoApellido;
 	
     @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
     
+	@Size(max=1)
 	@Column(name = "es_activo")
 	private String esActivo;
 	

@@ -56,6 +56,13 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 		return super.find(id);
 	}
 	
+	/*
+	 * Consulta los usuarios del sistema
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Param: strUsuario
+	 * @Return
+	 */
 	public Usuarios  consultarUsuarioSistema(String strUsuario) {
 		try {	
 			return em.createQuery(
@@ -70,6 +77,16 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 		}
 	}
 	
+	/*
+	 * Consulta los usuarios del sistema 
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Param intPage
+	 * @Param intPerPage
+	 * @Param strCedulaCodigoUsuario
+	 * @Param strEstado
+	 * @Return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<ConsultarUsuarioDTO>  consultarUsuarioSistema(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado) {
 		
@@ -122,6 +139,17 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 		}
 	}
 	
+	
+	/*
+	 * Consulta los usuarios del sistema 
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Param intPage
+	 * @Param intPerPage
+	 * @Param strCedulaCodigoUsuario
+	 * @Param strEstado
+	 * @Return
+	 */
 	@SuppressWarnings("unchecked")
 	public Long  contarConsultarUsuarioSistema(String strCedulaCodigoUsuario, String strEstado) {
 		StringBuilder strJPQL = new StringBuilder();
@@ -156,6 +184,14 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 		}
 	}
 
+	
+	/*
+	 * Consulta los usuarios por numero de identificacion
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Param numeroIdentificacion
+	 * @Return
+	 */
 	public Usuarios consultarUsuarioSistemaPorCedula(String numeroIdentificacion) {
 		try {	
 			return em.createQuery(

@@ -43,6 +43,12 @@ public class TiposIdentificacionDAO extends BaseDAO<TiposIdentificacion, Integer
 		return super.find(id);
 	}
 
+	/*
+	 * Consulta los tipos de identificacion 
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Return
+	 */
 	public List<TiposIdentificacion> findAll() {
 		try {	
 			return em.createQuery(
