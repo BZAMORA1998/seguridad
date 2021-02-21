@@ -24,12 +24,16 @@ public class GeneralUtil {
 	 * @throws BOException
 		 * @throws IOException 
 	 */
-	public static String decodificaBase64(String stringBase64) throws BOException, IOException{
+	public static String decodificaBase64(String stringBase64) throws BOException{
 		String decodeString = null;
 
 			// VALIDA Y DECODIFICA EL STRING BASE64
 			if (!StringUtils.isBlank(stringBase64)) {
-				decodeString = new String(Base64.decode(stringBase64.getBytes()));
+				try {
+					decodeString = new String(Base64.decode(stringBase64.getBytes()));
+				} catch (IOException e) {
+					throw new BOException("ven.error.errorDecodeAuth");
+				}
 			}
 	
 		// RETORNA EL STRING stringBase64

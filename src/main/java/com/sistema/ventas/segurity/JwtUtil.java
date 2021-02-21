@@ -1,6 +1,7 @@
 package com.sistema.ventas.segurity;
 
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,24 +22,35 @@ public class JwtUtil {
 
     private String secret = "javatechie";
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public String extractUsername(String token) throws BOException {
+       return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token) {
+    public Date extractExpiration(String token) throws BOException {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws BOException {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    private Claims extractAllClaims(String token) throws BOException {
+    	Claims claims = null ;
+    	 try {
+        	 claims=Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    	 }catch(Exception e){
+    		 throw new BOException("ven.warn.tokenInvalido");
+    	 }
+    	 
+    	 return claims;
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    private Boolean isTokenExpired(String token) throws BOException {
+    	
+    	if(!extractExpiration(token).before(new Date())) 
+    		 throw new ExpiredJwtException(null,null,"Token caducado");
+    	
+        return true;
     }
 
     public String generateToken(String username) {
@@ -54,12 +66,10 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) throws BOException {
+    	
         final String username = extractUsername(token);
-       
-        if(isTokenExpired(token))
-        	throw new ExpiredJwtException(null,null,"Token caducado");
         
-        return (username.equals(userDetails.getUsername()));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         
     }
 }

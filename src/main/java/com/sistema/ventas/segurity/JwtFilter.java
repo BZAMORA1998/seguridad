@@ -36,47 +36,38 @@ public class JwtFilter extends OncePerRequestFilter {
 	        String authorizationHeader = httpServletRequest.getHeader("Authorization");
 	        String[] arrServiciosSinSeguridad = {};	
 	        
-	        String token = null;
-	        String userName = null;
+	        String strToken = null;
+	        String strUserName = null;
 	
-	        System.out.print("=>"+httpServletRequest.getRequestURI());
-	        
 	        if (!(httpServletRequest.getRequestURI()!=null && 
 					Arrays.stream(arrServiciosSinSeguridad).anyMatch(StringUtils.upperCase(httpServletRequest.getRequestURI())::equalsIgnoreCase))) {
 		        	
 		        	 if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-				            token = authorizationHeader.substring(7);
-							userName = jwtUtil.extractUsername(token);
-				        }
+			            strToken = authorizationHeader.substring(7);
+						strUserName = jwtUtil.extractUsername(strToken);
+				     }
 				
-				        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-				
-				            UserDetails userDetails = service.loadUserByUsername(userName);
-				
-				            if (jwtUtil.validateToken(token, userDetails)) {
-				
-				                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-				                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				                usernamePasswordAuthenticationToken
-				                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-				                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-				            }
-				        }
-		        }else {
-		        	 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-		                        new UsernamePasswordAuthenticationToken(null, null,null);
-		                usernamePasswordAuthenticationToken
-		                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-		                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-		        }
-		       
+			        if (strUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			
+			            UserDetails objUserDetails = service.loadUserByUsername(strUserName);
+			
+			            if (jwtUtil.validateToken(strToken, objUserDetails)) {
+			
+			                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+			                        new UsernamePasswordAuthenticationToken(objUserDetails, null, objUserDetails.getAuthorities());
+			                usernamePasswordAuthenticationToken
+			                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+			                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			            }
+			        }
+	        }  
 		        
-			} catch (Exception e) {
-				e.printStackTrace();
-				httpServletResponse.setStatus(Status.UNAUTHORIZED.getStatusCode());
-				httpServletResponse.setHeader("msgAutorizadorException", e.getMessage());
- 			}
-	    
+		} catch (Exception e) {
+			e.printStackTrace();
+			httpServletResponse.setStatus(Status.UNAUTHORIZED.getStatusCode());
+			httpServletResponse.setHeader("msgAutorizadorException", e.getMessage());
+		}
+    
 	    filterChain.doFilter(httpServletRequest, httpServletResponse);
 	    
     }
