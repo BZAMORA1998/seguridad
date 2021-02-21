@@ -1,6 +1,7 @@
 package com.sistema.ventas.segurity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -52,11 +53,14 @@ public class JwtFilter extends OncePerRequestFilter {
 			            UserDetails objUserDetails = service.loadUserByUsername(strUserName);
 			
 			            if (jwtUtil.validateToken(strToken, objUserDetails)) {
-			
-			                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-			                        new UsernamePasswordAuthenticationToken(objUserDetails, null, objUserDetails.getAuthorities());
+			            	
+			                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+			                		objUserDetails, 
+			    					null,
+			    					new ArrayList<>());
 			                usernamePasswordAuthenticationToken
 			                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+			                
 			                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			            }
 			        }

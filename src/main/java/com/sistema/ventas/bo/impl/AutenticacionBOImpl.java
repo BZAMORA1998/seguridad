@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.bo.IAutenticacionBO;
@@ -29,7 +30,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 	
 	@Override
 	@Transactional
-	public AutenticacionDTO login(String strBasic) throws BOException {
+	public AutenticacionDTO login(String strBasic) throws AuthenticationException, BOException {
 				
 		String[] strAuth=SeguridadUtil.obtenerBasicAuth(strBasic,AuthenticationScheme.BASIC.name());
 		AutenticacionDTO objAut=null; 
@@ -42,9 +43,8 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 			if(objUsuario==null) {
 				throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strAuth[0]});
 			}else {
-				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(strAuth[0],
-						strAuth[1]));
 				
+				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(strAuth[0],strAuth[1]));
 				objAut=new AutenticacionDTO();
 				objAut.setSecuenciaSistemaUsuario(objUsuario.getSecuenciaUsuario());
 				objAut.setPrimerApellido(objUsuario.getPersonas().getPrimerApellido());
@@ -57,7 +57,7 @@ public class AutenticacionBOImpl implements IAutenticacionBO{
 		
 		} catch (BadCredentialsException e) {
 			throw new BOException("ven.warn.credencialesInvalidas");
-		}
+		} 
 		
 		return objAut;
 	}

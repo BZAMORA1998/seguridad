@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -45,7 +47,9 @@ public class UsuariosApi {
 		
 		try {
 
-			Map<String,Object> objMap=objIUsuariosBO.crearUsuario(objUsuariosDTO);
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			Map<String,Object> objMap=objIUsuariosBO.crearUsuario(objUsuariosDTO,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
@@ -65,7 +69,9 @@ public class UsuariosApi {
 		
 		try {
 
-			objIUsuariosBO.actualizarUsuario(intIdUsuario,objUsuariosDTO);
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIUsuariosBO.actualizarUsuario(intIdUsuario,objUsuariosDTO,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
@@ -86,7 +92,7 @@ public class UsuariosApi {
 			) throws BOException {
 		
 		try {
-
+			
 			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosBO.consultarUsuarios(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
 			
 			return new ResponseEntity<>(new ResponseOk(
@@ -106,8 +112,9 @@ public class UsuariosApi {
 			) throws BOException {
 		
 		try {
-
-			objIUsuariosBO.eliminarUsuario(intIdUsuario);
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIUsuariosBO.eliminarUsuario(intIdUsuario,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
@@ -145,8 +152,9 @@ public class UsuariosApi {
 			) throws BOException, IOException {
 		
 		try {
-
-			objIUsuariosBO.guardarPhoto(photo,intIdPersona);
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIUsuariosBO.guardarPhoto(photo,intIdPersona,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),

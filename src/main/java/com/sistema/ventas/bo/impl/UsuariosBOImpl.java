@@ -48,7 +48,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	
 	@Override
 	@Transactional
-	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO) throws BOException {
+	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
 		
 		Usuarios objUsuario=null;
 		
@@ -152,7 +152,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 	
 	@Override
-	public void actualizarUsuario(Integer intIdUsuario,UsuariosDTO objUsuariosDTO) throws BOException {
+	public void actualizarUsuario(Integer intIdUsuario,UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
 		Usuarios objUsuario=null;
 		Optional<TiposIdentificacion> objTiposIdentificacion=null;
 		
@@ -256,7 +256,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 
 
 	@Override
-	public void eliminarUsuario(Integer intIdUsuario) throws BOException {
+	public void eliminarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
 		
 		//Valida que el campo usuario sea obligatorio
 		if (ObjectUtils.isEmpty(intIdUsuario)) 
@@ -318,7 +318,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
-	public void guardarPhoto(MultipartFile photo,Integer intIdPersona)throws BOException, IOException{
+	public void guardarPhoto(MultipartFile photo,Integer intIdPersona,String strUsuario)throws BOException, IOException{
 		
 		System.out.print("=>"+photo.getBytes());
 		

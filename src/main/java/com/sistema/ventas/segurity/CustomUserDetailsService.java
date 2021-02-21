@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 	@Autowired
 	private UsuariosDAO objUsuariosDAO;
 	
-	@SuppressWarnings({ "unused", "rawtypes" })
+	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
 	@Override
 	public UserDetails loadUserByUsername(String username){
 		// TODO Auto-generated method stub
