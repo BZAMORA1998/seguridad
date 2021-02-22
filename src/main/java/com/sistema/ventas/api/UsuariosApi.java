@@ -104,7 +104,7 @@ public class UsuariosApi {
 		}
 	}
 	
-	@RequestMapping(value="/{idUsuario}/usuarios",method = RequestMethod.DELETE)
+	@RequestMapping(value="/{idUsuario}",method = RequestMethod.PUT)
 	@Transactional 
 	public ResponseEntity<?> eliminarUsuario(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
@@ -114,14 +114,12 @@ public class UsuariosApi {
 		try {
 			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			objIUsuariosBO.eliminarUsuario(intIdUsuario,objUserDetails.getUsername());
-
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-					null), HttpStatus.OK);
+					objIUsuariosBO.eliminarUsuario(intIdUsuario,objUserDetails.getUsername())), HttpStatus.OK);
 		} catch (BOException be) {
-			logger.error(" ERROR => " + be.getTranslatedMessage(null));
-			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
 	

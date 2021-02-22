@@ -94,7 +94,8 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 		
 		try {	
 			
-			strJPQL.append(" SELECT per.numeroIdentificacion as numeroIdentificacion, ");
+			strJPQL.append(" SELECT u.secuenciaUsuario as secuenciaUsuario, ");
+			strJPQL.append(" 		per.numeroIdentificacion as numeroIdentificacion, ");
 			strJPQL.append("    	per.primerApellido as primerApellido,");
 			strJPQL.append("    	per.segundoApellido as segundoApellido,");
 			strJPQL.append("    	per.primerNombre as primerNombre,");
@@ -127,6 +128,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 					.getResultList()
 					.stream()
 					.map(tuple -> {return ConsultarUsuarioDTO.builder()
+					.secuenciaUsuario(tuple.get("secuenciaUsuario",Number.class).intValue())
 					.numeroIdentificacion(tuple.get("numeroIdentificacion",String.class))
 					.nombresCompletos(GeneralUtil.concatenarApellidosNombres(tuple.get("primerApellido",String.class), tuple.get("segundoApellido",String.class), tuple.get("primerNombre",String.class), tuple.get("segundoNombre",String.class)))
 					.usuario(tuple.get("usuario",String.class))

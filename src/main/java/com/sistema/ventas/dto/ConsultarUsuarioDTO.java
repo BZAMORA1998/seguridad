@@ -15,6 +15,7 @@ public class ConsultarUsuarioDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Integer secuenciaUsuario;
 	private String numeroIdentificacion;
 	private String nombresCompletos;
     private String usuario;

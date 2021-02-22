@@ -1,6 +1,7 @@
 package com.sistema.ventas.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +45,21 @@ public class Usuarios  implements Serializable {
 	@Size(max=1)
 	@Column(name = "es_activo")
 	private String esActivo;
+	
+	@Column(name = "fecha_ingreso")
+	private Date fechaIngreso;
+	
+	@Size(max=50)
+	@Column(name = "usuario_ingreso")
+	private String usuarioIngreso;
 	 
+	@Column(name = "fecha_actualizacion")
+	private Date fechaActualizacion;
+	
+	@Size(max=50)
+	@Column(name = "usuario_actualizacion")
+	private String usuarioActualizacion;
+	
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "secuencia_persona", referencedColumnName = "secuencia_persona")
 	private Personas personas;

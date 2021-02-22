@@ -1,6 +1,7 @@
 package com.sistema.ventas.bo.impl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -256,34 +257,43 @@ public class UsuariosBOImpl implements IUsuariosBO{
 
 
 	@Override
-	public void eliminarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
+	@Transactional
+	public Map<String, Object> eliminarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
+		
+		Date datFechaActual=new Date();
 		
 		//Valida que el campo usuario sea obligatorio
 		if (ObjectUtils.isEmpty(intIdUsuario)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
 		
 		Optional<Usuarios> objUsuario=objUsuariosDAO.find(intIdUsuario);
-		objUsuario.get().setEsActivo("N");
 		
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
 		
-		if(!("S").equalsIgnoreCase(objUsuario.get().getEsActivo()))
+		if(("N").equalsIgnoreCase(objUsuario.get().getEsActivo()))
 			throw new BOException("ven.warn.idUsuarioInactivo");
 		
 		//Elimina el usuario
+		objUsuario.get().setEsActivo("N");
+		objUsuario.get().setUsuarioActualizacion(strUsuario);
+		objUsuario.get().setFechaActualizacion(datFechaActual);
+		
+		if(objUsuario.get().getPersonas()!=null) {
+			objUsuario.get().getPersonas().setEsActivo("N");
+			objUsuario.get().getPersonas().setUsuarioActualizacion(strUsuario);
+			objUsuario.get().getPersonas().setFechaActualizacion(datFechaActual);
+		}
 		objUsuariosDAO.update(objUsuario.get());
 		
+		Map<String, Object> mapResult = new HashMap();
+		mapResult.put("secuenciaUsuario",intIdUsuario);
 		
-		//Elimina a la persona
-		Optional<Personas> objPersonas =objPersonasDAO.find(objUsuario.get().getPersonas().getSecuenciaPersona());
-		objPersonas.get().setEsActivo("N");
-		objPersonasDAO.update(objPersonas.get());
+		return mapResult;
 		
 	}
 
 	@Override
-	@Transactional
 	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario) throws BOException {
 		
 		//Valida que el campo usuario sea obligatorio

@@ -63,6 +63,20 @@ public class Personas implements Serializable {
 	
 	@Column(name = "foto")
 	private byte[] foto;
+	
+	@Column(name = "fecha_ingreso")
+	private Date fechaIngreso;
+	
+	@Size(max=50)
+	@Column(name = "usuario_ingreso")
+	private String usuarioIngreso;
+	 
+	@Column(name = "fecha_actualizacion")
+	private Date fechaActualizacion;
+	
+	@Size(max=50)
+	@Column(name = "usuario_actualizacion")
+	private String usuarioActualizacion;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "secuencia_tipo_identificacion", referencedColumnName = "secuencia_tipo_identificacion", insertable = true, updatable = true)
