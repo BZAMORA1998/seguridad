@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -77,6 +78,14 @@ public class Personas implements Serializable {
 	@Size(max=50)
 	@Column(name = "usuario_actualizacion")
 	private String usuarioActualizacion;
+	
+    @JoinColumns({
+        @JoinColumn(name = "secuencia_pais", referencedColumnName = "secuencia_pais"),
+        @JoinColumn(name = "secuencia_provincia", referencedColumnName = "secuencia_provincia"),
+        @JoinColumn(name = "secuencia_ciudad", referencedColumnName = "secuencia_ciudad")})
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Ciudad ciudad;
+
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "secuencia_tipo_identificacion", referencedColumnName = "secuencia_tipo_identificacion", insertable = true, updatable = true)

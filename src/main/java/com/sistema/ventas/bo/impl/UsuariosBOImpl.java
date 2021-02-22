@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosBO;
+import com.sistema.ventas.dao.CiudadDAO;
 import com.sistema.ventas.dao.GenerosDAO;
+import com.sistema.ventas.dao.PaisDAO;
 import com.sistema.ventas.dao.PersonasDAO;
+import com.sistema.ventas.dao.ProvinciaDAO;
 import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
@@ -26,13 +29,19 @@ import com.sistema.ventas.enums.AlgoritmosIdentificacion;
 import com.sistema.ventas.enums.FormatoFecha;
 import com.sistema.ventas.enums.TipoIdentificacion;
 import com.sistema.ventas.exceptions.BOException;
+import com.sistema.ventas.model.Ciudad;
+import com.sistema.ventas.model.CiudadCPK;
 import com.sistema.ventas.model.Generos;
+import com.sistema.ventas.model.Pais;
 import com.sistema.ventas.model.Personas;
+import com.sistema.ventas.model.Provincia;
+import com.sistema.ventas.model.ProvinciaCPK;
 import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.TiposIdentificacion;
 import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.FechasUtil;
 import com.sistema.ventas.util.IdentificacionUtil;
+import com.sistema.ventas.util.StringUtil;
 
 @Service
 public class UsuariosBOImpl implements IUsuariosBO{
@@ -47,6 +56,12 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private TiposIdentificacionDAO objTiposIdentificacionDAO;
 	@Autowired
 	private RolesDAO objRolesDAO;
+	@Autowired
+	private PaisDAO objPaisDAO;
+	@Autowired
+	private ProvinciaDAO objProvinciaDAO;
+	@Autowired
+	private CiudadDAO objCiudadDAO;
 	
 	@Override
 	@Transactional
@@ -54,99 +69,203 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		
 		Usuarios objUsuario=null;
 		
-		// primerNombre.
+		//***********Prime nombrer*************1
+		// Valida que el primer nombre sea obligatorio.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerNombre"});
+		//**************************************
 		
-		// primerApellido.
+		//***********Prime apellido*************2
+		// Valida que el primer apellido sea obligatorio.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getPrimerApellido())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerApellido"});
+		//**************************************
 		
-		// codigoIdentificacion
+		//******************Secuencia tipo Identificacion********************3
+		// Valida que la secuenica tipo identificacion sea obligatorio
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.codigoTipoIdentificacion"});
-		
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaTipoIdentificacion"});
+
+		//Busca el tipo de identificacion
 		Optional<TiposIdentificacion> objTiposIdentificacion=objTiposIdentificacionDAO.find(objUsuariosDTO.getSecuenciaTipoIdentificacion());
 		
+		//Valida que el tipo de identificacion exista
 		if(!objTiposIdentificacion.isPresent()) 
-			throw new BOException("ven.warn.tipoIdentificacionNoExiste");
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaTipoIdentificacion"});
 		
+		//Valida que el tipo de identificacion este activo
 		if(!("S").equalsIgnoreCase(objTiposIdentificacion.get().getEsActivo())) 
-			throw new BOException("ven.warn.tipoIdentificacionInactivo");
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaTipoIdentificacion"});
 		
-		// codigoIdentificacion
+		//**************************************************************
+		
+		//***************Numero identificacion************************4
+		// Valida que el numero de identificacion sea obligatoria
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.numeroIdentificacion"});
 
 		Boolean booNumeroIdentificacion=false;
-		
+		//Valida el tipo de indeificacion segun el formato
 		if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 			booNumeroIdentificacion=IdentificacionUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
 		else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
 			booNumeroIdentificacion=IdentificacionUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
 		
+		//Valida el tipo de indeificacion segun el formato
 		if(!booNumeroIdentificacion) 
 			throw new BOException("ven.warn.numeroIdentificacionInvalida");
 		
+		//Busca el usuario por cedula
 		objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCedula(objUsuariosDTO.getNumeroIdentificacion());
 		
+		//Valida que el usuario no exista
 		if(!ObjectUtils.isEmpty(objUsuario)) 
 			throw new BOException("ven.warn.numeroIdentificacionExiste");
 		
-		// codigoGenero.
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaGenero())) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.codigoGenero"});
+		//*******************************************************************
 		
+		//***************Secuencia Genero************************5
+		// Valida que la secuencia genero sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaGenero())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaGenero"});
+		
+		//Busca el genero
 		Optional<Generos> objGenero=objGenerosDAO.find(objUsuariosDTO.getSecuenciaGenero());
 		
+		//Valida que exista el genero
 		if(!objGenero.isPresent()) 
-			throw new BOException("ven.warn.generoNoExiste");
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaGenero"});
 		
+		//Valida que este activo el genero
 		if(!("S").equalsIgnoreCase(objGenero.get().getEsActivo())) 
-			throw new BOException("ven.warn.generoInactivo");
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaGenero"});
 		
-		// fechaNacimiento.
+		//***********************************************************
+		
+		//***************Fecha de nacimiento************************6
+		// Valida que la fecha de nacimiento sea requerida
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getFechaNacimiento())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.fechaNacimiento"});
+		//***********************************************************
 		
+		//********************Usuario*******************************8
 		// Usuario.
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getUser())) 
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getUsuario())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.usuario"});
 		
-		objUsuario=objUsuariosDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
+		objUsuario=objUsuariosDAO.consultarUsuarioSistema(objUsuariosDTO.getUsuario());
 		
 		if(objUsuario!=null)
-			throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});
+			throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUsuario()});
 		
-		// Contraseña.
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getPassword())) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.contraseña"});
+		//**************************************************************
+		
+		//************Secuencia Pais*********************************** 9
+		// Valida que la secuenica pais sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaPais())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaPais"});
+		
+		//Busca el el pais
+		Optional<Pais> objPais=objPaisDAO.find(objUsuariosDTO.getSecuenciaPais());
+		
+		//Valida que el tipo de identificacion exista
+		if(!objPais.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaPais"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objPais.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaPais"});
+		
+		//*************************************************************
+		
+		//************Secuencia Provincia***********************************10
+		// Valida que la secuencia provincia sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaProvincia())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaProvincia"});
+		
+		//Busca el el pais
+		Optional<Provincia> objProvincia=objProvinciaDAO.find(new ProvinciaCPK(objUsuariosDTO.getSecuenciaPais(),objUsuariosDTO.getSecuenciaProvincia()));
+		
+		//Valida que el tipo de identificacion exista
+		if(!objProvincia.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaProvincia"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objProvincia.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaProvincia"});
+		
+		//*************************************************************
+		
+		//************Secuencia Ciudad***********************************11
+		// Valida que la secuencia ciudad sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaCiudad())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaCiudad"});
+		
+		//Busca el el pais
+		Optional<Ciudad> objCiudad=objCiudadDAO.find(new CiudadCPK(objUsuariosDTO.getSecuenciaPais(),objUsuariosDTO.getSecuenciaProvincia(),objUsuariosDTO.getSecuenciaCiudad()));
+		
+		//Valida que el tipo de identificacion exista
+		if(!objCiudad.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaCiudad"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objCiudad.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaCiudad"});
+				
+		//*************************************************************
+			
+		//************Secuencia rol***********************************12
+		// Valida que la secuencia ciudad sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaRol())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
+		
+		//Busca el el pais
+		Optional<Roles> objRoles=objRolesDAO.find(objUsuariosDTO.getSecuenciaRol());
+		
+		//Valida que el tipo de identificacion exista
+		if(!objRoles.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaRol"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objRoles.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaRol"});
+				
+		//*************************************************************
+					
 		
 		Personas objPersona=new Personas();
-		objPersona.setPrimerNombre(objUsuariosDTO.getPrimerNombre().toUpperCase());
-		if(ObjectUtils.isEmpty(objPersona.getSegundoNombre()))
-			objPersona.setSegundoNombre(objUsuariosDTO.getSegundoNombre().toUpperCase());
-		objPersona.setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
-		if(!ObjectUtils.isEmpty(objPersona.getSegundoApellido()!=null))
-			objPersona.setSegundoApellido(objUsuariosDTO.getSegundoNombre().toUpperCase());
+		
+		objPersona.setPrimerNombre(StringUtil.eliminarAcentos(objUsuariosDTO.getPrimerNombre().toUpperCase()));
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoNombre()))
+			objPersona.setSegundoNombre(StringUtil.eliminarAcentos(objUsuariosDTO.getSegundoNombre().toUpperCase()));
+		
+		objPersona.setPrimerApellido(StringUtil.eliminarAcentos(objUsuariosDTO.getPrimerApellido().toUpperCase()));
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoApellido()))
+			objPersona.setSegundoApellido(StringUtil.eliminarAcentos(objUsuariosDTO.getSegundoApellido().toUpperCase()));
+		
+		Date datFechaActual=new Date();
+		
 		objPersona.setFechaNacimiento(FechasUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
 		objPersona.setTiposIdentificacion(objTiposIdentificacion.get());
-		objPersona.setNumeroIdentificacion(objUsuariosDTO.getNumeroIdentificacion());
+		objPersona.setNumeroIdentificacion(StringUtil.eliminarAcentos(objUsuariosDTO.getNumeroIdentificacion()));
 		objPersona.setGenero(objGenero.get());
+		objPersona.setCiudad(objCiudad.get());
 		objPersona.setEsActivo("S");
+		objPersona.setUsuarioIngreso(strUsuario);
+		objPersona.setFechaIngreso(datFechaActual);
 		objPersonasDAO.persist(objPersona);
 		
-		Usuarios objUsuariosSistema=new Usuarios();
-		objUsuariosSistema.setUsuario(objUsuariosDTO.getUser().toUpperCase());
-		objUsuariosSistema.setContrasenia(objUsuariosDTO.getPassword());
-		objUsuariosSistema.setPersonas(objPersona);
-		objUsuariosSistema.setEsActivo("S");
+		Usuarios objUsuarios=new Usuarios();
+		objUsuarios.setUsuario(StringUtil.eliminarAcentos(objUsuariosDTO.getUsuario().toUpperCase()));
+		objUsuarios.setPersonas(objPersona);
+		objUsuarios.setEsActivo("S");
+		objUsuarios.setUsuarioIngreso(strUsuario);
+		objUsuarios.setFechaIngreso(datFechaActual);
+		objUsuarios.setRoles(objRoles.get());
 		
-		Optional<Roles> objRolSistema =objRolesDAO.find(2);
-		
-		objUsuariosSistema.setRoles(objRolSistema.get());
-		
-		objUsuariosDAO.persist(objUsuariosSistema);
+		objUsuariosDAO.persist(objUsuarios);
 		
 		Map<String,Object> objMap=new HashMap<String,Object>();
 		objMap.put("secuenciaPersona",objPersona.getSecuenciaPersona());
@@ -204,12 +323,12 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		}
 		
 		// Usuario.
-		if (!ObjectUtils.isEmpty(objUsuariosDTO.getUser())) {
+		if (!ObjectUtils.isEmpty(objUsuariosDTO.getUsuario())) {
 		
-			objUsuario=objUsuariosDAO.consultarUsuarioSistema(objUsuariosDTO.getUser());
+			objUsuario=objUsuariosDAO.consultarUsuarioSistema(objUsuariosDTO.getUsuario());
 			
 			if(objUsuario!=null)
-				throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUser()});
+				throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUsuario()});
 		}
 		
 		Optional<Usuarios> objUsuariosSistema=objUsuariosDAO.find(intIdUsuario);
@@ -217,11 +336,8 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if(!objUsuariosSistema.isPresent())
 			throw new BOException("ven.warn.usuarioNoExiste");
 		
-		if(!ObjectUtils.isEmpty(objUsuariosDTO.getUser()))
-			objUsuariosSistema.get().setUsuario(objUsuariosDTO.getUser().toUpperCase());
-		
-		if(!ObjectUtils.isEmpty(objUsuariosDTO.getPassword()))
-			objUsuariosSistema.get().setContrasenia(objUsuariosDTO.getPassword());
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getUsuario()))
+			objUsuariosSistema.get().setUsuario(objUsuariosDTO.getUsuario().toUpperCase());
 		
 		Optional<Personas> objPersona=objPersonasDAO.find(objUsuariosSistema.get().getPersonas().getSecuenciaPersona());
 		if (!ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre()))

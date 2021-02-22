@@ -49,14 +49,12 @@ public class UsuariosApi {
 
 			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			Map<String,Object> objMap=objIUsuariosBO.crearUsuario(objUsuariosDTO,objUserDetails.getUsername());
-
 			return new ResponseEntity<>(new ResponseOk(
-					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
-					objMap), HttpStatus.OK);
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					objIUsuariosBO.crearUsuario(objUsuariosDTO,objUserDetails.getUsername())), HttpStatus.OK);
 		} catch (BOException be) {
-			logger.error(" ERROR => " + be.getTranslatedMessage(null));
-			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
 	
@@ -74,11 +72,11 @@ public class UsuariosApi {
 			objIUsuariosBO.actualizarUsuario(intIdUsuario,objUsuariosDTO,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
-					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(null)),
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					null), HttpStatus.OK);
 		} catch (BOException be) {
-			logger.error(" ERROR => " + be.getTranslatedMessage(null));
-			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
 	
@@ -137,8 +135,8 @@ public class UsuariosApi {
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					objUsuario), HttpStatus.OK);
 		} catch (BOException be) {
-			logger.error(" ERROR => " + be.getTranslatedMessage(null));
-			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
 	
@@ -158,8 +156,8 @@ public class UsuariosApi {
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					null), HttpStatus.OK);
 		} catch (BOException be) {
-			logger.error(" ERROR => " + be.getTranslatedMessage(null));
-			throw new CustomExceptionHandler(be.getTranslatedMessage(null), be.getData());
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
 	
