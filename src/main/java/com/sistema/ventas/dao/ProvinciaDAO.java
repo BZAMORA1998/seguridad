@@ -69,6 +69,7 @@ public class ProvinciaDAO extends BaseDAO<Provincia,ProvinciaCPK>{
 		try {	
 			
 			strJPQL.append(" SELECT p.provinciaCPK.secuenciaProvincia as secuenciaProvincia, ");
+			strJPQL.append(" 		p.provinciaCPK.secuenciaPais as secuenciaPais, ");
 			strJPQL.append("    	p.nombre as nombre,");
 			strJPQL.append("    	p.esActivo as esActivo");
 			strJPQL.append(" FROM 	Provincia p");
@@ -85,6 +86,7 @@ public class ProvinciaDAO extends BaseDAO<Provincia,ProvinciaCPK>{
 					.stream()
 					.map(tuple -> {return ProvinciaDTO.builder()
 					.secuenciaProvincia(tuple.get("secuenciaProvincia",Number.class).intValue())
+					.secuenciaPais(tuple.get("secuenciaPais",Number.class).intValue())
 					.nombre(tuple.get("nombre",String.class))
 					.esActivo(tuple.get("esActivo",String.class))
 					.build();})
