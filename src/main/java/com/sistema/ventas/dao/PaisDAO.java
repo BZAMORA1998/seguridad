@@ -1,8 +1,10 @@
 package com.sistema.ventas.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
@@ -40,5 +42,24 @@ public class PaisDAO extends BaseDAO<Pais,Integer>{
 	@Override
 	public Optional<Pais> find(@NonNull Integer id) {
 		return super.find(id);
+	}
+
+	/*
+	 * Consulta todos los paises
+	 * 
+	 * @author Bryan Zamora
+	 * @return
+	 */
+	public List<Pais> findAll() {
+		try {
+			return em.createQuery(
+					"SELECT p " +
+					"FROM Pais p " +
+					"WHERE p.esActivo='S'"+
+					" ORDER BY p.nombre",Pais.class)
+					.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 }
