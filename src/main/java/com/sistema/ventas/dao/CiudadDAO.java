@@ -14,10 +14,8 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.dto.CiudadDTO;
-import com.sistema.ventas.dto.ProvinciaDTO;
 import com.sistema.ventas.model.Ciudad;
 import com.sistema.ventas.model.CiudadCPK;
-import com.sistema.ventas.model.Provincia;
 
 import lombok.NonNull;
 

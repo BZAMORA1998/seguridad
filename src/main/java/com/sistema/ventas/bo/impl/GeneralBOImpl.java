@@ -15,10 +15,8 @@ import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dto.CiudadDTO;
 import com.sistema.ventas.dto.ProvinciaDTO;
 import com.sistema.ventas.exceptions.BOException;
-import com.sistema.ventas.model.Ciudad;
 import com.sistema.ventas.model.Generos;
 import com.sistema.ventas.model.Pais;
-import com.sistema.ventas.model.Provincia;
 import com.sistema.ventas.model.TiposIdentificacion;
 
 @Service

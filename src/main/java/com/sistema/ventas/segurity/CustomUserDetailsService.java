@@ -9,9 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.dao.UsuariosDAO;
-import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Usuarios;
-import com.sistema.ventas.util.GeneralUtil;
+import com.sistema.ventas.util.StringUtil;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService{
@@ -26,11 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistema(username);
 		String strPassword;
 
-		try {
-			strPassword = GeneralUtil.decodificaBase64(objUsuario.getContrasenia());
-		} catch (BOException e) {
-			return null;
-		}
+		strPassword = StringUtil.base64UrlDecode(objUsuario.getContrasenia());
+		
 		return new User(objUsuario.getUsuario(),strPassword,new ArrayList());
 
 	}

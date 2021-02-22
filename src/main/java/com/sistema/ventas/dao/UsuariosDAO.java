@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.model.Usuarios;
-import com.sistema.ventas.util.GeneralUtil;
+import com.sistema.ventas.util.StringUtil;
 
 @Service
 public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
@@ -130,7 +130,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 					.map(tuple -> {return ConsultarUsuarioDTO.builder()
 					.secuenciaUsuario(tuple.get("secuenciaUsuario",Number.class).intValue())
 					.numeroIdentificacion(tuple.get("numeroIdentificacion",String.class))
-					.nombresCompletos(GeneralUtil.concatenarApellidosNombres(tuple.get("primerApellido",String.class), tuple.get("segundoApellido",String.class), tuple.get("primerNombre",String.class), tuple.get("segundoNombre",String.class)))
+					.nombresCompletos(StringUtil.concatenarApellidosNombres(tuple.get("primerApellido",String.class), tuple.get("segundoApellido",String.class), tuple.get("primerNombre",String.class), tuple.get("segundoNombre",String.class)))
 					.usuario(tuple.get("usuario",String.class))
 					.rol(tuple.get("rol",String.class))
 					.estado(tuple.get("estado")!=null && "S".equalsIgnoreCase(tuple.get("estado",String.class))?"ACTIVO":"INACTIVO")

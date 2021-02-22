@@ -31,7 +31,8 @@ import com.sistema.ventas.model.Personas;
 import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.TiposIdentificacion;
 import com.sistema.ventas.model.Usuarios;
-import com.sistema.ventas.util.GeneralUtil;
+import com.sistema.ventas.util.FechasUtil;
+import com.sistema.ventas.util.IdentificacionUtil;
 
 @Service
 public class UsuariosBOImpl implements IUsuariosBO{
@@ -80,9 +81,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		Boolean booNumeroIdentificacion=false;
 		
 		if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
-			booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
+			booNumeroIdentificacion=IdentificacionUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
 		else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
-			booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
+			booNumeroIdentificacion=IdentificacionUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
 		
 		if(!booNumeroIdentificacion) 
 			throw new BOException("ven.warn.numeroIdentificacionInvalida");
@@ -128,7 +129,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objPersona.setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
 		if(!ObjectUtils.isEmpty(objPersona.getSegundoApellido()!=null))
 			objPersona.setSegundoApellido(objUsuariosDTO.getSegundoNombre().toUpperCase());
-		objPersona.setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
+		objPersona.setFechaNacimiento(FechasUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
 		objPersona.setTiposIdentificacion(objTiposIdentificacion.get());
 		objPersona.setNumeroIdentificacion(objUsuariosDTO.getNumeroIdentificacion());
 		objPersona.setGenero(objGenero.get());
@@ -174,9 +175,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			Boolean booNumeroIdentificacion=false;
 			
 			if(TipoIdentificacion.CEDULA.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
-				booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
+				booNumeroIdentificacion=IdentificacionUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.CEDULA_IDENTIDAD_EC.getName());
 			else if(TipoIdentificacion.RUC.getValor().equals(objUsuariosDTO.getSecuenciaTipoIdentificacion())) 
-				booNumeroIdentificacion=GeneralUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
+				booNumeroIdentificacion=IdentificacionUtil.validaAlgoritmoIdentificacion(objUsuariosDTO.getNumeroIdentificacion(), AlgoritmosIdentificacion.REGISTRO_UNICO_CONTRIBUYENTE_EC.getName());
 			
 			if(!booNumeroIdentificacion) 
 				throw new BOException("ven.warn.numeroIdentificacionInvalida");
@@ -236,7 +237,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			objPersona.get().setSegundoApellido(objUsuariosDTO.getSegundoApellido().toUpperCase());
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getFechaNacimiento()))
-			objPersona.get().setFechaNacimiento(GeneralUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
+			objPersona.get().setFechaNacimiento(FechasUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
 		
 		if(!ObjectUtils.isEmpty(objTiposIdentificacion.get()))
 			objPersona.get().setTiposIdentificacion(objTiposIdentificacion.get());

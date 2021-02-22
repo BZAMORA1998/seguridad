@@ -18,8 +18,6 @@ import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.exceptions.CustomExceptionHandler;
 import com.sistema.ventas.model.Generos;
-import com.sistema.ventas.model.Pais;
-import com.sistema.ventas.model.Provincia;
 import com.sistema.ventas.model.TiposIdentificacion;
 import com.sistema.ventas.util.MensajesUtil;
 

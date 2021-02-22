@@ -11,15 +11,11 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.ProvinciaDTO;
-import com.sistema.ventas.model.Pais;
 import com.sistema.ventas.model.Provincia;
 import com.sistema.ventas.model.ProvinciaCPK;
-import com.sistema.ventas.util.GeneralUtil;
 
 import lombok.NonNull;
 
