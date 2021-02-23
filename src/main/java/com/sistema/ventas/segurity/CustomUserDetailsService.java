@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistema(username);
 		String strPassword;
 
-		strPassword = StringUtil.base64UrlDecode(objUsuario.getContrasenia());
+		strPassword = StringUtil.base64Decode(objUsuario.getContrasenia());
 		
 		return new User(objUsuario.getUsuario(),strPassword,new ArrayList());
 

@@ -25,6 +25,7 @@ import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
+import com.sistema.ventas.email.SendEmail;
 import com.sistema.ventas.enums.AlgoritmosIdentificacion;
 import com.sistema.ventas.enums.FormatoFecha;
 import com.sistema.ventas.enums.TipoIdentificacion;
@@ -40,6 +41,7 @@ import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.TiposIdentificacion;
 import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.FechasUtil;
+import com.sistema.ventas.util.FormatoEmailUtil;
 import com.sistema.ventas.util.IdentificacionUtil;
 import com.sistema.ventas.util.StringUtil;
 
@@ -62,23 +64,34 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private ProvinciaDAO objProvinciaDAO;
 	@Autowired
 	private CiudadDAO objCiudadDAO;
+	@Autowired
+	private SendEmail objSendEmail;
 	
 	@Override
 	@Transactional
 	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
 		
 		Usuarios objUsuario=null;
+		String strContrasenia=StringUtil.generateRandomString(10);
 		
 		//***********Prime nombrer*************1
 		// Valida que el primer nombre sea obligatorio.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerNombre"});
+		
+		if(!StringUtil.soloLetrasYEspacio(objUsuariosDTO.getPrimerNombre()))
+			throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.primerNombre"});
+		
 		//**************************************
 		
 		//***********Prime apellido*************2
 		// Valida que el primer apellido sea obligatorio.
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getPrimerApellido())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerApellido"});
+		
+		if(!StringUtil.soloLetrasYEspacio(objUsuariosDTO.getPrimerApellido()))
+			throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.primerApellido"});
+		
 		//**************************************
 		
 		//******************Secuencia tipo Identificacion********************3
@@ -231,19 +244,44 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaRol"});
 				
 		//*************************************************************
-					
+		
+		//**************************Email***********************************
+		// Valida que la email sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getEmail())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.email"});		
+
+		if(!FormatoEmailUtil.emailValido(objUsuariosDTO.getEmail())) 
+			throw new BOException("ven.warn.correoInvalido");
+		
+		Personas existeCorreo=objPersonasDAO.consultarExisteCorreo(objUsuariosDTO.getEmail());
+		
+		//Valida si existe el correo
+		if(!ObjectUtils.isEmpty(existeCorreo)) 
+			throw new BOException("ven.warn.correoExiste");
+		
+		//*************************************************************
 		
 		Personas objPersona=new Personas();
 		
 		objPersona.setPrimerNombre(StringUtil.eliminarAcentos(objUsuariosDTO.getPrimerNombre().toUpperCase()));
 		
-		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoNombre()))
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoNombre())) {
+			
+			if(!StringUtil.soloLetrasYEspacio(objUsuariosDTO.getSegundoNombre()))
+				throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.segundoNombre"});
+			
 			objPersona.setSegundoNombre(StringUtil.eliminarAcentos(objUsuariosDTO.getSegundoNombre().toUpperCase()));
+		}
 		
 		objPersona.setPrimerApellido(StringUtil.eliminarAcentos(objUsuariosDTO.getPrimerApellido().toUpperCase()));
 		
-		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoApellido()))
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoApellido())) {
+			
+			if(!StringUtil.soloLetrasYEspacio(objUsuariosDTO.getSegundoApellido()))
+				throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.segundoApellido"});
+			
 			objPersona.setSegundoApellido(StringUtil.eliminarAcentos(objUsuariosDTO.getSegundoApellido().toUpperCase()));
+		}
 		
 		Date datFechaActual=new Date();
 		
@@ -252,6 +290,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objPersona.setNumeroIdentificacion(StringUtil.eliminarAcentos(objUsuariosDTO.getNumeroIdentificacion()));
 		objPersona.setGenero(objGenero.get());
 		objPersona.setCiudad(objCiudad.get());
+		objPersona.setEmail(objUsuariosDTO.getEmail());
 		objPersona.setEsActivo("S");
 		objPersona.setUsuarioIngreso(strUsuario);
 		objPersona.setFechaIngreso(datFechaActual);
@@ -264,8 +303,11 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuarios.setUsuarioIngreso(strUsuario);
 		objUsuarios.setFechaIngreso(datFechaActual);
 		objUsuarios.setRoles(objRoles.get());
-		
+		objUsuarios.setContrasenia(StringUtil.base64Encode(strContrasenia));
 		objUsuariosDAO.persist(objUsuarios);
+		
+		String strContenido="Usuario:"+objUsuarios.getUsuario()+" - Contraseña: "+strContrasenia;
+		objSendEmail.envioEmail(objUsuariosDTO.getEmail(),"Contraseña Ventas",strContenido);
 		
 		Map<String,Object> objMap=new HashMap<String,Object>();
 		objMap.put("secuenciaPersona",objPersona.getSecuenciaPersona());

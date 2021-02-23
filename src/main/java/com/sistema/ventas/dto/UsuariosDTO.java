@@ -21,5 +21,6 @@ public class UsuariosDTO {
     private Integer secuenciaProvincia;
     private Integer secuenciaCiudad;
     private Integer secuenciaRol;
-    private String usuario;    
+    private String usuario; 
+    private String email;
 }

@@ -3,6 +3,7 @@ package com.sistema.ventas.dao;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
@@ -10,6 +11,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.Personas;
+import com.sistema.ventas.model.Usuarios;
 
 @Service
 public class PersonasDAO extends BaseDAO<Personas, Integer>{
@@ -46,4 +48,25 @@ public class PersonasDAO extends BaseDAO<Personas, Integer>{
 	public Optional<Personas> find(@NonNull Integer id) {
 		return super.find(id);
 	}
+	
+	/*
+	 * Consulta si existe el correo
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Param numeroIdentificacion
+	 * @Return
+	 */
+	public Personas consultarExisteCorreo(String email) {
+		try {	
+			return em.createQuery(
+						"SELECT pe \n" +
+						"FROM Personas pe \n" +
+						"WHERE pe.email=:email \n" +
+						"AND pe.esActivo = 'S'",Personas.class)
+						.setParameter("email",email)
+						.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
+}

@@ -79,6 +79,10 @@ public class Personas implements Serializable {
 	@Column(name = "usuario_actualizacion")
 	private String usuarioActualizacion;
 	
+	@Size(max=50)
+	@Column(name = "email")
+	private String email;
+	
     @JoinColumns({
         @JoinColumn(name = "secuencia_pais", referencedColumnName = "secuencia_pais"),
         @JoinColumn(name = "secuencia_provincia", referencedColumnName = "secuencia_provincia"),

@@ -1,10 +1,10 @@
 package com.sistema.ventas.util;
 
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * Helper de validaciones de cadenas.
@@ -21,8 +21,8 @@ public class StringUtil {
 	 * @param input
 	 * @return
 	 */
-	public static String base64UrlEncode(String input) {
-		return Base64.encodeBase64URLSafeString(input.getBytes(Charset.forName("UTF-8")));
+	public static String base64Encode(String input) {
+		return Base64.getEncoder().encodeToString(input.getBytes());
 	}
 	
 	/**
@@ -32,8 +32,8 @@ public class StringUtil {
 	 * @param input
 	 * @return
 	 */
-	public static String base64UrlDecode(String input) {
-		return new String(Base64.decodeBase64(input), Charset.forName("UTF-8"));
+	public static String base64Decode(String input) {
+		return new String(Base64.getDecoder().decode(input));
 	}
 	
 	/**
@@ -150,4 +150,33 @@ public class StringUtil {
 		return new String(array);
 	}
 	
+	
+    /**
+     * Este método devuelve una cadena aleatoria generada con SecureRandom
+     * 
+     * @param length
+     * @return 
+     */
+    public static String generateRandomString(int length) {
+        String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
+        String CHAR_UPPER = CHAR_LOWER.toUpperCase();
+        String NUMBER = "0123456789";
+
+        String DATA_FOR_RANDOM_STRING = CHAR_LOWER + CHAR_UPPER + NUMBER;
+        SecureRandom random = new SecureRandom();
+    
+        if (length < 1) throw new IllegalArgumentException();
+
+        StringBuilder sb = new StringBuilder(length);
+        
+        for (int i = 0; i < length; i++) {
+            // 0-62 (exclusivo), retorno aleatorio 0-61
+            int rndCharAt = random.nextInt(DATA_FOR_RANDOM_STRING.length());
+            char rndChar = DATA_FOR_RANDOM_STRING.charAt(rndCharAt);
+
+            sb.append(rndChar);
+        }
+
+        return sb.toString();
+    }
 }
