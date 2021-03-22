@@ -1,6 +1,5 @@
 package com.sistema.ventas.util;
 
-import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.regex.Matcher;

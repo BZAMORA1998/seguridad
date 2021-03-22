@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IGeneralBO;
@@ -112,6 +113,23 @@ public class GeneralAPI {
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 					objIGeneralBO.findAllCiudad(intSecuenciaPais,intSecuenciaProvincia)), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+	}
+	
+	@RequestMapping(value="/calcularEdad",method = RequestMethod.GET)
+	public ResponseEntity<?> consultarEdad(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam(	value = "fechaNacimiento", 	required = false) String strFechaNacimiento
+			) throws BOException {
+		
+		try {
+
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					objIGeneralBO.consultarFechaNacimiento(strLanguage,strFechaNacimiento)), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());

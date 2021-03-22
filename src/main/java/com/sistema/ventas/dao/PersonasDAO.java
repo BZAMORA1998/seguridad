@@ -11,7 +11,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.Personas;
-import com.sistema.ventas.model.Usuarios;
 
 @Service
 public class PersonasDAO extends BaseDAO<Personas, Integer>{

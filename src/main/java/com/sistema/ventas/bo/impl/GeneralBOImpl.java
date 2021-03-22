@@ -1,6 +1,8 @@
 package com.sistema.ventas.bo.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,12 @@ import com.sistema.ventas.dao.ProvinciaDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dto.CiudadDTO;
 import com.sistema.ventas.dto.ProvinciaDTO;
+import com.sistema.ventas.enums.FormatoEdad;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Generos;
 import com.sistema.ventas.model.Pais;
 import com.sistema.ventas.model.TiposIdentificacion;
+import com.sistema.ventas.util.EdadUtil;
 
 @Service
 public class GeneralBOImpl implements IGeneralBO{
@@ -71,6 +75,18 @@ public class GeneralBOImpl implements IGeneralBO{
 		
 		
 		return objCiudadDAO.findAll(intSecuenciaPais,intSecuenciaProvincia);
+	}
+
+	@Override
+	public Map<String,Object> consultarFechaNacimiento(String strLanguage, String strFechaNacimiento) throws BOException {
+		
+		if (ObjectUtils.isEmpty(strFechaNacimiento)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.fechaNacimiento"});
+		
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("edad", EdadUtil.convertirFechaNacimientoAEdad(strFechaNacimiento, FormatoEdad.SHORT, strLanguage));
+		
+		return map;
 	}
 
 }

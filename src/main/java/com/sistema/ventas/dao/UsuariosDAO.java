@@ -17,7 +17,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
-import com.sistema.ventas.model.Personas;
 import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.StringUtil;
 

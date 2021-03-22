@@ -233,10 +233,10 @@ public class EdadUtil {
 	 * @return Retorna null si no es posible calcular la edad.
 	 */
 	public static String convertirFechaNacimientoAEdad(String fechaNacimiento, FormatoEdad formatoEdad,String strLanguage) {
-		if (!FechasUtil.formatoFechaValido(fechaNacimiento, FormatoFecha.DD_MM_YYYY)) {
+		if (!FechasUtil.formatoFechaValido(fechaNacimiento, FormatoFecha.YYYY_MM_DD_GUION)) {
 			throw new RuntimeException("El formato de fecha no es valido.");
 		}
-		Date datFechaNacimiento = FechasUtil.stringToDate(fechaNacimiento, FormatoFecha.DD_MM_YYYY);
+		Date datFechaNacimiento = FechasUtil.stringToDate(fechaNacimiento, FormatoFecha.YYYY_MM_DD_GUION);
 		return calculaEdad(datFechaNacimiento, formatoEdad,strLanguage);
 	}
 

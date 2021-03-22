@@ -1,6 +1,7 @@
 package com.sistema.ventas.bo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sistema.ventas.dto.CiudadDTO;
 import com.sistema.ventas.dto.ProvinciaDTO;
@@ -58,5 +59,16 @@ public interface IGeneralBO {
 	 * @throws BOException
 	 */
 	public List<CiudadDTO> findAllCiudad(Integer intSecuenciaPais,Integer intSecuenciaProvincia)throws BOException ;
+
+	/**
+	 * Consulta edad
+	 * 
+	 * @author Bryan Zamora
+	 * @param strLanguage
+	 * @param strFechaNacimiento
+	 * @return
+	 * @throws BOException
+	 */
+	public Map<String,Object> consultarFechaNacimiento(String strLanguage, String strFechaNacimiento)throws BOException;
 
 }
