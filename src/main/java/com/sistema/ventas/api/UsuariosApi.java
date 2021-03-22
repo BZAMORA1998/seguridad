@@ -91,7 +91,9 @@ public class UsuariosApi {
 		
 		try {
 			
-			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosBO.consultarUsuarios(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosBO.consultarUsuarios(intPage,intPerPage,strCedulaCodigoUsuario,strEstado,objUserDetails.getUsername());
 			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),

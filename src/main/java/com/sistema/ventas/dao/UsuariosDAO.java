@@ -89,7 +89,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 	 * @Return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ConsultarUsuarioDTO>  consultarUsuarioSistema(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado) {
+	public List<ConsultarUsuarioDTO>  consultarUsuarioSistema(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado, String strUser) {
 		
 		StringBuilder strJPQL = new StringBuilder();
 		
@@ -108,7 +108,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append(" 	JOIN 	u.personas per");
 			strJPQL.append(" 	JOIN 	u.roles ro");
 			strJPQL.append(" WHERE u.esActivo is not null");
-			
+			strJPQL.append(" AND u.usuario != :user");
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
 			
@@ -121,6 +121,8 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				query.setParameter("valor",strCedulaCodigoUsuario);
+			
+			query.setParameter("user",strUser);
 			
 			if(!ObjectUtils.isEmpty(intPage) && !ObjectUtils.isEmpty(intPerPage))
 				query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
@@ -154,7 +156,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 	 * @Return
 	 */
 	@SuppressWarnings("unchecked")
-	public Long  contarConsultarUsuarioSistema(String strCedulaCodigoUsuario, String strEstado) {
+	public Long  contarConsultarUsuarioSistema(String strCedulaCodigoUsuario, String strEstado, String strUser) {
 		StringBuilder strJPQL = new StringBuilder();
 		
 		try {	
@@ -165,6 +167,8 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append(" 	JOIN 	u.roles ro");
 			strJPQL.append(" WHERE u.esActivo is not null");
 			
+			strJPQL.append(" AND u.usuario != :user");
+			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
 			
@@ -173,10 +177,14 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			else if("INACTIVO".equalsIgnoreCase(strEstado))
 				strJPQL.append(" AND u.esActivo ='N'");
 			
+			
+			
 			Query query =  em.createQuery(strJPQL.toString());
 			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				query.setParameter("valor",strCedulaCodigoUsuario);
+			
+			query.setParameter("user",strUser);
 			
 			Long lonUsuarios=(Long) query.getSingleResult();
 			

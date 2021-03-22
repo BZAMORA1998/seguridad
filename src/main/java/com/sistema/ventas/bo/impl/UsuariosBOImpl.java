@@ -508,7 +508,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
-	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage,String strCedulaCodigoUsuario, String strEstado)
+	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage,String strCedulaCodigoUsuario, String strEstado, String strUser)
 			throws BOException {
 		
 		//intPage.
@@ -520,8 +520,8 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.perPage"});
 		
 	
-		List<ConsultarUsuarioDTO> lsUsuario=objUsuariosDAO.consultarUsuarioSistema(intPage,intPerPage,strCedulaCodigoUsuario,strEstado);
-		Long lngUsuario=objUsuariosDAO.contarConsultarUsuarioSistema(strCedulaCodigoUsuario,strEstado);
+		List<ConsultarUsuarioDTO> lsUsuario=objUsuariosDAO.consultarUsuarioSistema(intPage,intPerPage,strCedulaCodigoUsuario,strEstado,strUser);
+		Long lngUsuario=objUsuariosDAO.contarConsultarUsuarioSistema(strCedulaCodigoUsuario,strEstado,strUser);
 		
 		Map<String, Object> mapResult = new HashMap();
 		mapResult.put("rows",lsUsuario);

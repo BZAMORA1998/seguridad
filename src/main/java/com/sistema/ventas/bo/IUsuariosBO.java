@@ -75,9 +75,10 @@ public interface IUsuariosBO {
 	 * @param  intPerPage
 	 * @param  strCedulaCodigoUsuario
 	 * @param  strEstado
+	 * @param strUser 
 	 * @return
 	 * @throws BOException
 	 */
-	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado)throws BOException;
+	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado, String strUser)throws BOException;
 
 }
