@@ -217,4 +217,28 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			return null;
 		}
 	}
+
+	public boolean validarCodigoRepetido(String strUser) {
+		
+		StringBuilder strJPQL = new StringBuilder();
+		try {	
+			strJPQL.append(" SELECT count(u) ");
+			strJPQL.append(" FROM 	Usuarios u");
+			strJPQL.append(" WHERE u.usuario = :user");
+			
+			Query query =  em.createQuery(strJPQL.toString());
+			
+			query.setParameter("user",strUser);
+			
+			Long lonUsuarios=(Long) query.getSingleResult();
+			
+			if(lonUsuarios==0)
+				return true;
+			else
+				return false;
+			
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
 }

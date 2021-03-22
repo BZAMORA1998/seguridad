@@ -81,4 +81,19 @@ public interface IUsuariosBO {
 	 */
 	public Map<String, Object> consultarUsuarios(Integer intPage, Integer intPerPage, String strCedulaCodigoUsuario, String strEstado, String strUser)throws BOException;
 
+	/**
+	 * Consulta los usuario disponible
+	 * 
+	 * @author Bryan Zamora
+	 * @param  intPage
+	 * @param  intPerPage
+	 * @param  strCedulaCodigoUsuario
+	 * @param  strEstado
+	 * @param strUser 
+	 * @return
+	 * @throws BOException
+	 */
+	public Map<String, Object> consultarUsuarioDisponible(String strPrimerNombre, String strSegundoNombre,
+			String stPrimerApellido, String strSegundoApellido)throws BOException;
+
 }

@@ -163,4 +163,26 @@ public class UsuariosApi {
 		}
 	}
 	
+	@RequestMapping(value="/usuarioDisponible",method = RequestMethod.GET)
+	public ResponseEntity<?> consultarUsuarioDisponible(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam(	value = "primerNombre", 	required = false) String strPrimerNombre,
+			@RequestParam(	value = "segundoNombre", 	required = false) String strSegundoNombre,
+			@RequestParam(	value = "primerApellido", 	required = false) String stPrimerApellido,
+			@RequestParam(	value = "segundoApellido", 	required = false) String strSegundoApellido
+			) throws BOException {
+		
+		try {
+			
+			Map<String,Object> mapConsultarUsuarioDTO=objIUsuariosBO.consultarUsuarioDisponible(strPrimerNombre,strSegundoNombre,stPrimerApellido,strSegundoApellido);
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					mapConsultarUsuarioDTO), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+	}
+	
 }

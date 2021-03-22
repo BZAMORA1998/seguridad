@@ -152,7 +152,7 @@ public class StringUtil {
 	
     /**
      * Este método devuelve una cadena aleatoria generada con SecureRandom
-     * 
+     * @author Bryan
      * @param length
      * @return 
      */

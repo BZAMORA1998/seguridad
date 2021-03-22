@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
+import com.sistema.ventas.dto.PersonaDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.email.SendEmail;
 import com.sistema.ventas.enums.AlgoritmosIdentificacion;
@@ -529,4 +531,192 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		
 		return mapResult;
 	}
+
+	@Override
+	public Map<String, Object> consultarUsuarioDisponible(String strPrimerNombre, String strSegundoNombre,
+			String strPrimerApellido, String strSegundoApellido) throws BOException {
+
+		PersonaDTO objPersonaDTO=new PersonaDTO();
+		// Valida que el primer nombre sea obligatorio.
+		if (ObjectUtils.isEmpty(strPrimerNombre)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerNombre"});
+		
+		if(!StringUtil.soloLetrasYEspacio(strPrimerNombre))
+			throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.primerNombre"});
+		
+		objPersonaDTO.setPrimerNombre(strPrimerNombre);
+
+		// Valida que el primer apellido sea obligatorio.
+		if (ObjectUtils.isEmpty(strPrimerApellido)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.primerApellido"});
+		
+		if(!StringUtil.soloLetrasYEspacio(strPrimerApellido))
+			throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.primerApellido"});
+		
+		objPersonaDTO.setPrimerApellido(strPrimerApellido);
+		
+		if(!ObjectUtils.isEmpty(strSegundoNombre)) {
+			
+			if(!StringUtil.soloLetrasYEspacio(strSegundoNombre))
+				throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.segundoNombre"});
+			
+			objPersonaDTO.setSegundoNombre(strSegundoNombre);
+			
+		}
+		
+		if(!ObjectUtils.isEmpty(strSegundoApellido)) {
+			
+			if(!StringUtil.soloLetrasYEspacio(strSegundoApellido))
+				throw new BOException("ven.warn.campoSoloLetrasEspacios", new Object[] { "ven.campos.segundoApellido"});
+			
+			objPersonaDTO.setSegundoApellido(strSegundoApellido);
+		}
+		
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("usuarioDisponible",validarCodUsuario(objPersonaDTO,"ALG_USUARIOS_1",10));
+		
+		return map;
+	}
+	
+	public String validarCodUsuario(PersonaDTO objPersona,String strAlgoritmoCodigosEmpleados, Integer maxCantCaracteres) throws BOException{
+		String strCodUsuario = "";
+		
+		if(strAlgoritmoCodigosEmpleados.toUpperCase().trim().equals("ALG_USUARIOS_1")){
+			strCodUsuario=algoritmoUsuarios1(objPersona,maxCantCaracteres);
+		}else {
+			throw new BOException("seg.warn.algoritmo");
+		}
+		
+		return strCodUsuario;
+	}
+	
+	public String algoritmoUsuarios1(PersonaDTO objPersonal, Integer maxCantCaracteres) {
+		try{
+			//1)1ra letra primer nombre + 1er apellido.
+			String strCodUsuario = "";
+			String strCodUsuarioAux = "";
+			
+			if(!StringUtils.isBlank(objPersonal.getPrimerNombre()) && !StringUtils.isBlank(objPersonal.getPrimerApellido())){
+		    	strCodUsuario = strCodUsuario+ objPersonal.getPrimerNombre().trim().substring(0, 1);
+				strCodUsuario = StringUtil.eliminarAcentos(strCodUsuario + objPersonal.getPrimerApellido().trim());
+				strCodUsuario = usuarioExtenso(strCodUsuario,maxCantCaracteres);
+			
+				//2) 1ra letra segundo nombre + 1er apellido.
+				
+				if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+						&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+					strCodUsuarioAux = "";
+					strCodUsuario = "";
+					if(!StringUtils.isBlank(objPersonal.getSegundoNombre())&& !StringUtils.isBlank(objPersonal.getPrimerApellido())){
+						strCodUsuarioAux = strCodUsuarioAux + objPersonal.getSegundoNombre().trim().substring(0,1);
+						strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getPrimerApellido().trim());
+						strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+					}
+					
+					if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+							&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+						strCodUsuarioAux = "";
+						strCodUsuario = "";
+						//3) 1ra letra primer nombre + 2do apellido.
+						if(!StringUtils.isBlank(objPersonal.getPrimerNombre()) && !StringUtils.isBlank(objPersonal.getSegundoApellido())){
+							strCodUsuarioAux = strCodUsuarioAux + objPersonal.getPrimerNombre().trim().substring(0,1);
+							strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getSegundoApellido().trim());
+							strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+						} 
+						
+						//4) 1ra letra segundo nombre + 2do apellido.
+						
+						if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+								&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+							strCodUsuarioAux = "";
+							strCodUsuario = "";
+							if(!StringUtils.isBlank(objPersonal.getSegundoNombre()) && !StringUtils.isBlank(objPersonal.getSegundoApellido())){
+								strCodUsuarioAux =strCodUsuarioAux + objPersonal.getSegundoNombre().trim().substring(0,1);
+								strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getSegundoApellido().trim());
+								strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+							}
+							
+							//5)1ra letra primer nombre + 1ra letra segundo nombre + 1er apellido.
+							if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+									&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+								strCodUsuarioAux = "";
+								strCodUsuario = "";	
+								if(!StringUtils.isBlank(objPersonal.getPrimerNombre())&&!StringUtils.isBlank(objPersonal.getSegundoNombre())&&!StringUtils.isBlank(objPersonal.getPrimerApellido())){
+									strCodUsuarioAux = strCodUsuarioAux + objPersonal.getPrimerNombre().trim().substring(0, 1);
+									strCodUsuarioAux = strCodUsuarioAux + objPersonal.getSegundoNombre().trim().substring(0, 1);
+									strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getPrimerApellido().trim());
+									strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+								} 
+								
+								//6)1ra letra primer nombre + 1ra letra segundo nombre + 2do apellido.
+								if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+										&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+									strCodUsuarioAux = "";
+									strCodUsuario = "";	
+									if(!StringUtils.isBlank(objPersonal.getPrimerNombre()) && !StringUtils.isBlank(objPersonal.getSegundoNombre())&& !StringUtils.isBlank(objPersonal.getSegundoApellido())){
+										strCodUsuarioAux = strCodUsuarioAux + objPersonal.getPrimerNombre().trim().substring(0, 1);
+										strCodUsuarioAux = strCodUsuarioAux + objPersonal.getSegundoNombre().trim().substring(0, 1);
+										strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getSegundoApellido().trim());
+										strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+									}
+									
+									//7. 1raLetra primerApellido + 1erApellido + 1raLetra d segundodoApellido
+									if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+											&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+										strCodUsuarioAux = "";
+										strCodUsuario = "";	
+										if(!StringUtils.isBlank(objPersonal.getPrimerApellido()) && !StringUtils.isBlank(objPersonal.getSegundoApellido())){
+											strCodUsuarioAux = strCodUsuarioAux + objPersonal.getPrimerApellido().trim().substring(0, 1);
+											strCodUsuarioAux = strCodUsuarioAux + objPersonal.getPrimerApellido().trim();
+											strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getSegundoApellido().trim().substring(0, 1));
+											strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+										}
+										
+										//8. 1ra y 2da Letra del 1erNombre + 1erApellido
+										if(StringUtils.isBlank(strCodUsuario) || (!StringUtils.isBlank(strCodUsuario) 
+												&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))){
+											strCodUsuarioAux = "";
+											strCodUsuario = "";	
+											if(!StringUtils.isBlank(objPersonal.getPrimerNombre()) && !StringUtils.isBlank(objPersonal.getPrimerApellido())){
+												strCodUsuarioAux = strCodUsuarioAux + objPersonal.getPrimerNombre().trim().substring(0, 2);
+												strCodUsuarioAux = StringUtil.eliminarAcentos(strCodUsuarioAux + objPersonal.getPrimerApellido().trim());
+												strCodUsuario = usuarioExtenso(strCodUsuarioAux,maxCantCaracteres);
+											}
+											
+											//9. En caso no cumpla ningun caso
+											if(!StringUtils.isBlank(strCodUsuario) 
+													&& !objUsuariosDAO.validarCodigoRepetido(strCodUsuario.toUpperCase().trim()))
+												strCodUsuario = "";	
+										}
+									}
+								}
+							}
+						}
+					}	
+				}
+			}
+			
+			return strCodUsuario.toUpperCase().trim();
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private String usuarioExtenso(String strUsuario,Integer maxCantCaracteres){
+		try{
+			String strUser="";
+			if(strUsuario.length()<= maxCantCaracteres){
+				strUser = strUsuario.replaceAll(" ", "");				
+			}else{
+				strUser = strUsuario.substring(0,maxCantCaracteres).replaceAll(" ", "");				
+			}
+			return strUser;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
