@@ -15,7 +15,9 @@ import com.sistema.ventas.dao.PaisDAO;
 import com.sistema.ventas.dao.ProvinciaDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dto.CiudadDTO;
+import com.sistema.ventas.dto.EnviarEmailDTO;
 import com.sistema.ventas.dto.ProvinciaDTO;
+import com.sistema.ventas.email.SendEmail;
 import com.sistema.ventas.enums.FormatoEdad;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Generos;
@@ -36,6 +38,8 @@ public class GeneralBOImpl implements IGeneralBO{
 	private ProvinciaDAO objProvinciaDAO;
 	@Autowired
 	private CiudadDAO objCiudadDAO;
+	@Autowired
+	private SendEmail objSendEmail;
 	
 	@Override
 	public List<TiposIdentificacion> findAllTiposIdentificacion() throws BOException {
@@ -87,6 +91,20 @@ public class GeneralBOImpl implements IGeneralBO{
 		map.put("edad", EdadUtil.convertirFechaNacimientoAEdad(strFechaNacimiento, FormatoEdad.SHORT, strLanguage));
 		
 		return map;
+	}
+
+	@Override
+	public void enviarEmailDTO(EnviarEmailDTO objEnviarEmail) throws BOException {
+		if (ObjectUtils.isEmpty(objEnviarEmail.getEmail())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.email"});
+		
+		if (ObjectUtils.isEmpty(objEnviarEmail.getAsunto())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.asunto"});
+		
+		if (ObjectUtils.isEmpty(objEnviarEmail.getContenido())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.contenido"});
+		
+		objSendEmail.envioEmail(objEnviarEmail.getEmail(), objEnviarEmail.getAsunto(), objEnviarEmail.getContenido());
 	}
 
 }

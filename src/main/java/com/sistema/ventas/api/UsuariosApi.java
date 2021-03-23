@@ -184,5 +184,4 @@ public class UsuariosApi {
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	}
-	
 }

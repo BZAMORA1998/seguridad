@@ -22,6 +22,8 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\Usua
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\BaseDAO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\exceptions\CustomExceptionHandler.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dao\UsuariosDAO.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\EnviarEmailDTO.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\PersonaDTO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\enums\AuthenticationScheme.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\Generos.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\JwtUtil.java
@@ -52,9 +54,11 @@ C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\Str
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\segurity\JwtFilter.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\enums\TipoIdentificacion.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\enums\FormatoFecha.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\email\SendEmail.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\FechasUtil.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\model\Ciudad.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\IdentificacionUtil.java
+C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\FormatoEmailUtil.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\api\GeneralAPI.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\dto\OpcionesMenuDTO.java
 C:\workspace_ventas\sistema-ventas-api\src\main\java\com\sistema\ventas\util\SeguridadUtil.java

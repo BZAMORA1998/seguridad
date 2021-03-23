@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sistema.ventas.dto.CiudadDTO;
+import com.sistema.ventas.dto.EnviarEmailDTO;
 import com.sistema.ventas.dto.ProvinciaDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Generos;
@@ -70,5 +71,15 @@ public interface IGeneralBO {
 	 * @throws BOException
 	 */
 	public Map<String,Object> consultarFechaNacimiento(String strLanguage, String strFechaNacimiento)throws BOException;
+
+	/**
+	 * Enviar email
+	 * 
+	 * @author Bryan Zamora
+	 * @param objEnviarEmail
+	 * @return
+	 * @throws BOException
+	 */
+	public void enviarEmailDTO(EnviarEmailDTO objEnviarEmail)throws BOException;
 
 }
