@@ -160,7 +160,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append(" SELECT count(u) ");
 			strJPQL.append(" FROM 	Usuarios u");
 			strJPQL.append(" 	JOIN 	u.personas per");
-			strJPQL.append(" 	JOIN 	u.roles ro");
 			strJPQL.append(" WHERE u.esActivo is not null");
 			
 			strJPQL.append(" AND u.usuario != :user");
