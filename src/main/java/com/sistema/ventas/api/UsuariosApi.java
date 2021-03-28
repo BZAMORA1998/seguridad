@@ -104,9 +104,9 @@ public class UsuariosApi {
 		}
 	}
 	
-	@RequestMapping(value="/{idUsuario}",method = RequestMethod.PUT)
+	@RequestMapping(value="/activarOInactivarUsuario/{idUsuario}",method = RequestMethod.PUT)
 	@Transactional 
-	public ResponseEntity<?> eliminarUsuario(
+	public ResponseEntity<?> activarOInactivarUsuario(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
 			@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario
 			) throws BOException {
@@ -116,7 +116,7 @@ public class UsuariosApi {
 			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-					objIUsuariosBO.eliminarUsuario(intIdUsuario,objUserDetails.getUsername())), HttpStatus.OK);
+					objIUsuariosBO.activarOInactivarUsuario(intIdUsuario,objUserDetails.getUsername())), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());

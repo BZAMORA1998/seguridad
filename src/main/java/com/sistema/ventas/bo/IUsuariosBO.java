@@ -32,7 +32,7 @@ public interface IUsuariosBO {
 	 * @return
 	 * @throws BOException
 	 */
-	public Map<String, Object> eliminarUsuario(Integer intIdUsuario, String strUsuario)  throws BOException;
+	public Map<String, Object> activarOInactivarUsuario(Integer intIdUsuario, String strUsuario)  throws BOException;
 
 	/**
 	 * Consulta Usuario por id

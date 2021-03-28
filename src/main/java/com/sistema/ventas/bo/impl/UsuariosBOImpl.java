@@ -417,7 +417,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 
 	@Override
 	@Transactional
-	public Map<String, Object> eliminarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
+	public Map<String, Object> activarOInactivarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
 		
 		Date datFechaActual=new Date();
 		
@@ -431,20 +431,14 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			throw new BOException("ven.warn.idUsuarioNoExiste");
 		
 		if(("N").equalsIgnoreCase(objUsuario.get().getEsActivo()))
-			throw new BOException("ven.warn.idUsuarioInactivo");
+			objUsuario.get().setEsActivo("S");
+		else
+			objUsuario.get().setEsActivo("N");
 		
 		//Elimina el usuario
-		objUsuario.get().setEsActivo("N");
 		objUsuario.get().setUsuarioActualizacion(strUsuario);
 		objUsuario.get().setFechaActualizacion(datFechaActual);
-		
-		if(objUsuario.get().getPersonas()!=null) {
-			objUsuario.get().getPersonas().setEsActivo("N");
-			objUsuario.get().getPersonas().setUsuarioActualizacion(strUsuario);
-			objUsuario.get().getPersonas().setFechaActualizacion(datFechaActual);
-		}
-		objUsuariosDAO.update(objUsuario.get());
-		
+			
 		Map<String, Object> mapResult = new HashMap();
 		mapResult.put("secuenciaUsuario",intIdUsuario);
 		
