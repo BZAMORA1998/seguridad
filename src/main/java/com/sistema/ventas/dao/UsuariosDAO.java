@@ -104,7 +104,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append("    	u.esActivo as estado");
 			strJPQL.append(" FROM 	Usuarios u");
 			strJPQL.append(" 	JOIN 	u.personas per");
-			strJPQL.append(" 	JOIN 	u.roles ro");
 			strJPQL.append(" WHERE u.esActivo is not null");
 			strJPQL.append(" AND u.usuario != :user");
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
