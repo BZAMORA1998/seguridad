@@ -101,7 +101,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append("    	per.primerNombre as primerNombre,");
 			strJPQL.append("    	per.segundoNombre as segundoNombre,");
 			strJPQL.append("    	u.usuario as usuario,");
-			strJPQL.append("    	ro.abreviatura as rol,");
 			strJPQL.append("    	u.esActivo as estado");
 			strJPQL.append(" FROM 	Usuarios u");
 			strJPQL.append(" 	JOIN 	u.personas per");
