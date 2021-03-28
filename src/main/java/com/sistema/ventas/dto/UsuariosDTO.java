@@ -20,7 +20,6 @@ public class UsuariosDTO {
     private Integer secuenciaPais;
     private Integer secuenciaProvincia;
     private Integer secuenciaCiudad;
-    private Integer secuenciaRol;
     private String usuario; 
     private String email;
 }

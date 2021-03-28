@@ -59,8 +59,6 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	@Autowired
 	private TiposIdentificacionDAO objTiposIdentificacionDAO;
 	@Autowired
-	private RolesDAO objRolesDAO;
-	@Autowired
 	private PaisDAO objPaisDAO;
 	@Autowired
 	private ProvinciaDAO objProvinciaDAO;
@@ -229,21 +227,21 @@ public class UsuariosBOImpl implements IUsuariosBO{
 				
 		//*************************************************************
 			
-		//************Secuencia rol***********************************12
-		// Valida que la secuencia ciudad sea obligatorio
-		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaRol())) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
-		
-		//Busca el el pais
-		Optional<Roles> objRoles=objRolesDAO.find(objUsuariosDTO.getSecuenciaRol());
-		
-		//Valida que el tipo de identificacion exista
-		if(!objRoles.isPresent()) 
-			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaRol"});
-		
-		//Valida que el tipo de identificacion este activo
-		if(!("S").equalsIgnoreCase(objRoles.get().getEsActivo())) 
-			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaRol"});
+//		//************Secuencia rol***********************************12
+//		// Valida que la secuencia ciudad sea obligatorio
+//		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaRol())) 
+//			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
+//		
+//		//Busca el el pais
+//		Optional<Roles> objRoles=objRolesDAO.find(objUsuariosDTO.getSecuenciaRol());
+//		
+//		//Valida que el tipo de identificacion exista
+//		if(!objRoles.isPresent()) 
+//			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaRol"});
+//		
+//		//Valida que el tipo de identificacion este activo
+//		if(!("S").equalsIgnoreCase(objRoles.get().getEsActivo())) 
+//			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaRol"});
 				
 		//*************************************************************
 		
@@ -304,7 +302,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuarios.setEsActivo("S");
 		objUsuarios.setUsuarioIngreso(strUsuario);
 		objUsuarios.setFechaIngreso(datFechaActual);
-		objUsuarios.setRoles(objRoles.get());
+		//objUsuarios.setRoles(objRoles.get());
 		objUsuarios.setContrasenia(StringUtil.base64Encode(strContrasenia));
 		objUsuariosDAO.persist(objUsuarios);
 		
