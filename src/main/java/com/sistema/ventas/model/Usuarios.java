@@ -46,6 +46,10 @@ public class Usuarios  implements Serializable {
 	@Column(name = "es_activo")
 	private String esActivo;
 	
+	@Size(max=1)
+	@Column(name = "es_primera_vez")
+	private String esPrimeraVez;
+	
 	@Column(name = "fecha_ingreso")
 	private Date fechaIngreso;
 	

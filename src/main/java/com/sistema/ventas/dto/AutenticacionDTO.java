@@ -15,4 +15,5 @@ public class AutenticacionDTO {
 	private String token;
 	private String rolSistema;
 	private byte[] photo;
+	public Boolean esContrasenaPrimeraVez;
 }
