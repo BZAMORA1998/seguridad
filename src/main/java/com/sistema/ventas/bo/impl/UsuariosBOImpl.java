@@ -21,7 +21,6 @@ import com.sistema.ventas.dao.GenerosDAO;
 import com.sistema.ventas.dao.PaisDAO;
 import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.ProvinciaDAO;
-import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
@@ -39,7 +38,6 @@ import com.sistema.ventas.model.Pais;
 import com.sistema.ventas.model.Personas;
 import com.sistema.ventas.model.Provincia;
 import com.sistema.ventas.model.ProvinciaCPK;
-import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.TiposIdentificacion;
 import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.FechasUtil;
@@ -299,6 +297,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		Usuarios objUsuarios=new Usuarios();
 		objUsuarios.setUsuario(StringUtil.eliminarAcentos(objUsuariosDTO.getUsuario().toUpperCase()));
 		objUsuarios.setPersonas(objPersona);
+		objUsuarios.setEsActivo("S");
 		objUsuarios.setEsActivo("S");
 		objUsuarios.setUsuarioIngreso(strUsuario);
 		objUsuarios.setFechaIngreso(datFechaActual);
@@ -709,6 +708,47 @@ public class UsuariosBOImpl implements IUsuariosBO{
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	@Transactional
+	public void recuperarContrasena(String strCorreo) throws BOException {
+		
+		String strContrasenia=StringUtil.generateRandomString(10);
+		
+		//Valida que el campo correo sea obligatorio
+		if (ObjectUtils.isEmpty(strCorreo)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.correo"});
+		
+		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(strCorreo);
+		
+		if(ObjectUtils.isEmpty(objUsuario))
+			throw new BOException("ven.warn.usuarioNoExiste", new Object[] {strCorreo});
+		
+		objUsuario.setEsPrimeraVez("S");
+		objUsuario.setContrasenia(StringUtil.base64Encode(strContrasenia));
+		objUsuario.setFechaActualizacion(new Date());
+		objUsuario.setUsuarioActualizacion("SYSTEM");
+		
+		String strContenido="Usuario:"+objUsuario.getUsuario()+" - Contraseña: "+strContrasenia;
+		objSendEmail.envioEmail(objUsuario.getPersonas().getEmail(),"Recuperar Contraseña",strContenido);
+	}
+
+	@Override
+	@Transactional
+	public void cambioContrasena(String strContrasenia, String username) throws BOException {
+		
+		//Valida que el campo correo sea obligatorio
+		if (ObjectUtils.isEmpty(strContrasenia)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.contrasenia"});
+		
+		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
+		
+		objUsuario.setEsPrimeraVez("N");
+		objUsuario.setContrasenia(StringUtil.base64Encode(strContrasenia));
+		objUsuario.setFechaActualizacion(new Date());
+		objUsuario.setUsuarioActualizacion(username);
+		
 	}
 	
 }

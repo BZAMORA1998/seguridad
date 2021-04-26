@@ -239,4 +239,18 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			return false;
 		}
 	}
+
+	public Usuarios consultarUsuarioSistemaPorCorreo(String strCorreo) {
+		try {	
+			return em.createQuery(
+						"SELECT us \n" +
+						"  FROM Usuarios us \n" +
+						"  WHERE (lower(us.usuario)=:usuario or us.personas.email=:usuario) \n" +
+						"  AND us.esActivo = 'S'",Usuarios.class)
+						.setParameter("usuario",strCorreo.toLowerCase())
+						.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }

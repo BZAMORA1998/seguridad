@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosBO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
+import com.sistema.ventas.dto.ContrasenaDTO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.exceptions.BOException;
@@ -183,5 +184,50 @@ public class UsuariosApi {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
+	}
+	
+	
+	@RequestMapping(value="/recuperarContrasena",method = RequestMethod.POST)
+	public ResponseEntity<?> recuperarContrasena(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
+			@RequestBody ContrasenaDTO objCorreo
+			) throws BOException {
+		
+		try {
+			
+			objIUsuariosBO.recuperarContrasena(objCorreo.getCorreo());
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.recuperarContrasena", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
+			
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+		
+	}
+	
+	@RequestMapping(value="/cambioContrasena",method = RequestMethod.POST)
+	public ResponseEntity<?> cambioContrasena(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
+			@RequestBody ContrasenaDTO objContrasena
+			) throws BOException {
+		
+		try {
+			
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIUsuariosBO.cambioContrasena(objContrasena.getContrasenia(),objUserDetails.getUsername());
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
+			
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+		
 	}
 }

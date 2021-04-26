@@ -31,15 +31,16 @@ public class JwtFilter extends OncePerRequestFilter {
     private CustomUserDetailsService service;
 
 
-    @Override
+    @SuppressWarnings({ "unused", "unused" })
+	@Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException{
 	    try {
 	        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-	        String[] arrServiciosSinSeguridad = {};	
+	        String[] arrServiciosSinSeguridad = {"/ventas/v1/usuarios/recuperarContrasena"};	
 	        
 	        String strToken = null;
 	        String strUserName = null;
-	
+	        
 	        if (!(httpServletRequest.getRequestURI()!=null && 
 					Arrays.stream(arrServiciosSinSeguridad).anyMatch(StringUtils.upperCase(httpServletRequest.getRequestURI())::equalsIgnoreCase))) {
 		        	

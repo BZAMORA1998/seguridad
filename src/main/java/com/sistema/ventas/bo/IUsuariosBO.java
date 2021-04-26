@@ -96,4 +96,22 @@ public interface IUsuariosBO {
 	public Map<String, Object> consultarUsuarioDisponible(String strPrimerNombre, String strSegundoNombre,
 			String stPrimerApellido, String strSegundoApellido)throws BOException;
 
+	/**
+	 * Recuperar la contrasena del usuario
+	 * 
+	 * @author Bryan Zamora
+	 * @return
+	 * @throws BOException
+	 */
+	public void recuperarContrasena(String strCorreo)throws BOException;
+
+	/**
+	 * Cambiar contrasena
+	 * 
+	 * @author Bryan Zamora
+	 * @return
+	 * @throws BOException
+	 */
+	public void cambioContrasena(String contrasena, String username)throws BOException;
+
 }
