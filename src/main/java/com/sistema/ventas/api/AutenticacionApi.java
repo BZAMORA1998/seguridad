@@ -1,5 +1,11 @@
 package com.sistema.ventas.api;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +21,12 @@ import com.sistema.ventas.dto.AutenticacionDTO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.exceptions.CustomExceptionHandler;
+import com.sistema.ventas.segurity.JwtUtil;
 import com.sistema.ventas.util.MensajesUtil;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.impl.DefaultClaims;
 
 @RestController
 @RequestMapping("/autenticacion")
@@ -26,6 +37,8 @@ public class AutenticacionApi {
 
 	@Autowired
 	private IAutenticacionBO objIAutenticacionBO;
+	@Autowired
+	private JwtUtil jwUtil;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> login(
@@ -43,5 +56,21 @@ public class AutenticacionApi {
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
 	
+	}
+	
+	@RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+	public ResponseEntity<?> refreshtoken(@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
+			@RequestHeader(value = "Authorization") Object objToken) throws Exception {
+		
+		// From the HttpRequest get the claims
+		Claims claims =Jwts.parser().setSigningKey("javainuse").parseClaimsJws(objToken.toString().replace("Bearer ","")).getBody();
+		String token = jwUtil.doGenerateRefreshToken(claims, claims.get("sub").toString());
+		Map<String,Object>mapToken=new HashMap<String,Object>();
+		mapToken.put("token",token);
+		
+		return new ResponseEntity<>(new ResponseOk(
+				MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+				mapToken), HttpStatus.OK);
+		
 	}
 }

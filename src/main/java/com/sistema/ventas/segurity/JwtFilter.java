@@ -47,6 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		        	 if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			            strToken = authorizationHeader.substring(7);
 						strUserName = jwtUtil.extractUsername(strToken);
+						System.out.println("Fecha de expiracion"+jwtUtil.extractExpiration(strToken));
 				     }
 				
 			        if (strUserName != null && SecurityContextHolder.getContext().getAuthentication() == null) {

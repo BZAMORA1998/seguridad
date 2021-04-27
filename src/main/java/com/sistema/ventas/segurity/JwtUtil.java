@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,25 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtUtil {
 
-    private String secret = "javatechie";
+	private String secret;
+	private int jwtExpirationInMs;
+	private int refreshExpirationDateInMs;
+
+	@Value("${jwt.secret}")
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
+	@Value("${jwt.expirationDateInMs}")
+	public void setJwtExpirationInMs(int jwtExpirationInMs) {
+		this.jwtExpirationInMs = jwtExpirationInMs;
+	}
+
+	@Value("${jwt.refreshExpirationDateInMs}")
+	public void setRefreshExpirationDateInMs(int refreshExpirationDateInMs) {
+		this.refreshExpirationDateInMs = refreshExpirationDateInMs;
+	}
+
 
     public String extractUsername(String token) throws BOException {
        return extractClaim(token, Claims::getSubject);
@@ -46,7 +65,7 @@ public class JwtUtil {
     	 return claims;
     }
 
-    private Boolean isTokenExpired(String token) throws BOException {
+    public Boolean isTokenExpired(String token) throws BOException {
         return extractExpiration(token).before(new Date());
     }
 
@@ -58,7 +77,7 @@ public class JwtUtil {
     private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+3600000))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
@@ -68,4 +87,12 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         
     }
+    
+    public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
+
+		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
+				.signWith(SignatureAlgorithm.HS512, secret).compact();
+
+	}
 }
