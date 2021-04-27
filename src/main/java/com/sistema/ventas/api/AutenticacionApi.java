@@ -2,9 +2,6 @@ package com.sistema.ventas.api;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +23,6 @@ import com.sistema.ventas.util.MensajesUtil;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.impl.DefaultClaims;
 
 @RestController
 @RequestMapping("/autenticacion")
