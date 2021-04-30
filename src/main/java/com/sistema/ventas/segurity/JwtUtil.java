@@ -21,6 +21,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtUtil {
 
 	private String secret;
+	@SuppressWarnings("unused")
 	private int jwtExpirationInMs;
 	private int refreshExpirationDateInMs;
 

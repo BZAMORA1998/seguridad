@@ -54,7 +54,7 @@ public class AutenticacionApi {
 	
 	}
 	
-	@RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+	@RequestMapping(value = "/refreshToken", method = RequestMethod.GET)
 	public ResponseEntity<?> refreshtoken(@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
 			@RequestHeader(value = "Authorization") Object objToken) throws Exception {
 		
@@ -67,6 +67,5 @@ public class AutenticacionApi {
 		return new ResponseEntity<>(new ResponseOk(
 				MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 				mapToken), HttpStatus.OK);
-		
 	}
 }

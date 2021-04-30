@@ -745,7 +745,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
 		
 		objUsuario.setEsPrimeraVez("N");
-		objUsuario.setContrasenia(StringUtil.base64Encode(strContrasenia));
+		objUsuario.setContrasenia(strContrasenia);
 		objUsuario.setFechaActualizacion(new Date());
 		objUsuario.setUsuarioActualizacion(username);
 		
