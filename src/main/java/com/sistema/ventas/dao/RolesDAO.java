@@ -1,14 +1,20 @@
 package com.sistema.ventas.dao;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.sistema.ventas.dto.ConsultarModulosDTO;
+import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.model.Roles;
 
 @Service
@@ -39,6 +45,26 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 	@Override
 	public Optional<Roles> find(@NonNull Integer id) {
 		return super.find(id);
+	}
+
+	public List<ConsultarRolesDTO> consultarRoles(Integer intSecuenciaUsuario) {
+		StringBuilder strJPQLBase = new StringBuilder();
+		strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.abreviatura as abreviatura from tbl_usuario_x_roles ru, tbl_roles r ");
+		strJPQLBase.append("where ru.secuencia_rol=r.secuencia_rol ");
+		strJPQLBase.append("and   ru.secuencia_usuario=:secuenciaUsuario ");
+		strJPQLBase.append("and   ru.es_activo='S' ");
+		strJPQLBase.append("and   r.es_activo='S' ");
+		TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
+		//PARAMETROS
+		query.setParameter("secuenciaUsuario", intSecuenciaUsuario);
+
+		return query.getResultList().stream()
+				.map(tuple -> ConsultarRolesDTO.builder()
+				.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
+				.abreviatura(tuple.get("abreviatura", String.class))
+				.build())
+		.distinct()
+		.collect(Collectors.toList());
 	}
 
 }
