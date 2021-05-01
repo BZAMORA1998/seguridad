@@ -1,5 +1,6 @@
 package com.sistema.ventas.api;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.sistema.ventas.bo.IAutenticacionBO;
 import com.sistema.ventas.dto.AutenticacionDTO;
 import com.sistema.ventas.dto.ResponseOk;
+import com.sistema.ventas.dto.TokenDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.exceptions.CustomExceptionHandler;
 import com.sistema.ventas.segurity.JwtUtil;
 import com.sistema.ventas.util.MensajesUtil;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 
 @RestController
@@ -55,17 +59,45 @@ public class AutenticacionApi {
 	}
 	
 	@RequestMapping(value = "/refreshToken", method = RequestMethod.GET)
-	public ResponseEntity<?> refreshtoken(@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
+	public ResponseEntity<?> refreshtoken(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
 			@RequestHeader(value = "Authorization") Object objToken) throws Exception {
 		
-		// From the HttpRequest get the claims
-		Claims claims =Jwts.parser().setSigningKey("javainuse").parseClaimsJws(objToken.toString().replace("Bearer ","")).getBody();
-		String token = jwUtil.doGenerateRefreshToken(claims, claims.get("sub").toString());
-		Map<String,Object>mapToken=new HashMap<String,Object>();
-		mapToken.put("token",token);
+		Claims claims;
+		String token;
+		Map<String,Object> mapToken;
+		String strToken=objToken.toString().replace("Bearer ","");
+		
+		try {
+			// From the HttpRequest get the claims
+			claims =Jwts.parser().setSigningKey("javainuse")
+					.parseClaimsJws(strToken)
+					.getBody();
+		
+			token = jwUtil.doGenerateRefreshToken(claims, claims.get("sub").toString());
+			mapToken=new HashMap<String,Object>();
+			mapToken.put("token",token);
 		
 		return new ResponseEntity<>(new ResponseOk(
 				MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 				mapToken), HttpStatus.OK);
+		
+		}catch(ExpiredJwtException e) {
+			Gson g = new Gson(); 
+			Base64.Decoder decoder = Base64.getDecoder(); 
+			String[] chunks = strToken.split("\\.");
+			String data = new String(decoder.decode(chunks[1])); 
+			TokenDTO s = g.fromJson(data, TokenDTO.class); 
+			token = jwUtil.generateToken(s.getSub());
+			mapToken=new HashMap<String,Object>();
+			mapToken.put("token",token);
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					mapToken), HttpStatus.OK);
+			
+		 }catch(Exception e){
+			 throw new BOException("ven.warn.tokenInvalido");
+		 }
 	}
 }
