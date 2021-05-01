@@ -21,10 +21,10 @@ import com.sistema.ventas.util.MensajesUtil;
 
 @RestController
 @RequestMapping("/general")
-public class GeneralAPI {
+public class GeneralApi {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LogManager.getLogger(GeneralAPI.class.getName());
+	private static final Logger logger = LogManager.getLogger(GeneralApi.class.getName());
 	
 	@Autowired
 	private IGeneralBO objIGeneralBO;
