@@ -46,7 +46,9 @@ class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	
-        String[] arrServiciosSinSeguridad = {"/autenticacion/login","/usuarios/recuperarContrasena","/autenticacion/refreshToken"};	
+        String[] arrServiciosSinSeguridad = {"/autenticacion/login",
+        		"/usuarios/recuperarContrasena",
+        		"/autenticacion/refreshToken"};	
         
         http.csrf().disable().authorizeRequests().antMatchers(arrServiciosSinSeguridad)
         		.permitAll().
