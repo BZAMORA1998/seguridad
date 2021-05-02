@@ -2,6 +2,7 @@ package com.sistema.ventas.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,18 @@ public class RolesBOImpl implements IRolesBO{
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
 		
 		return objRolesDAO.consultarRoles(objUsuario.getSecuenciaUsuario());
+	}
+
+
+	@Override
+	public List<ConsultarRolesDTO> consultarRolesRuta(String strRuta) throws BOException {
+		
+		if (ObjectUtils.isEmpty(strRuta)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.ruta"});
+		
+		List<ConsultarRolesDTO> objList=objRolesDAO.consultarRolesRuta(strRuta);
+		
+		return objRolesDAO.consultarRolesRuta(strRuta);
 	}
 
 

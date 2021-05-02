@@ -9,4 +9,6 @@ public interface IRolesBO {
 
 	List<ConsultarRolesDTO> consultarRoles(String username)throws BOException;
 
+	List<ConsultarRolesDTO> consultarRolesRuta(String strRuta)throws BOException;
+
 }

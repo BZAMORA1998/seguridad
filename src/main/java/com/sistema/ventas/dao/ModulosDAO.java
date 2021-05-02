@@ -51,7 +51,7 @@ public class ModulosDAO extends BaseDAO<Modulos,Integer>{
 	public List<ConsultarModulosDTO> consultarModulos(Integer intSecuenciaUsuario) {
 		
 		StringBuilder strJPQLBase = new StringBuilder();
-		strJPQLBase.append("SELECT m.secuencia_modulo as secuenciaModulo,m.nombre as nombre ");
+		strJPQLBase.append("SELECT m.secuencia_modulo as secuenciaModulo,m.nombre as nombre,m.url as url ");
 		strJPQLBase.append("from tbl_modulo_x_roles mr,tbl_modulos m ");
 		strJPQLBase.append("where mr.secuencia_modulo=m.secuencia_modulo ");
 		strJPQLBase.append("and   mr.es_activo='S' ");
@@ -69,6 +69,7 @@ public class ModulosDAO extends BaseDAO<Modulos,Integer>{
 				.map(tuple -> ConsultarModulosDTO.builder()
 				.secuenciaModulo(tuple.get("secuenciaModulo")!=null?tuple.get("secuenciaModulo", Number.class).intValue():null)
 				.nombre(tuple.get("nombre", String.class))
+				.url(tuple.get("url", String.class))
 				.build())
 		.distinct()
 		.collect(Collectors.toList());

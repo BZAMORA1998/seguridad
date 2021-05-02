@@ -2,6 +2,7 @@ package com.sistema.ventas.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,12 @@ public class ModulosBOImpl implements IModulosBO{
 		
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(strUsername);
 		
-		return objModulosDAO.consultarModulos(objUsuario.getSecuenciaUsuario());
+		List<ConsultarModulosDTO>ls=objModulosDAO.consultarModulos(objUsuario.getSecuenciaUsuario());
+		
+		if (ObjectUtils.isEmpty(ls))
+			throw new BOException("ven.warn.usuarioSinModulos", new Object[] {strUsername});
+		
+		return ls;
 	}
 
 }

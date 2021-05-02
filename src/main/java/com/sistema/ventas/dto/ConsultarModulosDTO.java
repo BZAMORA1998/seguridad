@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ConsultarModulosDTO {
 	private Integer secuenciaModulo;
 	private String nombre;
+	private String url;
 }

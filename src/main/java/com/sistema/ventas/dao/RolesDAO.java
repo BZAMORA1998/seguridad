@@ -67,4 +67,27 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		.collect(Collectors.toList());
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<ConsultarRolesDTO> consultarRolesRuta(String strRuta) {
+		
+		StringBuilder strJPQLBase = new StringBuilder();
+		strJPQLBase.append("select distinct a.secuencia_rol as secuenciaRol, a.abreviatura as abreviatura from tbl_roles a,tbl_rutas_x_roles b,tbl_rutas_url c ");
+		strJPQLBase.append("where a.secuencia_rol=b.secuencia_rol ");
+		strJPQLBase.append("and b.secuencia_ruta=c.secuencia_ruta ");
+		strJPQLBase.append("and c.nombre like :ruta ");
+		strJPQLBase.append("and   a.es_activo='S' ");
+		strJPQLBase.append("and   b.es_activo='S' ");
+		
+		TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
+		query.setParameter("ruta",strRuta.toUpperCase());
+
+		return query.getResultList().stream()
+				.map(tuple -> ConsultarRolesDTO.builder()
+				.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
+				.abreviatura(tuple.get("abreviatura", String.class))
+				.build())
+		.distinct()
+		.collect(Collectors.toList());
+	}
+
 }
