@@ -97,7 +97,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select distinct a.secuencia_ruta as secuenciaRuta,a.nombre as nombre,b.es_select as esSelect from tbl_rutas_url a  ");
+			strJPQLBase.append("select distinct a.secuencia_ruta as secuenciaRuta,a.description as description, a.nombre as nombre,b.es_select as esSelect from tbl_rutas_url a  ");
 			strJPQLBase.append("left join ( ");
 			strJPQLBase.append("			select c.es_select,c.secuencia_ruta,c.secuencia_rol from tbl_rutas_x_roles c ");
 			strJPQLBase.append(" 			where c.es_activo='S' ");
@@ -124,6 +124,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 					.map(tuple -> ConsultarRolesRutaUsuarioDTO.builder()
 					.secuenciaRuta(tuple.get("secuenciaRuta")!=null?tuple.get("secuenciaRuta", Number.class).intValue():null)
 					.nombre(tuple.get("nombre", String.class))
+					.description(tuple.get("description", String.class))
 					.esSelect(tuple.get("esSelect")!=null && "S".equalsIgnoreCase(tuple.get("esSelect",String.class))?true:false)
 					.rutas(consultarRolesRutaUsuario(intSecuenciaRol,
 				          intSecuenciaUsuario,false,tuple.get("secuenciaRuta", Number.class).intValue()))
