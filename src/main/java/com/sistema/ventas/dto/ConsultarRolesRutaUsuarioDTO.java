@@ -15,5 +15,5 @@ public class ConsultarRolesRutaUsuarioDTO {
 	private Integer secuenciaRuta;
 	private String nombre;
 	private Boolean esSelect;
-	private List<ConsultarRolesRutaUsuarioDTO> ruta;
+	private List<ConsultarRolesRutaUsuarioDTO> rutas;
 }
