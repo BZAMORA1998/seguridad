@@ -13,6 +13,7 @@ import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.ConsultarModulosDTO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
+import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Usuarios;
 
@@ -40,9 +41,20 @@ public class RolesBOImpl implements IRolesBO{
 		if (ObjectUtils.isEmpty(strRuta)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.ruta"});
 		
-		List<ConsultarRolesDTO> objList=objRolesDAO.consultarRolesRuta(strRuta);
-		
 		return objRolesDAO.consultarRolesRuta(strRuta);
+	}
+
+
+	@Override
+	public List<ConsultarRolesRutaUsuarioDTO> consultarRolesRutaUsuario(String username, Integer intSecuenciaRol)
+			throws BOException {
+		
+		if (ObjectUtils.isEmpty(intSecuenciaRol)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
+		
+		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
+		
+		return objRolesDAO.consultarRolesRutaUsuario(intSecuenciaRol,objUsuario.getSecuenciaUsuario(),true,null);
 	}
 
 

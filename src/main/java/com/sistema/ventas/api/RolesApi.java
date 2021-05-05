@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,4 +65,24 @@ public class RolesApi {
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 			}
 		}
+		
+		@RequestMapping(value="/ruta/usuario/{secuenciaRol}", method = RequestMethod.GET)
+		public ResponseEntity<?> consultarRolesRutaUsuario(
+				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+				@PathVariable(value="secuenciaRol", required = false)  Integer  intSecuenciaRol
+				) throws BOException {
+			
+			try {
+				
+				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+				return new ResponseEntity<>(new ResponseOk(
+						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+						objIRolesBO.consultarRolesRutaUsuario(objUserDetails.getUsername(),intSecuenciaRol)), HttpStatus.OK);
+			} catch (BOException be) {
+				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+			}
+		}
+		
 }
