@@ -15,7 +15,6 @@ import javax.persistence.TypedQuery;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.dto.ConsultarModulosDTO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.model.Roles;
@@ -126,7 +125,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 					.secuenciaRuta(tuple.get("secuenciaRuta")!=null?tuple.get("secuenciaRuta", Number.class).intValue():null)
 					.nombre(tuple.get("nombre", String.class))
 					.esSelect(tuple.get("esSelect")!=null && "S".equalsIgnoreCase(tuple.get("esSelect",String.class))?true:false)
-					.ruta(consultarRolesRutaUsuario(intSecuenciaRol,
+					.rutas(consultarRolesRutaUsuario(intSecuenciaRol,
 				          intSecuenciaUsuario,false,tuple.get("secuenciaRuta", Number.class).intValue()))
 					.build())
 			.distinct()
