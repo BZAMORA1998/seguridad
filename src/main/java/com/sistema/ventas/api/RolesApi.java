@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sistema.ventas.bo.IModulosBO;
 import com.sistema.ventas.bo.IRolesBO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.exceptions.BOException;
@@ -31,8 +30,8 @@ public class RolesApi {
 		@Autowired
 		private IRolesBO objIRolesBO;
 		
-		@RequestMapping(method = RequestMethod.GET)
-		public ResponseEntity<?> consultarModulos(
+		@RequestMapping(value="/usuario",method = RequestMethod.GET)
+		public ResponseEntity<?> consultarRolesUsuario(
 				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage
 				) throws BOException {
 			
@@ -42,7 +41,7 @@ public class RolesApi {
 				
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-						objIRolesBO.consultarRoles(objUserDetails.getUsername())), HttpStatus.OK);
+						objIRolesBO.consultarRolesUsuario(objUserDetails.getUsername())), HttpStatus.OK);
 			} catch (BOException be) {
 				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
@@ -79,6 +78,24 @@ public class RolesApi {
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 						objIRolesBO.consultarRolesRutaUsuario(objUserDetails.getUsername(),intSecuenciaRol)), HttpStatus.OK);
+			} catch (BOException be) {
+				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+			}
+		}
+		
+		@RequestMapping(method = RequestMethod.GET)
+		public ResponseEntity<?> consultarRoles(
+				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage
+				) throws BOException {
+			
+			try {
+				
+				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				
+				return new ResponseEntity<>(new ResponseOk(
+						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+						objIRolesBO.consultarRoles()), HttpStatus.OK);
 			} catch (BOException be) {
 				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());

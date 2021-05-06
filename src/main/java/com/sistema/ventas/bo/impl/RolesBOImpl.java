@@ -6,12 +6,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.bo.IModulosBO;
 import com.sistema.ventas.bo.IRolesBO;
-import com.sistema.ventas.dao.ModulosDAO;
 import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
-import com.sistema.ventas.dto.ConsultarModulosDTO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.exceptions.BOException;
@@ -27,11 +24,11 @@ public class RolesBOImpl implements IRolesBO{
 	
 
 	@Override
-	public List<ConsultarRolesDTO> consultarRoles(String username) throws BOException {
+	public List<ConsultarRolesDTO> consultarRolesUsuario(String username) throws BOException {
 		
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
 		
-		return objRolesDAO.consultarRoles(objUsuario.getSecuenciaUsuario());
+		return objRolesDAO.consultarRolesUsuario(objUsuario.getSecuenciaUsuario());
 	}
 
 
@@ -55,6 +52,12 @@ public class RolesBOImpl implements IRolesBO{
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
 		
 		return objRolesDAO.consultarRolesRutaUsuario(intSecuenciaRol,objUsuario.getSecuenciaUsuario(),true,null);
+	}
+
+
+	@Override
+	public List<ConsultarRolesDTO> consultarRoles() throws BOException {
+		return objRolesDAO.consultarRoles();
 	}
 
 

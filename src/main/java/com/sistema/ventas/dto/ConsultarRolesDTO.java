@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ConsultarRolesDTO {
 	private Integer secuenciaRol;
 	private String abreviatura;
+	private String descripcion;
 }
