@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IRolesBO;
+import com.sistema.ventas.dto.GuardarRolesDTO;
 import com.sistema.ventas.dto.ResponseOk;
+import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.exceptions.CustomExceptionHandler;
 import com.sistema.ventas.util.MensajesUtil;
@@ -91,11 +94,30 @@ public class RolesApi {
 			
 			try {
 				
-				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-				
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
 						objIRolesBO.consultarRoles()), HttpStatus.OK);
+			} catch (BOException be) {
+				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+			}
+		}
+		
+		@RequestMapping(value="/ruta/usuario",method = RequestMethod.POST)
+		public ResponseEntity<?> guardaRolesPorUrl(
+				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+				@RequestBody GuardarRolesDTO objGuardarRolesDTO
+				) throws BOException {
+			
+			try {
+				
+				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				
+				objIRolesBO.guardaRolesPorUrl(objGuardarRolesDTO,objUserDetails.getUsername());
+				
+				return new ResponseEntity<>(new ResponseOk(
+						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+						null), HttpStatus.OK);
 			} catch (BOException be) {
 				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
