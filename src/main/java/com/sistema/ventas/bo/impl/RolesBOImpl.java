@@ -18,9 +18,11 @@ import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.dto.GuardarRolesDTO;
 import com.sistema.ventas.exceptions.BOException;
+import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.RutasXRoles;
 import com.sistema.ventas.model.RutasXRolesCPK;
 import com.sistema.ventas.model.Usuarios;
+import com.sistema.ventas.util.StringUtil;
 
 @Service
 public class RolesBOImpl implements IRolesBO{
@@ -73,15 +75,15 @@ public class RolesBOImpl implements IRolesBO{
 
 	@Override
 	@Transactional
-	public void guardaRolesPorUrl(GuardarRolesDTO objGuardarRolesDTO, String username) throws BOException {
+	public void guardaRolesPorUrl(List<Integer> lsSecuenciaRutas, Integer intSecuenciaRol, String username) throws BOException {
 		
 		Date dateFechaActual=new Date();
 		
 		//Requiere la secuencia de rutas
-		if (ObjectUtils.isEmpty(objGuardarRolesDTO.getSecuenciaRol())) 
+		if (ObjectUtils.isEmpty(intSecuenciaRol)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
 		
-		List<RutasXRoles> lsRutasXRoles =objRutasXRolesDAO.findAllPorRol(objGuardarRolesDTO.getSecuenciaRol());
+		List<RutasXRoles> lsRutasXRoles =objRutasXRolesDAO.findAllPorRol(intSecuenciaRol);
 		
 		for(RutasXRoles objRol:lsRutasXRoles) {
 			objRol.setEsActivo("N");
@@ -91,16 +93,16 @@ public class RolesBOImpl implements IRolesBO{
 		}
 		
 		//Requiere los roles
-		if (!ObjectUtils.isEmpty(objGuardarRolesDTO.getSecuenciaRutas())) {
+		if (!ObjectUtils.isEmpty(lsSecuenciaRutas)) {
 			Optional<RutasXRoles> optRutasXRoles;
 			RutasXRoles objRutasXRoles;
-			for(Integer intRuta:objGuardarRolesDTO.getSecuenciaRutas()) {
-				optRutasXRoles=objRutasXRolesDAO.find(new RutasXRolesCPK(objGuardarRolesDTO.getSecuenciaRol(),intRuta));
+			for(Integer intRuta:lsSecuenciaRutas) {
+				optRutasXRoles=objRutasXRolesDAO.find(new RutasXRolesCPK(intSecuenciaRol,intRuta));
 				
 				if(!optRutasXRoles.isPresent()) {
 					
 					objRutasXRoles=new RutasXRoles();
-					objRutasXRoles.setRutasXRolesCPK(new RutasXRolesCPK(objGuardarRolesDTO.getSecuenciaRol(),intRuta));
+					objRutasXRoles.setRutasXRolesCPK(new RutasXRolesCPK(intSecuenciaRol,intRuta));
 					objRutasXRoles.setEsActivo("S");
 					objRutasXRoles.setEsSelect("S");
 					objRutasXRoles.setFechaIngreso(dateFechaActual);
@@ -122,6 +124,25 @@ public class RolesBOImpl implements IRolesBO{
 			
 		}
 
+	}
+
+
+	@Override
+	@Transactional
+	public void crearRol(String strNombre,String username) throws BOException {
+		
+		if (ObjectUtils.isEmpty(strNombre)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.nombre"});
+		
+		Boolean booExiste=objRolesDAO.consultarRolesPorNombre(strNombre);
+		
+		if(booExiste)
+			throw new BOException("ven.warn.nombreRolExiste");
+		
+		Roles objRol=new Roles();
+		objRol.setNombre(StringUtil.eliminarAcentos(strNombre.toUpperCase().trim()));
+		objRol.setEsActivo("S");
+		objRolesDAO.persist(objRol);
 	}
 
 

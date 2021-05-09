@@ -2,14 +2,16 @@ package com.sistema.ventas.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 @Builder
-public class ConsultarRolesDTO {
-	private Integer secuenciaRol;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class CrearRolDTO {
 	private String nombre;
 }

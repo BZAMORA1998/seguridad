@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class GuardarRolesDTO {
-	public Integer secuenciaRol;
 	public List<Integer> secuenciaRutas;
 }

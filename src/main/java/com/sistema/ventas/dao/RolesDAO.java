@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 
@@ -52,7 +53,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 	public List<ConsultarRolesDTO> consultarRolesUsuario(Integer intSecuenciaUsuario) {
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.abreviatura as abreviatura,r.descripcion as descripcion from tbl_usuario_x_roles ru, tbl_roles r ");
+			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre from tbl_usuario_x_roles ru, tbl_roles r ");
 			strJPQLBase.append("where ru.secuencia_rol=r.secuencia_rol ");
 			strJPQLBase.append("and   ru.secuencia_usuario=:secuenciaUsuario ");
 			strJPQLBase.append("and   ru.es_activo='S' ");
@@ -64,8 +65,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 			return query.getResultList().stream()
 					.map(tuple -> ConsultarRolesDTO.builder()
 					.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
-					.abreviatura(tuple.get("abreviatura", String.class))
-					.descripcion(tuple.get("descripcion", String.class))
+					.nombre(tuple.get("nombre", String.class))
 					.build())
 			.distinct()
 			.collect(Collectors.toList());
@@ -79,7 +79,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select distinct a.secuencia_rol as secuenciaRol, a.abreviatura as abreviatura,a.descripcion as descripcion from tbl_roles a,tbl_rutas_x_roles b,tbl_rutas_url c ");
+			strJPQLBase.append("select distinct a.secuencia_rol as secuenciaRol, a.nombre as nombre from tbl_roles a,tbl_rutas_x_roles b,tbl_rutas_url c ");
 			strJPQLBase.append("where a.secuencia_rol=b.secuencia_rol ");
 			strJPQLBase.append("and b.secuencia_ruta=c.secuencia_ruta ");
 			strJPQLBase.append("and c.nombre like :ruta ");
@@ -92,8 +92,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 			return query.getResultList().stream()
 					.map(tuple -> ConsultarRolesDTO.builder()
 					.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
-					.abreviatura(tuple.get("abreviatura", String.class))
-					.descripcion(tuple.get("descripcion", String.class))
+					.nombre(tuple.get("nombre", String.class))
 					.build())
 			.distinct()
 				.collect(Collectors.toList());
@@ -150,20 +149,43 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.abreviatura as abreviatura,r.descripcion as descripcion from tbl_usuario_x_roles ru, tbl_roles r ");
+			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre from tbl_usuario_x_roles ru, tbl_roles r ");
 			strJPQLBase.append("where r.es_activo='S' ");
-			strJPQLBase.append("ORDER BY descripcion ");
+			strJPQLBase.append("ORDER BY nombre ");
 			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
 			return query.getResultList().stream()
 					.map(tuple -> ConsultarRolesDTO.builder()
 					.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
-					.abreviatura(tuple.get("abreviatura", String.class))
-					.descripcion(tuple.get("descripcion", String.class))
+					.nombre(tuple.get("nombre", String.class))
 					.build())
 			.distinct()
 			.collect(Collectors.toList());
 		} catch (NoResultException e) {
 			return null;
+		}
+	}
+
+	public Boolean consultarRolesPorNombre(String strNombre) {
+		
+		try {
+			StringBuilder strJPQLBase = new StringBuilder();
+		
+			strJPQLBase.append("select count(1) ");
+			strJPQLBase.append("from Roles r ");
+			strJPQLBase.append("where r.nombre=:nombre ");
+			
+			Query query = em.createQuery(strJPQLBase.toString());
+			query.setParameter("nombre",strNombre.trim().toUpperCase());
+			
+			Long a=(Long) query.getSingleResult();
+			
+			if(a.intValue()==0)
+				return false;
+			else
+				return true;
+			
+		} catch (NoResultException e) {
+			return false;
 		}
 	}
 

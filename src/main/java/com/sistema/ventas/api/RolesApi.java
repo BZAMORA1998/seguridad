@@ -1,5 +1,7 @@
 package com.sistema.ventas.api;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IRolesBO;
+import com.sistema.ventas.dto.CrearRolDTO;
 import com.sistema.ventas.dto.GuardarRolesDTO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -103,17 +106,18 @@ public class RolesApi {
 			}
 		}
 		
-		@RequestMapping(value="/ruta/usuario",method = RequestMethod.POST)
+		@RequestMapping(value="/ruta/usuario/{secuenciaRol}",method = RequestMethod.PUT)
 		public ResponseEntity<?> guardaRolesPorUrl(
 				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
-				@RequestBody GuardarRolesDTO objGuardarRolesDTO
+				@PathVariable(value="secuenciaRol", required = false)  Integer  intSecuenciaRol,
+				@RequestBody List<Integer> lsSecuenciaRutas
 				) throws BOException {
 			
 			try {
 				
 				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				
-				objIRolesBO.guardaRolesPorUrl(objGuardarRolesDTO,objUserDetails.getUsername());
+				objIRolesBO.guardaRolesPorUrl(lsSecuenciaRutas,intSecuenciaRol,objUserDetails.getUsername());
 				
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
@@ -123,5 +127,27 @@ public class RolesApi {
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 			}
 		}
+		
+		@RequestMapping(method = RequestMethod.POST)
+		public ResponseEntity<?> crearRol(
+				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+				@RequestBody CrearRolDTO nombreRol
+				) throws BOException {
+			
+			try {
+				
+				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				
+				objIRolesBO.crearRol(nombreRol.getNombre(),objUserDetails.getUsername());
+				
+				return new ResponseEntity<>(new ResponseOk(
+						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+						null), HttpStatus.OK);
+			} catch (BOException be) {
+				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+			}
+		}
+		
 		
 }

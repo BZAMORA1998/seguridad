@@ -29,13 +29,9 @@ public class Roles implements Serializable {
     @Column(name = "secuencia_rol")
     private Integer secuenciaRol;
 	
-	@Size(max=5)
-	@Column(name = "abreviatura")
-    private String abreviatura;
-	
 	@Size(max=50)
-	@Column(name = "descripcion")
-    private String descripcion;
+	@Column(name = "nombre")
+    private String nombre;
 	
 	@Size(max=1)
 	@Column(name = "es_activo")
