@@ -42,6 +42,16 @@ public class RolesBOImpl implements IRolesBO{
 		
 		return objRolesDAO.consultarRolesUsuario(objUsuario.getSecuenciaUsuario());
 	}
+	
+	@Override
+	public List<ConsultarRolesDTO> consultarRolesNoUsuario(Integer intIdUsuario,String username) throws BOException {
+		
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intIdUsuario)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
+		
+		return objRolesDAO.consultarRolesNoUsuario(intIdUsuario);
+	}
 
 
 	@Override

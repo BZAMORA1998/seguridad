@@ -9,6 +9,8 @@ import com.sistema.ventas.exceptions.BOException;
 public interface IRolesBO {
 
 	List<ConsultarRolesDTO> consultarRolesUsuario(String username)throws BOException;
+	
+	List<ConsultarRolesDTO> consultarRolesNoUsuario(Integer intIdUsuario,String username)throws BOException;
 
 	List<ConsultarRolesDTO> consultarRolesRuta(String strRuta)throws BOException;
 

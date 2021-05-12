@@ -1,6 +1,7 @@
 package com.sistema.ventas.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,4 +22,6 @@ public class ConsultarUsuarioDTO implements Serializable {
     private String usuario;
     private String email;
     private boolean estado;
+    private List<ConsultarRolesDTO> roles;
+    private List<ConsultarRolesDTO> noRoles;
 }

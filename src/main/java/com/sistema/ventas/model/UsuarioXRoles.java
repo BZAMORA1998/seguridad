@@ -6,9 +6,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -22,22 +19,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "tbl_rutas_x_roles")
-public class RutasXRoles implements Serializable {
+@Table(name = "tbl_usuarios_x_roles")
+public class UsuarioXRoles implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	@EqualsAndHashCode.Include
-    private RutasXRolesCPK rutasXRolesCPK;
+    private UsuariosXRolCPK usuariosXRolesCPK;
 	
 	@Size(max=1)
 	@Column(name = "es_activo")
 	private String esActivo;
-	
-	@Size(max=1)
-	@Column(name = "es_select")
-	private String esSelect;
 	
 	@Column(name = "fecha_ingreso")
 	private Date fechaIngreso;
@@ -52,9 +45,5 @@ public class RutasXRoles implements Serializable {
 	@Size(max=50)
 	@Column(name = "usuario_actualizacion")
 	private String usuarioActualizacion;
-	
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "secuencia_rol", referencedColumnName = "secuencia_rol",insertable = false, updatable = false)
-	private Roles roles;
 
 }

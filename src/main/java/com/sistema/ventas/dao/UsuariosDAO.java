@@ -13,6 +13,7 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ import com.sistema.ventas.util.StringUtil;
 @Service
 public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 
+	@Autowired
+	private RolesDAO objRoles;
+	
 	@PersistenceContext
 	EntityManager em;
 	
@@ -107,6 +111,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append(" 	JOIN 	u.personas per");
 			strJPQL.append(" WHERE u.esActivo is not null");
 			strJPQL.append(" AND u.usuario != :user");
+			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
 			
@@ -135,6 +140,8 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 					.usuario(tuple.get("usuario",String.class))
 					.email(tuple.get("email",String.class))
 					.estado(tuple.get("estado")!=null && "S".equalsIgnoreCase(tuple.get("estado",String.class))?true:false)
+					.roles(objRoles.consultarRolesUsuario(tuple.get("secuenciaUsuario",Number.class).intValue()))
+					.noRoles(objRoles.consultarRolesNoUsuario(tuple.get("secuenciaUsuario",Number.class).intValue()))
 					.build();})
 					.collect(Collectors.toList());
 		} catch (NoResultException e) {
