@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
+import com.sistema.ventas.dto.CrearRolDTO;
 import com.sistema.ventas.exceptions.BOException;
 
 public interface IRolesBO {
@@ -20,6 +21,6 @@ public interface IRolesBO {
 
 	void guardaRolesPorUrl(List<Integer> lsSecuenciaRutas, Integer intSecuenciaRol, String username) throws BOException;
 
-	void crearRol(String strNombre, String username)throws BOException;
+	void crearRol(CrearRolDTO objCrearRol, String username)throws BOException;
 
 }

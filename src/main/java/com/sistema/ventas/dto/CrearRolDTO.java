@@ -14,4 +14,5 @@ import lombok.Setter;
 
 public class CrearRolDTO {
 	private String nombre;
+	private Integer secuenciaModulo;
 }

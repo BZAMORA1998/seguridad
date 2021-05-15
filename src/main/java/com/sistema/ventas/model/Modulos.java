@@ -23,8 +23,8 @@ public class Modulos {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "secuencia_modulos")
-    private Integer secuenciaGenero;
+    @Column(name = "secuencia_modulo")
+    private Integer secuenciaModulo	;
 	
 	@Column(name = "nombre")
     private String nombre;

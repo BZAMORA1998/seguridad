@@ -150,14 +150,14 @@ public class RolesApi {
 		@RequestMapping(method = RequestMethod.POST)
 		public ResponseEntity<?> crearRol(
 				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
-				@RequestBody CrearRolDTO nombreRol
+				@RequestBody CrearRolDTO objCrearRol
 				) throws BOException {
 			
 			try {
 				
 				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				
-				objIRolesBO.crearRol(nombreRol.getNombre(),objUserDetails.getUsername());
+				objIRolesBO.crearRol(objCrearRol,objUserDetails.getUsername());
 				
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),

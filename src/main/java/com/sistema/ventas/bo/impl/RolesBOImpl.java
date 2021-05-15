@@ -3,21 +3,25 @@ package com.sistema.ventas.bo.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sistema.ventas.bo.IRolesBO;
+import com.sistema.ventas.dao.ModuloXRolesDAO;
+import com.sistema.ventas.dao.ModulosDAO;
 import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.RutasXRolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
-import com.sistema.ventas.dto.GuardarRolesDTO;
+import com.sistema.ventas.dto.CrearRolDTO;
 import com.sistema.ventas.exceptions.BOException;
+import com.sistema.ventas.model.ModuloXRoles;
+import com.sistema.ventas.model.ModuloXRolesCPK;
+import com.sistema.ventas.model.Modulos;
 import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.RutasXRoles;
 import com.sistema.ventas.model.RutasXRolesCPK;
@@ -33,7 +37,10 @@ public class RolesBOImpl implements IRolesBO{
 	private UsuariosDAO objUsuariosDAO;
 	@Autowired
     private RutasXRolesDAO objRutasXRolesDAO;
-	
+	@Autowired
+    private ModulosDAO objModulosDAO;
+	@Autowired
+    private ModuloXRolesDAO objModuloXRolesDAO;
 
 	@Override
 	public List<ConsultarRolesDTO> consultarRolesUsuario(String username) throws BOException {
@@ -84,7 +91,7 @@ public class RolesBOImpl implements IRolesBO{
 
 
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
 	public void guardaRolesPorUrl(List<Integer> lsSecuenciaRutas, Integer intSecuenciaRol, String username) throws BOException {
 		
 		Date dateFechaActual=new Date();
@@ -138,21 +145,40 @@ public class RolesBOImpl implements IRolesBO{
 
 
 	@Override
-	@Transactional
-	public void crearRol(String strNombre,String username) throws BOException {
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
+	public void crearRol(CrearRolDTO objCrearRol,String strUsername) throws BOException {
 		
-		if (ObjectUtils.isEmpty(strNombre)) 
+		if (ObjectUtils.isEmpty(objCrearRol.getNombre())) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.nombre"});
 		
-		Boolean booExiste=objRolesDAO.consultarRolesPorNombre(strNombre);
+		Boolean booExiste=objRolesDAO.consultarRolesPorNombre(objCrearRol.getNombre());
 		
 		if(booExiste)
 			throw new BOException("ven.warn.nombreRolExiste");
 		
+		if (ObjectUtils.isEmpty(objCrearRol.getSecuenciaModulo())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaModulo"});
+		
+		Optional<Modulos> objModulos=objModulosDAO.find(objCrearRol.getSecuenciaModulo());
+		
+		if(!objModulos.isPresent())
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaModulo"});
+		
+		if("N".equalsIgnoreCase(objModulos.get().getEsActivo()))
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaModulo"});
+
 		Roles objRol=new Roles();
-		objRol.setNombre(StringUtil.eliminarAcentos(strNombre.toUpperCase().trim()));
+		objRol.setNombre(StringUtil.eliminarAcentos(objCrearRol.getNombre().trim()));
 		objRol.setEsActivo("S");
 		objRolesDAO.persist(objRol);
+		
+		ModuloXRoles objModuloXRol=new ModuloXRoles();
+		objModuloXRol.setModuloXRolesCPK(new ModuloXRolesCPK(objRol.getSecuenciaRol(),objCrearRol.getSecuenciaModulo()));
+		objModuloXRol.setEsActivo("S");
+		objModuloXRol.setFechaIngreso(new Date());
+		objModuloXRol.setUsuarioIngreso(strUsername);
+		objModuloXRolesDAO.persist(objModuloXRol);
+		
 	}
 
 
