@@ -74,14 +74,16 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<ConsultarRolesDTO> consultarRolesUsuario(Integer intSecuenciaUsuario) {
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre from tbl_usuario_x_roles ru, tbl_roles r ");
-			strJPQLBase.append("where ru.secuencia_rol=r.secuencia_rol ");
-			strJPQLBase.append("and   ru.secuencia_usuario=:secuenciaUsuario ");
-			strJPQLBase.append("and   ru.es_activo='S' ");
-			strJPQLBase.append("and   r.es_activo='S' ");
+			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre ,COALESCE(ru.secuencia_rol,'N') as esSelect ");
+			strJPQLBase.append("from tbl_roles r ");
+			strJPQLBase.append("     LEFT JOIN  tbl_usuario_x_roles ru ");
+			strJPQLBase.append("     	on 	  ru.secuencia_rol=r.secuencia_rol");
+			strJPQLBase.append("		and   ru.es_activo='S' ");
+			strJPQLBase.append("		and   ru.secuencia_usuario=:secuenciaUsuario ");
 			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
 			//PARAMETROS
 			query.setParameter("secuenciaUsuario", intSecuenciaUsuario);
@@ -90,6 +92,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 					.map(tuple -> ConsultarRolesDTO.builder()
 					.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
 					.nombre(tuple.get("nombre", String.class))
+					.esSelect("N".equalsIgnoreCase(tuple.get("esSelect", String.class))?false:true)
 					.build())
 			.distinct()
 			.collect(Collectors.toList());

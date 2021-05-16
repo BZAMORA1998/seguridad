@@ -141,7 +141,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 					.email(tuple.get("email",String.class))
 					.estado(tuple.get("estado")!=null && "S".equalsIgnoreCase(tuple.get("estado",String.class))?true:false)
 					.roles(objRoles.consultarRolesUsuario(tuple.get("secuenciaUsuario",Number.class).intValue()))
-					.noRoles(objRoles.consultarRolesNoUsuario(tuple.get("secuenciaUsuario",Number.class).intValue()))
 					.build();})
 					.collect(Collectors.toList());
 		} catch (NoResultException e) {

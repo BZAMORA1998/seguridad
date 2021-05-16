@@ -23,5 +23,4 @@ public class ConsultarUsuarioDTO implements Serializable {
     private String email;
     private boolean estado;
     private List<ConsultarRolesDTO> roles;
-    private List<ConsultarRolesDTO> noRoles;
 }

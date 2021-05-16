@@ -6,13 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosBO;
@@ -66,7 +65,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private SendEmail objSendEmail;
 	
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
 	public Map<String,Object> crearUsuario(UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
 		
 		Usuarios objUsuario=null;
@@ -314,6 +313,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
 	public void actualizarUsuario(Integer intIdUsuario,UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
 		Usuarios objUsuario=null;
 		Optional<TiposIdentificacion> objTiposIdentificacion=null;
@@ -410,12 +410,12 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuariosSistema.get().setPersonas(objPersona.get());
 		objUsuariosSistema.get().setEsActivo("S");
 		
-		objUsuariosDAO.persist(objUsuariosSistema.get());
+		objUsuariosDAO.update(objUsuariosSistema.get());
 	}
 
 
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
 	public Map<String, Object> activarOInactivarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
 		
 		Date datFechaActual=new Date();
@@ -711,7 +711,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
 	public void recuperarContrasena(String strCorreo) throws BOException {
 		
 		String strContrasenia=StringUtil.generateRandomString(10);
@@ -735,7 +735,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
 	public void cambioContrasena(String strContrasenia, String username) throws BOException {
 		
 		//Valida que el campo correo sea obligatorio

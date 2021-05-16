@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.RutasXRoles;
 import com.sistema.ventas.model.RutasXRolesCPK;
+import com.sistema.ventas.model.UsuarioXRoles;
 
 @Service
 public class RutasXRolesDAO extends BaseDAO<RutasXRoles, RutasXRolesCPK>{
@@ -75,5 +76,6 @@ public class RutasXRolesDAO extends BaseDAO<RutasXRoles, RutasXRolesCPK>{
 			return null;
 		}
 	}
+	
 
 }

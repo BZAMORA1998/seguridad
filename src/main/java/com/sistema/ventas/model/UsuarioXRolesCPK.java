@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class UsuariosXRolCPK implements Serializable {
+public class UsuarioXRolesCPK implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

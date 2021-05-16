@@ -23,4 +23,6 @@ public interface IRolesBO {
 
 	void crearRol(CrearRolDTO objCrearRol, String username)throws BOException;
 
+	void guardaRolesUsuario(String username, List<Integer> objRoles, Integer intSecuenciaUsuario)throws BOException;
+
 }

@@ -15,6 +15,7 @@ import com.sistema.ventas.dao.ModulosDAO;
 import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.RutasXRolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
+import com.sistema.ventas.dao.UsuarioXRolesDAO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.dto.CrearRolDTO;
@@ -25,6 +26,8 @@ import com.sistema.ventas.model.Modulos;
 import com.sistema.ventas.model.Roles;
 import com.sistema.ventas.model.RutasXRoles;
 import com.sistema.ventas.model.RutasXRolesCPK;
+import com.sistema.ventas.model.UsuarioXRoles;
+import com.sistema.ventas.model.UsuarioXRolesCPK;
 import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.StringUtil;
 
@@ -37,6 +40,8 @@ public class RolesBOImpl implements IRolesBO{
 	private UsuariosDAO objUsuariosDAO;
 	@Autowired
     private RutasXRolesDAO objRutasXRolesDAO;
+	@Autowired
+    private UsuarioXRolesDAO objUsuariosXRolesDAO;
 	@Autowired
     private ModulosDAO objModulosDAO;
 	@Autowired
@@ -179,6 +184,66 @@ public class RolesBOImpl implements IRolesBO{
 		objModuloXRol.setUsuarioIngreso(strUsername);
 		objModuloXRolesDAO.persist(objModuloXRol);
 		
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
+	public void guardaRolesUsuario(String username, List<Integer> lsRoles,Integer intSecuenciaUsuario) throws BOException {
+		
+		Date dateFechaActual=new Date();
+		
+		//Requiere la secuencia de rutas
+		if (ObjectUtils.isEmpty(intSecuenciaUsuario)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaUsuario"});
+		
+		Optional<Usuarios> objUsuarios=objUsuariosDAO.find(intSecuenciaUsuario);
+		
+		if (!objUsuarios.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaUsuario"});
+				
+		if ("N".equalsIgnoreCase(objUsuarios.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaUsuario"});
+		
+		
+		
+		List<UsuarioXRoles> lsUsuarioXRoles =objUsuariosXRolesDAO.findRolAllPorUsuario(intSecuenciaUsuario);
+		
+		for(UsuarioXRoles objRol:lsUsuarioXRoles) {
+			objRol.setEsActivo("N");
+			objRol.setFechaModificacion(dateFechaActual);
+			objRol.setUsuarioIngreso(username);
+			objUsuariosXRolesDAO.update(objRol);
+		}
+		
+		//Requiere los roles
+		if (!ObjectUtils.isEmpty(lsRoles)) {
+			Optional<UsuarioXRoles> optUsuariosXRoles;
+			UsuarioXRoles objUsuariosXRoles;
+			for(Integer intRol:lsRoles) {
+				optUsuariosXRoles=objUsuariosXRolesDAO.find(new UsuarioXRolesCPK(intSecuenciaUsuario,intRol));
+				
+				if(!optUsuariosXRoles.isPresent()) {
+					
+					objUsuariosXRoles=new UsuarioXRoles();
+					objUsuariosXRoles.setUsuariosXRolesCPK(new UsuarioXRolesCPK(intSecuenciaUsuario,intRol));
+					objUsuariosXRoles.setEsActivo("S");
+					objUsuariosXRoles.setFechaIngreso(dateFechaActual);
+					objUsuariosXRoles.setUsuarioIngreso(username);
+					objUsuariosXRolesDAO.persist(objUsuariosXRoles);
+					
+				}else {
+					
+					if("N".equalsIgnoreCase(optUsuariosXRoles.get().getEsActivo())) {
+						optUsuariosXRoles.get().setEsActivo("S");
+						optUsuariosXRoles.get().setFechaModificacion(dateFechaActual);
+						optUsuariosXRoles.get().setUsuarioIngreso(username);
+						objUsuariosXRolesDAO.update(optUsuariosXRoles.get());
+					}
+					
+				}
+			}
+			
+		}
 	}
 
 
