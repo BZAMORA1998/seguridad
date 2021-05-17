@@ -25,4 +25,6 @@ public interface IRolesBO {
 
 	void guardaRolesUsuario(String username, List<Integer> objRoles, Integer intSecuenciaUsuario)throws BOException;
 
+	List<ConsultarRolesDTO> consultarRolesXUsuario(Integer intSecuenciaUsuario)throws BOException;
+
 }
