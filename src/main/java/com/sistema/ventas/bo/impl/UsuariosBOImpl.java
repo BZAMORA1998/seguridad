@@ -504,10 +504,13 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
 		
-		if(("N").equalsIgnoreCase(objUsuario.get().getEsActivo()))
+		if(("N").equalsIgnoreCase(objUsuario.get().getEsActivo()))	{
 			objUsuario.get().setEsActivo("S");
-		else
+			objUsuario.get().getPersonas().setEsActivo("S");
+		}else {
 			objUsuario.get().setEsActivo("N");
+			objUsuario.get().getPersonas().setEsActivo("N");
+		}
 		
 		//Elimina el usuario
 		objUsuario.get().setUsuarioActualizacion(strUsuario);
