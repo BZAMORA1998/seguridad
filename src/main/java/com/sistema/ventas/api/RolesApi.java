@@ -185,26 +185,24 @@ public class RolesApi {
 			}
 		}
 		
-		@RequestMapping(method = RequestMethod.POST)
-		public ResponseEntity<?> crearRol(
-				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
-				@RequestBody CrearRolDTO objCrearRol
-				) throws BOException {
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<?> crearRol(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestBody CrearRolDTO objCrearRol
+			) throws BOException {
+		
+		try {
 			
-			try {
-				
-				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-				
-				objIRolesBO.crearRol(objCrearRol,objUserDetails.getUsername());
-				
-				return new ResponseEntity<>(new ResponseOk(
-						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-						null), HttpStatus.OK);
-			} catch (BOException be) {
-				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
-				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
-			}
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIRolesBO.crearRol(objCrearRol,objUserDetails.getUsername());
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
 		}
-		
-		
+	}
 }

@@ -98,5 +98,17 @@ public class Personas implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "secuencia_GENERO", referencedColumnName = "secuencia_GENERO", insertable = true, updatable = true)
 	private Generos genero;
+    
+    @Size(max=500)
+	@Column(name = "direccion")
+	private String direccion;
+    
+    @Size(max=10)
+	@Column(name = "telefono_movil")
+	private String telefonoMovil;
+    
+    @Size(max=10)
+	@Column(name = "telefono_fijo")
+	private String telefonoFijo;
 }
 

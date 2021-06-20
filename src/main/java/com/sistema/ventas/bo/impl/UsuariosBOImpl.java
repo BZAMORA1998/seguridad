@@ -224,24 +224,6 @@ public class UsuariosBOImpl implements IUsuariosBO{
 				
 		//*************************************************************
 			
-//		//************Secuencia rol***********************************12
-//		// Valida que la secuencia ciudad sea obligatorio
-//		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaRol())) 
-//			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
-//		
-//		//Busca el el pais
-//		Optional<Roles> objRoles=objRolesDAO.find(objUsuariosDTO.getSecuenciaRol());
-//		
-//		//Valida que el tipo de identificacion exista
-//		if(!objRoles.isPresent()) 
-//			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaRol"});
-//		
-//		//Valida que el tipo de identificacion este activo
-//		if(!("S").equalsIgnoreCase(objRoles.get().getEsActivo())) 
-//			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaRol"});
-				
-		//*************************************************************
-		
 		//**************************Email***********************************
 		// Valida que la email sea obligatorio
 		if (ObjectUtils.isEmpty(objUsuariosDTO.getEmail())) 
@@ -291,6 +273,14 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objPersona.setEsActivo("S");
 		objPersona.setUsuarioIngreso(strUsuario);
 		objPersona.setFechaIngreso(datFechaActual);
+		objPersona.setTelefonoFijo(objUsuariosDTO.getTelefonoFijo());
+		objPersona.setTelefonoMovil(objUsuariosDTO.getTelefonoMovil());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getDireccion()))
+			objPersona.setDireccion(objUsuariosDTO.getDireccion().toUpperCase());
+		else
+			objPersona.setDireccion(null);
+		
 		objPersonasDAO.persist(objPersona);
 		
 		Usuarios objUsuarios=new Usuarios();
@@ -300,7 +290,6 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuarios.setEsActivo("S");
 		objUsuarios.setUsuarioIngreso(strUsuario);
 		objUsuarios.setFechaIngreso(datFechaActual);
-		//objUsuarios.setRoles(objRoles.get());
 		objUsuarios.setContrasenia(StringUtil.base64Encode(strContrasenia));
 		objUsuariosDAO.persist(objUsuarios);
 		
@@ -314,7 +303,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
-	public void actualizarUsuario(Integer intIdUsuario,UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
+	public void actualizarUsuario(UsuariosDTO objUsuariosDTO,String strUsuario) throws BOException {
 		Usuarios objUsuario=null;
 		Optional<TiposIdentificacion> objTiposIdentificacion=null;
 		
@@ -363,52 +352,138 @@ public class UsuariosBOImpl implements IUsuariosBO{
 				throw new BOException("ven.warn.generoInactivo");
 		}
 		
-		// Usuario.
-		if (!ObjectUtils.isEmpty(objUsuariosDTO.getUsuario())) {
-		
-			objUsuario=objUsuariosDAO.consultarUsuarioSistema(objUsuariosDTO.getUsuario());
-			
-			if(objUsuario!=null)
-				throw new BOException("ven.warn.usuarioExiste", new Object[] {objUsuariosDTO.getUsuario()});
-		}
-		
-		Optional<Usuarios> objUsuariosSistema=objUsuariosDAO.find(intIdUsuario);
+		Optional<Usuarios> objUsuariosSistema=objUsuariosDAO.find(objUsuariosDTO.getSecuenciaUsuario());
 		
 		if(!objUsuariosSistema.isPresent())
 			throw new BOException("ven.warn.usuarioNoExiste");
 		
-		if(!ObjectUtils.isEmpty(objUsuariosDTO.getUsuario()))
-			objUsuariosSistema.get().setUsuario(objUsuariosDTO.getUsuario().toUpperCase());
-		
 		Optional<Personas> objPersona=objPersonasDAO.find(objUsuariosSistema.get().getPersonas().getSecuenciaPersona());
+		
 		if (!ObjectUtils.isEmpty(objUsuariosDTO.getPrimerNombre()))
 			objPersona.get().setPrimerNombre(objUsuariosDTO.getPrimerNombre().toUpperCase());
+		else
+			objPersona.get().setPrimerNombre(null);
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoNombre()))
 			objPersona.get().setSegundoNombre(objUsuariosDTO.getSegundoNombre().toUpperCase());
+		else
+			objPersona.get().setSegundoNombre(null);
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getPrimerApellido()))
 			objPersona.get().setPrimerApellido(objUsuariosDTO.getPrimerApellido().toUpperCase());
+		else
+			objPersona.get().setPrimerApellido(null);
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getSegundoApellido()))
 			objPersona.get().setSegundoApellido(objUsuariosDTO.getSegundoApellido().toUpperCase());
+		else
+			objPersona.get().setSegundoApellido(null);
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getFechaNacimiento()))
 			objPersona.get().setFechaNacimiento(FechasUtil.stringToDate(objUsuariosDTO.getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
+		else 
+			objPersona.get().setFechaNacimiento(null);
+		
 		
 		if(!ObjectUtils.isEmpty(objTiposIdentificacion.get()))
 			objPersona.get().setTiposIdentificacion(objTiposIdentificacion.get());
+		else
+			objPersona.get().setTiposIdentificacion(null);
 		
 		if(!ObjectUtils.isEmpty(objUsuariosDTO.getNumeroIdentificacion()))
 			objPersona.get().setNumeroIdentificacion(objUsuariosDTO.getNumeroIdentificacion());
+		else
+			objPersona.get().setNumeroIdentificacion(null);
 		
 		if(!ObjectUtils.isEmpty(objGenero.get()))
 			objPersona.get().setGenero(objGenero.get());
+		else
+			objPersona.get().setGenero(null);
 		
-		objPersona.get().setEsActivo("S");
+		objPersona.get().setTelefonoFijo(objUsuariosDTO.getTelefonoFijo());
+		objPersona.get().setTelefonoMovil(objUsuariosDTO.getTelefonoMovil());
+		
+		if(!ObjectUtils.isEmpty(objUsuariosDTO.getDireccion()))
+			objPersona.get().setDireccion(objUsuariosDTO.getDireccion().toUpperCase());
+		else
+			objPersona.get().setDireccion(null);
+		
+		
+		//************Secuencia Pais*********************************** 9
+		// Valida que la secuenica pais sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaPais())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaPais"});
+		
+		//Busca el el pais
+		Optional<Pais> objPais=objPaisDAO.find(objUsuariosDTO.getSecuenciaPais());
+		
+		//Valida que el tipo de identificacion exista
+		if(!objPais.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaPais"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objPais.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaPais"});
+		
+		//*************************************************************
+		
+		//************Secuencia Provincia***********************************10
+		// Valida que la secuencia provincia sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaProvincia())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaProvincia"});
+		
+		//Busca el el pais
+		Optional<Provincia> objProvincia=objProvinciaDAO.find(new ProvinciaCPK(objUsuariosDTO.getSecuenciaPais(),objUsuariosDTO.getSecuenciaProvincia()));
+		
+		//Valida que el tipo de identificacion exista
+		if(!objProvincia.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaProvincia"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objProvincia.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaProvincia"});
+		
+		//*************************************************************
+		
+		//************Secuencia Ciudad***********************************11
+		// Valida que la secuencia ciudad sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getSecuenciaCiudad())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaCiudad"});
+		
+		//Busca el el pais
+		Optional<Ciudad> objCiudad=objCiudadDAO.find(new CiudadCPK(objUsuariosDTO.getSecuenciaPais(),objUsuariosDTO.getSecuenciaProvincia(),objUsuariosDTO.getSecuenciaCiudad()));
+		
+		//Valida que el tipo de identificacion exista
+		if(!objCiudad.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste",new Object[]{"ven.campos.secuenciaCiudad"});
+		
+		//Valida que el tipo de identificacion este activo
+		if(!("S").equalsIgnoreCase(objCiudad.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo",new Object[]{"ven.campos.secuenciaCiudad"});
+				
+		//*************************************************************
+			
+		//**************************Email***********************************
+		// Valida que la email sea obligatorio
+		if (ObjectUtils.isEmpty(objUsuariosDTO.getEmail())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.email"});		
+
+		if(!FormatoEmailUtil.emailValido(objUsuariosDTO.getEmail())) 
+			throw new BOException("ven.warn.correoInvalido");
+		
+		Personas existeCorreo=objPersonasDAO.consultarExisteCorreo(objUsuariosDTO.getEmail(),objPersona.get().getSecuenciaPersona());
+		
+		//Valida si existe el correo
+		if(!ObjectUtils.isEmpty(existeCorreo)) 
+			throw new BOException("ven.warn.correoExiste");
+		
+		//*************************************************************
+		
+		objPersona.get().setCiudad(objCiudad.get());
+		objPersona.get().setEmail(objUsuariosDTO.getEmail());
 		
 		objUsuariosSistema.get().setPersonas(objPersona.get());
-		objUsuariosSistema.get().setEsActivo("S");
+		
 		
 		objUsuariosDAO.update(objUsuariosSistema.get());
 	}
@@ -446,7 +521,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
-	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario) throws BOException {
+	public UsuariosDTO consultarUsuarioXId(Integer intIdUsuario) throws BOException {
 		
 		//Valida que el campo usuario sea obligatorio
 		if (ObjectUtils.isEmpty(intIdUsuario)) 
@@ -460,23 +535,32 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if(!("S").equalsIgnoreCase(objUsuario.get().getEsActivo()))
 			throw new BOException("ven.warn.idUsuarioInactivo");
 		
-//		ConsultarUsuarioDTO objUsuarioDTO=new ConsultarUsuarioDTO();
-//		objUsuarioDTO.setSecuenciaUsuarioSistema(objUsuario.get().getSecuenciaUsuario());
-//		if(objUsuario.get().getPersonas()!=null) {
-//			objUsuarioDTO.setCodigoTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getSecuenciaTipoIdentificacion());
-//			objUsuarioDTO.setNumeroIdentificacion(objUsuario.get().getPersonas().getNumeroIdentificacion());
-//			objUsuarioDTO.setPrimerNombre(objUsuario.get().getPersonas().getPrimerNombre());
-//			objUsuarioDTO.setSegundoNombre(objUsuario.get().getPersonas().getSegundoNombre());
-//			objUsuarioDTO.setPrimerApellido(objUsuario.get().getPersonas().getPrimerApellido());
-//			objUsuarioDTO.setSegundoApellido(objUsuario.get().getPersonas().getSegundoApellido());
-//			objUsuarioDTO.setFechaNacimiento(GeneralUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
-//			objUsuarioDTO.setCodigoGenero(objUsuario.get().getPersonas().getGenero().getSecuenciaGenero());
-//		}
+		UsuariosDTO objUsuarioDTO=new UsuariosDTO();
+		if(objUsuario.get().getPersonas()!=null) {
+			objUsuarioDTO.setSecuenciaTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getSecuenciaTipoIdentificacion());
+			objUsuarioDTO.setNumeroIdentificacion(objUsuario.get().getPersonas().getNumeroIdentificacion());
+			objUsuarioDTO.setPrimerNombre(objUsuario.get().getPersonas().getPrimerNombre());
+			objUsuarioDTO.setSegundoNombre(objUsuario.get().getPersonas().getSegundoNombre());
+			objUsuarioDTO.setPrimerApellido(objUsuario.get().getPersonas().getPrimerApellido());
+			objUsuarioDTO.setSegundoApellido(objUsuario.get().getPersonas().getSegundoApellido());
+			objUsuarioDTO.setFechaNacimiento(FechasUtil.dateToString(objUsuario.get().getPersonas().getFechaNacimiento(),FormatoFecha.YYYY_MM_DD_GUION));
+			objUsuarioDTO.setSecuenciaGenero(objUsuario.get().getPersonas().getGenero().getSecuenciaGenero());
+			objUsuarioDTO.setEmail(objUsuario.get().getPersonas().getEmail());
+			objUsuarioDTO.setDireccion(objUsuario.get().getPersonas().getDireccion());
+			objUsuarioDTO.setTelefonoFijo(objUsuario.get().getPersonas().getTelefonoFijo());
+			objUsuarioDTO.setTelefonoMovil(objUsuario.get().getPersonas().getTelefonoMovil());
+			
+			if(objUsuario.get().getPersonas().getCiudad()!=null) {
+				objUsuarioDTO.setSecuenciaPais(objUsuario.get().getPersonas().getCiudad().getCiudadCPK().getSecuenciaPais());
+				objUsuarioDTO.setSecuenciaProvincia(objUsuario.get().getPersonas().getCiudad().getCiudadCPK().getSecuenciaProvincia());
+				objUsuarioDTO.setSecuenciaCiudad(objUsuario.get().getPersonas().getCiudad().getCiudadCPK().getSecuenciaCiudad());
+			}
+		}
 		
-//		if(objUsuario.get().getRoles()!=null)
-//			objUsuarioDTO.setRolSistema(objUsuario.get().getRoles().getAbreviatura());
-//		
-		return null;
+		objUsuarioDTO.setUsuario(objUsuario.get().getUsuario());
+		objUsuarioDTO.setSecuenciaUsuario(objUsuario.get().getSecuenciaUsuario());
+		
+		return objUsuarioDTO;
 	}
 
 	@Override

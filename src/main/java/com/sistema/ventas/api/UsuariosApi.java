@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosBO;
-import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.ContrasenaDTO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -59,7 +58,7 @@ public class UsuariosApi {
 		}
 	}
 	
-	@RequestMapping(value="/{idUsuario}/actualizarUsuario",method = RequestMethod.PUT)
+	@RequestMapping(value="/actualizarUsuario",method = RequestMethod.PUT)
 	public ResponseEntity<?> actualizarUsuario(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
 			@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario,
@@ -70,7 +69,7 @@ public class UsuariosApi {
 
 			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			objIUsuariosBO.actualizarUsuario(intIdUsuario,objUsuariosDTO,objUserDetails.getUsername());
+			objIUsuariosBO.actualizarUsuario(objUsuariosDTO,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
@@ -131,12 +130,10 @@ public class UsuariosApi {
 			) throws BOException {
 		
 		try {
-
-			ConsultarUsuarioDTO objUsuario=objIUsuariosBO.consultarUsuarioXId(intIdUsuario);
-
+			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-					objUsuario), HttpStatus.OK);
+					objIUsuariosBO.consultarUsuarioXId(intIdUsuario)), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());

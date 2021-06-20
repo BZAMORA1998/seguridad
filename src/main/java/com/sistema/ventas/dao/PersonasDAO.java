@@ -68,4 +68,28 @@ public class PersonasDAO extends BaseDAO<Personas, Integer>{
 			return null;
 		}
 	}
+	
+	/*
+	 * Consulta si existe el correo
+	 * 
+	 * @Author: Bryan Zamora
+	 * @Param numeroIdentificacion
+	 * @Return
+	 */
+	public Personas consultarExisteCorreo(String email,Integer intSecuenciaPersona) {
+		try {	
+			return em.createQuery(
+						"SELECT pe \n" +
+						"FROM Personas pe \n" +
+						"WHERE pe.email=:email \n" +
+						"AND pe.esActivo = 'S'"+
+						"AND pe.secuenciaPersona != :secuenciaPersona"
+						,Personas.class)
+						.setParameter("email",email)
+						.setParameter("secuenciaPersona",intSecuenciaPersona)
+						.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }

@@ -42,17 +42,17 @@ public interface IUsuariosBO {
 	 * @return
 	 * @throws BOException
 	 */
-	public ConsultarUsuarioDTO consultarUsuarioXId(Integer intIdUsuario)  throws BOException;
+	public UsuariosDTO consultarUsuarioXId(Integer intIdUsuario)  throws BOException;
 
 	/**
 	 * Actualiza el usuario
 	 * 
 	 * @author Bryan Zamora
-	 * @param  intIdUsuario
+	 * @param  objUsuariosDTO
 	 * @return
 	 * @throws BOException
 	 */
-	public void actualizarUsuario(Integer intIdUsuario, UsuariosDTO objUsuariosDTO, String strUsuario)throws BOException;
+	public void actualizarUsuario(UsuariosDTO objUsuariosDTO, String strUsuario)throws BOException;
 
 	/**
 	 * Guarda la foto de una persona
