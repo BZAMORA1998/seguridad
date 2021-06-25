@@ -14,8 +14,8 @@ import com.sistema.ventas.dao.ModuloXRolesDAO;
 import com.sistema.ventas.dao.ModulosDAO;
 import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.RutasXRolesDAO;
-import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dao.UsuarioXRolesDAO;
+import com.sistema.ventas.dao.UsuariosDAO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.dto.CrearRolDTO;
@@ -55,16 +55,6 @@ public class RolesBOImpl implements IRolesBO{
 		return objRolesDAO.consultarRolesUsuario(objUsuario.getSecuenciaUsuario());
 	}
 	
-	@Override
-	public List<ConsultarRolesDTO> consultarRolesNoUsuario(Integer intIdUsuario,String username) throws BOException {
-		
-		//Valida que el campo usuario sea obligatorio
-		if (ObjectUtils.isEmpty(intIdUsuario)) 
-			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
-		
-		return objRolesDAO.consultarRolesNoUsuario(intIdUsuario);
-	}
-
 
 	@Override
 	public List<ConsultarRolesDTO> consultarRolesRuta(String strRuta) throws BOException {

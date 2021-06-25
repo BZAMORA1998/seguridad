@@ -75,24 +75,6 @@ public class RolesApi {
 			}
 		}
 		
-		@RequestMapping(value="/noUsuario/{idUsuario}",method = RequestMethod.GET)
-		public ResponseEntity<?> consultarRolesNoUsuario(
-				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
-				@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario
-				) throws BOException {
-			
-			try {
-				
-				UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-				
-				return new ResponseEntity<>(new ResponseOk(
-						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-						objIRolesBO.consultarRolesNoUsuario(intIdUsuario,objUserDetails.getUsername())), HttpStatus.OK);
-			} catch (BOException be) {
-				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
-				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
-			}
-		}
 		
 		@RequestMapping(value="/ruta", method = RequestMethod.GET)
 		public ResponseEntity<?> consultarRolesRuta(

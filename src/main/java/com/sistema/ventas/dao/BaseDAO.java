@@ -38,4 +38,5 @@ public abstract class BaseDAO<T, K> {
 		T t = em.find(clazz, id);
 		return Optional.ofNullable(t);
 	}
+	
 }

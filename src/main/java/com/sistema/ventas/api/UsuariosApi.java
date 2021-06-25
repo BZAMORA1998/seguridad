@@ -227,4 +227,25 @@ public class UsuariosApi {
 		}
 		
 	}
+	
+	@RequestMapping(value="/{idUsuario}/eliminarUsuario",method = RequestMethod.DELETE)
+	public ResponseEntity<?> eliminarUsuario(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage, 
+			@PathVariable(value="idUsuario", required = false)  Integer  intIdUsuario
+			) throws BOException {
+		
+		try {
+			
+			objIUsuariosBO.eliminarUsuario(intIdUsuario);
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
+			
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+		
+	}
 }

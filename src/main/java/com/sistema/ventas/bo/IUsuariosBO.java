@@ -114,4 +114,14 @@ public interface IUsuariosBO {
 	 */
 	public void cambioContrasena(String contrasena, String username)throws BOException;
 
+	/**
+	 * Elimina el usuario
+	 * 
+	 * @author Bryan Zamora
+	 * @param intIdUsuario
+	 * @return
+	 * @throws BOException
+	 */
+	public void eliminarUsuario(Integer intIdUsuario)throws BOException;
+
 }

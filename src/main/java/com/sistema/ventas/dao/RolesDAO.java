@@ -50,30 +50,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		return super.find(id);
 	}
 	
-	public List<ConsultarRolesDTO> consultarRolesNoUsuario(Integer intSecuenciaUsuario) {
-		try {
-			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre ");
-			strJPQLBase.append("from  tbl_roles r ");
-			strJPQLBase.append("where not exists (SELECT * from tbl_usuario_x_roles ur ");
-			strJPQLBase.append("		WHERE ur.secuencia_rol=r.secuencia_rol ");
-			strJPQLBase.append("        and ur.secuencia_usuario=:secuenciaUsuario) ");
-			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
-			//PARAMETROS
-			query.setParameter("secuenciaUsuario", intSecuenciaUsuario);
 	
-			return query.getResultList().stream()
-					.map(tuple -> ConsultarRolesDTO.builder()
-					.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
-					.nombre(tuple.get("nombre", String.class))
-					.build())
-			.distinct()
-			.collect(Collectors.toList());
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<ConsultarRolesDTO> consultarRolesUsuario(Integer intSecuenciaUsuario) {
 		try {

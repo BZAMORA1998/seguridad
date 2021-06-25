@@ -9,22 +9,90 @@ import com.sistema.ventas.exceptions.BOException;
 
 public interface IRolesBO {
 
+	/**
+	 * Consulta los roles que tiene el usuario que inicia la sesion
+	 * 
+	 * @author Bryan Zamora
+	 * @param  username
+	 * @return
+	 * @throws BOException
+	 */
 	List<ConsultarRolesDTO> consultarRolesUsuario(String username)throws BOException;
 	
-	List<ConsultarRolesDTO> consultarRolesNoUsuario(Integer intIdUsuario,String username)throws BOException;
-
+	/**
+	 * Consulta los roles que tiene las rutas 
+	 * 
+	 * @author Bryan Zamora
+	 * @param  username
+	 * @return
+	 * @throws BOException
+	 */
 	List<ConsultarRolesDTO> consultarRolesRuta(String strRuta)throws BOException;
 
+	/**
+	 * Consulta el Arbol url del rol que tiene el usuario.
+	 * 
+	 * @author Bryan Zamora
+	 * @param  username
+	 * @param intSecuenciaRol
+	 * @return
+	 * @throws BOException
+	 */
 	List<ConsultarRolesRutaUsuarioDTO> consultarRolesRutaUsuario(String username, Integer intSecuenciaRol)throws BOException;
 
+	/**
+	 * Consulta todos los roles
+	 * 
+	 * @author Bryan Zamora
+	 * @param  username
+	 * @return
+	 * @throws BOException
+	 */
 	List<ConsultarRolesDTO> consultarRoles()throws BOException;
 
+	/**
+	 * Guarda la url asignado al rol
+	 * 
+	 * @author Bryan Zamora
+	 * @param  lsSecuenciaRutas
+	 * @param intSecuenciaRol
+	 * @param username
+	 * @return
+	 * @throws BOException
+	 */
 	void guardaRolesPorUrl(List<Integer> lsSecuenciaRutas, Integer intSecuenciaRol, String username) throws BOException;
 
+	/**
+	 * Crea el rol segun el modulo
+	 * 
+	 * @author Bryan Zamora
+	 * @param  objCrearRol
+	 * @param username
+	 * @return
+	 * @throws BOException
+	 */
 	void crearRol(CrearRolDTO objCrearRol, String username)throws BOException;
 
+	/**
+	 * Guarda los roles que se va a asignar al usuario
+	 * 
+	 * @author Bryan Zamora
+	 * @param  username
+	 * @param objRoles
+	 * @param intSecuenciaUsuario
+	 * @return
+	 * @throws BOException
+	 */
 	void guardaRolesUsuario(String username, List<Integer> objRoles, Integer intSecuenciaUsuario)throws BOException;
 
+	/**
+	 * Consulta los roles que tiene asiganado el usuario
+	 * 
+	 * @author Bryan Zamora
+	 * @param  intSecuenciaUsuario
+	 * @return
+	 * @throws BOException
+	 */
 	List<ConsultarRolesDTO> consultarRolesXUsuario(Integer intSecuenciaUsuario)throws BOException;
 
 }

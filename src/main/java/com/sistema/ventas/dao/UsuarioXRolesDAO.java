@@ -11,10 +11,8 @@ import javax.persistence.PersistenceException;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.sistema.ventas.model.RutasXRoles;
-import com.sistema.ventas.model.RutasXRolesCPK;
-import com.sistema.ventas.model.UsuarioXRolesCPK;
 import com.sistema.ventas.model.UsuarioXRoles;
+import com.sistema.ventas.model.UsuarioXRolesCPK;
 
 @Service
 public class UsuarioXRolesDAO extends BaseDAO<UsuarioXRoles,UsuarioXRolesCPK>{
@@ -39,6 +37,11 @@ public class UsuarioXRolesDAO extends BaseDAO<UsuarioXRoles,UsuarioXRolesCPK>{
 	@Override
 	public void update(UsuarioXRoles t) throws PersistenceException {
 		super.update(t);
+	}
+	
+	@Override
+	public void remove(UsuarioXRoles t) throws PersistenceException {
+		super.remove(t);
 	}
 
 	@Override

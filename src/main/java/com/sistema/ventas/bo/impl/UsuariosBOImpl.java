@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,11 @@ import com.sistema.ventas.dao.PaisDAO;
 import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.ProvinciaDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
+import com.sistema.ventas.dao.UsuarioXRolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
+import com.sistema.ventas.daoRepository.IPersonasDAO;
+import com.sistema.ventas.daoRepository.IUsuarioXRolesDAO;
+import com.sistema.ventas.daoRepository.IUsuariosDAO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.PersonaDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -38,6 +43,7 @@ import com.sistema.ventas.model.Personas;
 import com.sistema.ventas.model.Provincia;
 import com.sistema.ventas.model.ProvinciaCPK;
 import com.sistema.ventas.model.TiposIdentificacion;
+import com.sistema.ventas.model.UsuarioXRoles;
 import com.sistema.ventas.model.Usuarios;
 import com.sistema.ventas.util.FechasUtil;
 import com.sistema.ventas.util.FormatoEmailUtil;
@@ -63,6 +69,14 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private CiudadDAO objCiudadDAO;
 	@Autowired
 	private SendEmail objSendEmail;
+	@Autowired
+    private UsuarioXRolesDAO objUsuariosXRolesDAO;
+	@Autowired
+	private IUsuarioXRolesDAO objIUsuarioXRolesDAO;
+	@Autowired
+	private IUsuariosDAO objIUsuariosDAO;
+	@Autowired
+	private IPersonasDAO objIPersonasDAO;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
@@ -836,6 +850,33 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuario.setFechaActualizacion(new Date());
 		objUsuario.setUsuarioActualizacion(username);
 		
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
+	public void eliminarUsuario(Integer intIdUsuario) throws BOException {
+		
+		//Valida que el campo usuario sea obligatorio
+		if (ObjectUtils.isEmpty(intIdUsuario)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
+		
+		Optional<Usuarios> objUsuario=objIUsuariosDAO.findById(intIdUsuario);
+		
+		//Valida si el usuario existe
+		if(!objUsuario.isPresent())
+			throw new BOException("ven.warn.idUsuarioNoExiste");
+
+		List<UsuarioXRoles> lsUsuariosXRoles=objUsuariosXRolesDAO.findRolAllPorUsuario(intIdUsuario);
+		
+		//Procede a eliminar en la tabla UsuarioXRoles.
+		if (!ObjectUtils.isEmpty(lsUsuariosXRoles)) {
+			for(UsuarioXRoles objlsUsuariosXRoles:lsUsuariosXRoles) 
+				objIUsuarioXRolesDAO.delete(objlsUsuariosXRoles);
+		}
+		
+		Personas objPersonas =objUsuario.get().getPersonas();
+		objIUsuariosDAO.delete(objUsuario.get());
+		objIPersonasDAO.delete(objPersonas);
 	}
 	
 }
