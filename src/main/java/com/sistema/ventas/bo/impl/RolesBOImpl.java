@@ -48,11 +48,11 @@ public class RolesBOImpl implements IRolesBO{
     private ModuloXRolesDAO objModuloXRolesDAO;
 
 	@Override
-	public List<ConsultarRolesDTO> consultarRolesUsuario(String username) throws BOException {
+	public List<ConsultarRolesDTO> consultarRolesUsuarioSesion(String username) throws BOException {
 		
 		Usuarios objUsuario=objUsuariosDAO.consultarUsuarioSistemaPorCorreo(username);
 		
-		return objRolesDAO.consultarRolesUsuario(objUsuario.getSecuenciaUsuario());
+		return objRolesDAO.consultarRolesUsuarioSesion(objUsuario.getSecuenciaUsuario());
 	}
 	
 

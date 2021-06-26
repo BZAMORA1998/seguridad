@@ -17,7 +17,7 @@ public interface IRolesBO {
 	 * @return
 	 * @throws BOException
 	 */
-	List<ConsultarRolesDTO> consultarRolesUsuario(String username)throws BOException;
+	List<ConsultarRolesDTO> consultarRolesUsuarioSesion(String username)throws BOException;
 	
 	/**
 	 * Consulta los roles que tiene las rutas 

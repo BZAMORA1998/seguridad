@@ -45,7 +45,7 @@ public class RolesApi {
 				
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-						objIRolesBO.consultarRolesUsuario(objUserDetails.getUsername())), HttpStatus.OK);
+						objIRolesBO.consultarRolesUsuarioSesion(objUserDetails.getUsername())), HttpStatus.OK);
 			} catch (BOException be) {
 				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
