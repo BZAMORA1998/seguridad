@@ -13,4 +13,6 @@ public class ConsultarModulosDTO {
 	private Integer secuenciaModulo;
 	private String nombre;
 	private String url;
+	private String img;
+	
 }

@@ -31,4 +31,7 @@ public class Modulos {
 	
 	@Column(name = "es_activo")
     private String esActivo;
+	
+	@Column(name = "img")
+    private String img;
 }

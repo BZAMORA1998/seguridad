@@ -129,14 +129,16 @@ public class RolesApi {
 		
 		@RequestMapping(method = RequestMethod.GET)
 		public ResponseEntity<?> consultarRoles(
-				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage
+				@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+				@RequestParam(	value = "page", 	required = false) Integer intPage,
+				@RequestParam(	value = "perPage", 	required = false) Integer intPerPage
 				) throws BOException {
 			
 			try {
 				
 				return new ResponseEntity<>(new ResponseOk(
 						MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-						objIRolesBO.consultarRoles()), HttpStatus.OK);
+						objIRolesBO.consultarRoles(intPerPage,intPage)), HttpStatus.OK);
 			} catch (BOException be) {
 				logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
 				throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());

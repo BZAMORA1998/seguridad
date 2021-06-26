@@ -1,6 +1,7 @@
 package com.sistema.ventas.bo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
@@ -44,11 +45,13 @@ public interface IRolesBO {
 	 * Consulta todos los roles
 	 * 
 	 * @author Bryan Zamora
+	 * @param intPage 
+	 * @param intPerPage 
 	 * @param  username
 	 * @return
 	 * @throws BOException
 	 */
-	List<ConsultarRolesDTO> consultarRoles()throws BOException;
+	Map<String, Object> consultarRoles(Integer intPerPage, Integer intPage)throws BOException;
 
 	/**
 	 * Guarda la url asignado al rol

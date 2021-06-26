@@ -1,7 +1,9 @@
 package com.sistema.ventas.bo.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +82,19 @@ public class RolesBOImpl implements IRolesBO{
 
 
 	@Override
-	public List<ConsultarRolesDTO> consultarRoles() throws BOException {
-		return objRolesDAO.consultarRoles();
+	public Map<String,Object>  consultarRoles(Integer intPerPage, Integer intPage) throws BOException {
+		
+		if (ObjectUtils.isEmpty(intPerPage)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.perPage"});
+		
+		if (ObjectUtils.isEmpty(intPage)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.page"});
+		
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("rows",objRolesDAO.consultarRoles(intPerPage,intPage));
+		map.put("totalRows",objRolesDAO.countConsultarRoles());
+		
+		return map;
 	}
 
 

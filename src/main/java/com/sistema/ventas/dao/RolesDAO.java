@@ -1,5 +1,6 @@
 package com.sistema.ventas.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -149,14 +150,16 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		}
 	}
 	
-	public List<ConsultarRolesDTO> consultarRoles() {
+	public List<ConsultarRolesDTO> consultarRoles(Integer intPerPage, Integer intPage) {
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre from tbl_usuario_x_roles ru, tbl_roles r ");
+			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre from tbl_roles r ");
 			strJPQLBase.append("where r.es_activo='S' ");
 			strJPQLBase.append("ORDER BY nombre ");
 			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
+			query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
+			
 			return query.getResultList().stream()
 					.map(tuple -> ConsultarRolesDTO.builder()
 					.secuenciaRol(tuple.get("secuenciaRol")!=null?tuple.get("secuenciaRol", Number.class).intValue():null)
@@ -216,6 +219,24 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 			.collect(Collectors.toList());
 		} catch (NoResultException e) {
 			return null;
+		}
+	}
+
+	public Integer countConsultarRoles() {
+		
+		try {
+			StringBuilder strJPQLBase = new StringBuilder();
+			strJPQLBase.append("select count(1) from tbl_roles r ");
+			strJPQLBase.append("where r.es_activo='S' ");
+			strJPQLBase.append("ORDER BY nombre ");
+			Query query =  em.createNativeQuery(strJPQLBase.toString());
+		
+			BigInteger intCount=(BigInteger) query.getSingleResult();
+			
+			return intCount.intValue() ;
+			
+		} catch (NoResultException e) {
+			return 0;
 		}
 	}
 }

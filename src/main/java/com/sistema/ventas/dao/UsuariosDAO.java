@@ -127,8 +127,7 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			
 			query.setParameter("user",strUser);
 			
-			if(!ObjectUtils.isEmpty(intPage) && !ObjectUtils.isEmpty(intPerPage))
-				query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
+			query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
 			
 			return query	
 					.getResultList()
