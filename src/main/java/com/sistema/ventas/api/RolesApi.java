@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.ventas.bo.IRolesBO;
 import com.sistema.ventas.dto.CrearRolDTO;
-import com.sistema.ventas.dto.GuardarRolesDTO;
 import com.sistema.ventas.dto.ResponseOk;
-import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.exceptions.CustomExceptionHandler;
 import com.sistema.ventas.util.MensajesUtil;

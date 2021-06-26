@@ -57,7 +57,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 			StringBuilder strJPQLBase = new StringBuilder();
 			strJPQLBase.append("select r.secuencia_rol as secuenciaRol, r.nombre as nombre ,COALESCE(ru.secuencia_rol,'N') as esSelect ");
 			strJPQLBase.append("from tbl_roles r ");
-			strJPQLBase.append("     LEFT JOIN  tbl_usuario_x_roles ru ");
+			strJPQLBase.append("     JOIN  tbl_usuario_x_roles ru ");
 			strJPQLBase.append("     	on 	  ru.secuencia_rol=r.secuencia_rol");
 			strJPQLBase.append("		and   ru.es_activo='S' ");
 			strJPQLBase.append("		and   ru.secuencia_usuario=:secuenciaUsuario ");
