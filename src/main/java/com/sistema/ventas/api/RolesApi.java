@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sistema.ventas.bo.IRolesBO;
 import com.sistema.ventas.dto.CrearRolDTO;
 import com.sistema.ventas.dto.ResponseOk;
+import com.sistema.ventas.dto.RolesDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.exceptions.CustomExceptionHandler;
 import com.sistema.ventas.util.MensajesUtil;
@@ -178,6 +179,63 @@ public class RolesApi {
 			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
 			objIRolesBO.crearRol(objCrearRol,objUserDetails.getUsername());
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+	}
+	
+	@RequestMapping(value="/{secuenciaRol}",method = RequestMethod.DELETE)
+	public ResponseEntity<?> eleminarRol(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@PathVariable(value="secuenciaRol", required = false)  Integer  intSecuenciaRol
+			) throws BOException {
+		
+		try {
+			
+			objIRolesBO.eliminarRol(intSecuenciaRol);
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+	}
+	
+	@RequestMapping(value="/{secuenciaRol}",method = RequestMethod.GET)
+	public ResponseEntity<?> consultarRolId(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@PathVariable(value="secuenciaRol", required = false)  Integer  intSecuenciaRol
+			) throws BOException {
+		
+		try {
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					objIRolesBO.consultarRolId(intSecuenciaRol)), HttpStatus.OK);
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT)
+	public ResponseEntity<?> actualizaRol(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestBody RolesDTO objRolesDTO
+			) throws BOException {
+		
+		try {
+			
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIRolesBO.actualizarRol(objRolesDTO,objUserDetails.getUsername());
 			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),

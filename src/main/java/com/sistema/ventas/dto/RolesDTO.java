@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class RolesDTO {
-	private Integer secuencia_rol;
+	private Integer secuenciaRol;
 	private String nombre;
+	private Integer secuenciaModulo;
 }

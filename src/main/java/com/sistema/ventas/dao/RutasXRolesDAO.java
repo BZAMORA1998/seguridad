@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.sistema.ventas.model.RutasXRoles;
 import com.sistema.ventas.model.RutasXRolesCPK;
-import com.sistema.ventas.model.UsuarioXRoles;
 
 @Service
 public class RutasXRolesDAO extends BaseDAO<RutasXRoles, RutasXRolesCPK>{
@@ -68,8 +67,7 @@ public class RutasXRolesDAO extends BaseDAO<RutasXRoles, RutasXRolesCPK>{
 			return em.createQuery(
 						"SELECT t \n" +
 						"  FROM RutasXRoles t \n" +
-						"  WHERE t.esActivo = 'S' "+
-						"  AND   t.rutasXRolesCPK.secuenciaRol = :secuenciaRol",RutasXRoles.class)
+						"  WHERE t.rutasXRolesCPK.secuenciaRol = :secuenciaRol",RutasXRoles.class)
 						.setParameter("secuenciaRol", secuenciaRol)
 						.getResultList();
 		} catch (NoResultException e) {

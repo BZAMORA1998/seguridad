@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,14 @@ import com.sistema.ventas.dao.RolesDAO;
 import com.sistema.ventas.dao.RutasXRolesDAO;
 import com.sistema.ventas.dao.UsuarioXRolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
+import com.sistema.ventas.daoRepository.IModuloXRolesDAO;
+import com.sistema.ventas.daoRepository.IRolesDAO;
+import com.sistema.ventas.daoRepository.IRutasXRolesDAO;
+import com.sistema.ventas.daoRepository.IUsuarioXRolesDAO;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.dto.CrearRolDTO;
+import com.sistema.ventas.dto.RolesDTO;
 import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.ModuloXRoles;
 import com.sistema.ventas.model.ModuloXRolesCPK;
@@ -48,6 +54,14 @@ public class RolesBOImpl implements IRolesBO{
     private ModulosDAO objModulosDAO;
 	@Autowired
     private ModuloXRolesDAO objModuloXRolesDAO;
+	@Autowired
+    private IRutasXRolesDAO objIRutasXRolesDAO;
+	@Autowired
+    private IUsuarioXRolesDAO objIUsuarioXRolesDAO;
+	@Autowired
+    private IRolesDAO objIRolesDAO;
+	@Autowired
+    private IModuloXRolesDAO objIModuloXRolesDAO;
 
 	@Override
 	public List<ConsultarRolesDTO> consultarRolesUsuarioSesion(String username) throws BOException {
@@ -257,6 +271,160 @@ public class RolesBOImpl implements IRolesBO{
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.idUsuario"});
 		
 		return objRolesDAO.consultarRolesUsuario(intSecuenciaUsuario);
+	}
+
+
+	@Override
+	public void eliminarRol(Integer intSecuenciaRol) throws BOException {
+		
+		//Valida que el campo intSecuenciaRol sea requerida.
+		if (ObjectUtils.isEmpty(intSecuenciaRol)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
+		
+		Optional<Roles> objRoles=objIRolesDAO.findById(intSecuenciaRol);
+		
+		//Valida que exista el rol.
+		if (!objRoles.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaRol"});
+		
+		List<UsuarioXRoles> lsUsuXRoles = objUsuariosXRolesDAO.findRolAllPorRol(intSecuenciaRol);
+			
+		//Elimina los roles en la entidad UsuarioXRoles
+		if(!ObjectUtils.isEmpty(lsUsuXRoles)) {
+			for(UsuarioXRoles objUsuXRoles:lsUsuXRoles) {
+				
+				if("S".equalsIgnoreCase(objUsuXRoles.getEsActivo()))
+					throw new BOException("ven.warn.noEliminarRol");
+				
+				objIUsuarioXRolesDAO.delete(objUsuXRoles);
+			}
+		}
+		
+		List<RutasXRoles> lsRutasXRoles =objRutasXRolesDAO.findAllPorRol(intSecuenciaRol);
+		
+		//Elimina los roles en la entidad RutasXRoles
+		if(!ObjectUtils.isEmpty(lsRutasXRoles)) {
+			for(RutasXRoles objRutasXRoles:lsRutasXRoles) {
+				objIRutasXRolesDAO.delete(objRutasXRoles);
+			}
+		}
+		
+		List<ModuloXRoles> lsModuloXRoles=objModuloXRolesDAO.findModuloPorRol(intSecuenciaRol);
+		
+		//Elimina los roles en la entidad ModuloXRoles
+		if(!ObjectUtils.isEmpty(lsModuloXRoles)) {
+			for(ModuloXRoles objModuloXRoles:lsModuloXRoles) {
+				objIModuloXRolesDAO.delete(objModuloXRoles);
+			}
+		}
+		
+		//Elimina el rol
+		objIRolesDAO.delete(objRoles.get());
+
+	}
+
+
+	@Override
+	public RolesDTO consultarRolId(Integer intSecuenciaRol) throws BOException {
+		
+		//Valida que el campo intSecuenciaRol sea requerida.
+		if (ObjectUtils.isEmpty(intSecuenciaRol)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
+		
+		Optional<Roles> objRoles=objIRolesDAO.findById(intSecuenciaRol);
+		
+		//Valida que exista el rol.
+		if (!objRoles.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaRol"});
+		
+		//Valida que exista el rol.
+		if ("N".equalsIgnoreCase(objRoles.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaRol"});
+		
+		List<ModuloXRoles> lsModuloXRoles= objModuloXRolesDAO.findModuloPorRol(intSecuenciaRol);
+		
+		RolesDTO objRolesDTO=new RolesDTO();
+		objRolesDTO.setSecuenciaRol(intSecuenciaRol);
+		objRolesDTO.setNombre(objRoles.get().getNombre());
+		objRolesDTO.setSecuenciaModulo(lsModuloXRoles.get(0).getModuloXRolesCPK().getSecuenciaModulo());
+		
+		return objRolesDTO;
+		
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
+	public void actualizarRol(RolesDTO objRolesDTO,String strUsuario) throws BOException {
+		
+		//Valida que objRolesDTO.getSecuenciaRol() sea requerida.
+		if (ObjectUtils.isEmpty(objRolesDTO.getSecuenciaRol())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaRol"});
+		
+		//Valida que el campo objRolesDTO.getNombre() sea requerida.
+		if (ObjectUtils.isEmpty(objRolesDTO.getNombre())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.nombre"});
+		
+		//Valida que el campo intSecuenciaRol sea requerida.
+		if (ObjectUtils.isEmpty(objRolesDTO.getSecuenciaModulo())) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] { "ven.campos.secuenciaModulo"});
+		
+		Optional<Roles> objRoles=objIRolesDAO.findById(objRolesDTO.getSecuenciaRol());
+		
+		//Valida que exista el rol.
+		if (!objRoles.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaRol"});
+		
+		//Valida el rol este activo.
+		if ("N".equalsIgnoreCase(objRoles.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaRol"});
+		
+		Optional<Modulos> objModulos=objModulosDAO.find(objRolesDTO.getSecuenciaModulo());
+		
+		//Valida que exista el modulo.
+		if (!objModulos.isPresent()) 
+			throw new BOException("ven.warn.campoNoExiste", new Object[] { "ven.campos.secuenciaModulo"});
+		
+		//Valida que este activo el modulo.
+		if ("N".equalsIgnoreCase(objModulos.get().getEsActivo())) 
+			throw new BOException("ven.warn.campoInactivo", new Object[] { "ven.campos.secuenciaModulo"});
+		
+		if(!objRoles.get().getNombre().equalsIgnoreCase(objRolesDTO.getNombre())) {
+			Boolean booExiste=objRolesDAO.consultarRolesPorNombre(objRolesDTO.getNombre());
+			
+			//Valida si existe el rol
+			if(booExiste)
+				throw new BOException("ven.warn.nombreRolExiste");
+		}
+			
+		Optional<ModuloXRoles> objModuloXRoles= objModuloXRolesDAO.find(new ModuloXRolesCPK(objRolesDTO.getSecuenciaRol(),objRolesDTO.getSecuenciaModulo()));
+		
+		if (!objModuloXRoles.isPresent()) {
+			ModuloXRoles objModuloXRolesCrear=new ModuloXRoles();
+			objModuloXRolesCrear.setModuloXRolesCPK(new ModuloXRolesCPK(objRolesDTO.getSecuenciaRol(),objRolesDTO.getSecuenciaModulo()));
+			objModuloXRolesCrear.setEsActivo("S");
+			objModuloXRolesCrear.setUsuarioIngreso(strUsuario);
+			objModuloXRolesCrear.setFechaIngreso(new Date());
+			objModuloXRolesDAO.persist(objModuloXRolesCrear);
+		}else if("N".equalsIgnoreCase(objModuloXRoles.get().getEsActivo())) {
+			objModuloXRoles.get().setEsActivo("S");
+			objModuloXRoles.get().setUsuarioActualizacion(strUsuario);
+			objModuloXRoles.get().setFechaModificacion(new Date());
+			objModuloXRolesDAO.update(objModuloXRoles.get());
+		}
+		
+		List<ModuloXRoles> lsModuloXRoles= objModuloXRolesDAO.findModuloPorRolExc(objRolesDTO.getSecuenciaRol(),objRolesDTO.getSecuenciaModulo());
+		
+		//Elimina los otros roles ya que un modulo solo puede tener un solo rol asignado
+		if (!ObjectUtils.isEmpty(lsModuloXRoles)) {
+			for(ModuloXRoles objModXRoles:lsModuloXRoles) {
+				objIModuloXRolesDAO.delete(objModXRoles);
+			}
+		}
+		
+		objRoles.get().setNombre(objRolesDTO.getNombre().toUpperCase());
+		objIRolesDAO.save(objRoles.get());
+			
+		
 	}
 
 

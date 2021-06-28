@@ -518,6 +518,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
 		
+		if(strUsuario.equals(objUsuario.get().getUsuario()))
+			throw new BOException("ven.warn.noInactivarUsuario");
+		
 		if(("N").equalsIgnoreCase(objUsuario.get().getEsActivo()))	{
 			objUsuario.get().setEsActivo("S");
 			objUsuario.get().getPersonas().setEsActivo("S");
@@ -854,7 +857,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
-	public void eliminarUsuario(Integer intIdUsuario) throws BOException {
+	public void eliminarUsuario(Integer intIdUsuario,String strUsuario) throws BOException {
 		
 		//Valida que el campo usuario sea obligatorio
 		if (ObjectUtils.isEmpty(intIdUsuario)) 
@@ -865,6 +868,9 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		//Valida si el usuario existe
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
+		
+		if(strUsuario.equals(objUsuario.get().getUsuario()))
+			throw new BOException("ven.warn.noEliminarUsuario");
 
 		List<UsuarioXRoles> lsUsuariosXRoles=objUsuariosXRolesDAO.findRolAllPorUsuario(intIdUsuario);
 		

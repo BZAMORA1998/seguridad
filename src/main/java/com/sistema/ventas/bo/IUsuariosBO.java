@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.exceptions.BOException;
 
@@ -119,9 +118,10 @@ public interface IUsuariosBO {
 	 * 
 	 * @author Bryan Zamora
 	 * @param intIdUsuario
+	 * @param strUsuario
 	 * @return
 	 * @throws BOException
 	 */
-	public void eliminarUsuario(Integer intIdUsuario)throws BOException;
+	public void eliminarUsuario(Integer intIdUsuario,String strUsuario)throws BOException;
 
 }

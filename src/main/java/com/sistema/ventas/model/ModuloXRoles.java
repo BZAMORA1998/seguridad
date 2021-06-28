@@ -35,12 +35,12 @@ public class ModuloXRoles implements Serializable {
 	@Column(name = "usuario_ingreso")
 	private String usuarioIngreso;
 	 
-//	@Column(name = "fecha_actualizacion")
-//	private Date fechaActualizacion;
-//	
-//	@Size(max=50)
-//	@Column(name = "usuario_actualizacion")
-//	private String usuarioActualizacion;
+	@Column(name = "fecha_modificacion")
+	private Date fechaModificacion;
+	
+	@Size(max=50)
+	@Column(name = "usuario_actualizacion")
+	private String usuarioActualizacion;
 	
 	@Size(max=1)
 	@Column(name = "es_activo")

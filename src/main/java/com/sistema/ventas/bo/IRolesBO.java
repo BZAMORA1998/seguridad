@@ -6,6 +6,7 @@ import java.util.Map;
 import com.sistema.ventas.dto.ConsultarRolesDTO;
 import com.sistema.ventas.dto.ConsultarRolesRutaUsuarioDTO;
 import com.sistema.ventas.dto.CrearRolDTO;
+import com.sistema.ventas.dto.RolesDTO;
 import com.sistema.ventas.exceptions.BOException;
 
 public interface IRolesBO {
@@ -97,5 +98,37 @@ public interface IRolesBO {
 	 * @throws BOException
 	 */
 	List<ConsultarRolesDTO> consultarRolesXUsuario(Integer intSecuenciaUsuario)throws BOException;
+
+
+	/**
+	 * Elimina el rol
+	 * 
+	 * @author Bryan Zamora
+	 * @param  intSecuenciaUsuario
+	 * @return
+	 * @throws BOException
+	 */
+	void eliminarRol(Integer intSecuenciaRol) throws BOException;
+
+	/**
+	 * Consulta rol por id
+	 * 
+	 * @author Bryan Zamora
+	 * @param  intSecuenciaRol
+	 * @return
+	 * @throws BOException
+	 */
+	RolesDTO consultarRolId(Integer intSecuenciaRol) throws BOException;
+
+	/**
+	 * Actualiza el rol
+	 * 
+	 * @author Bryan Zamora
+	 * @param  objRolesDTO
+	 * @param  strUsuario
+	 * @return
+	 * @throws BOException
+	 */
+	void actualizarRol(RolesDTO objRolesDTO, String strUsuario) throws BOException;
 
 }

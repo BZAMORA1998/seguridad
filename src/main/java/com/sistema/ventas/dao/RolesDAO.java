@@ -111,15 +111,20 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select distinct a.secuencia_ruta as secuenciaRuta,a.description as description, a.nombre as nombre,b.es_select as esSelect from tbl_rutas_url a  ");
+			strJPQLBase.append("select distinct a.secuencia_ruta as secuenciaRuta, ");
+			strJPQLBase.append("a.description as description, ");
+			strJPQLBase.append("a.nombre as nombre, ");
+			strJPQLBase.append("b.es_select as esSelect ");
+			strJPQLBase.append("from tbl_rutas_url a  ");
 			strJPQLBase.append("left join ( ");
-			strJPQLBase.append("			select c.es_select,c.secuencia_ruta,c.secuencia_rol from tbl_rutas_x_roles c ");
+			strJPQLBase.append("			select c.es_select, ");
+			strJPQLBase.append("				   c.secuencia_ruta, ");
+			strJPQLBase.append("				   c.secuencia_rol ");
+			strJPQLBase.append("			from tbl_rutas_x_roles c ");
 			strJPQLBase.append(" 			where c.es_activo='S' ");
 			strJPQLBase.append(" 		   )b ");
 			strJPQLBase.append("			on b.secuencia_ruta=a.secuencia_ruta ");
-			strJPQLBase.append("			and b.secuencia_rol in (select u.secuencia_rol from tbl_usuario_x_roles u  ");
-			strJPQLBase.append("									where u.secuencia_usuario=:secuenciaUsuario ");
-			strJPQLBase.append(" 									and u.secuencia_rol=:secuenciaRol) ");
+			strJPQLBase.append("			and b.secuencia_rol = :secuenciaRol ");
 			
 			if(esPrimeraVez) {
 				strJPQLBase.append("WHERE a.secuencia_ruta_padre is null");
@@ -128,7 +133,6 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 			}
 			
 			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
-			query.setParameter("secuenciaUsuario",intSecuenciaUsuario);
 			query.setParameter("secuenciaRol",intSecuenciaRol);
 			
 			if(!esPrimeraVez)
@@ -180,6 +184,7 @@ public class RolesDAO extends BaseDAO<Roles, Integer>{
 			strJPQLBase.append("select count(1) ");
 			strJPQLBase.append("from Roles r ");
 			strJPQLBase.append("where r.nombre=:nombre ");
+			strJPQLBase.append("and r.esActivo='S' ");
 			
 			Query query = em.createQuery(strJPQLBase.toString());
 			query.setParameter("nombre",strNombre.trim().toUpperCase());

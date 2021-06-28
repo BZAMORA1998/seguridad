@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Tuple;
@@ -50,31 +51,35 @@ public class ModulosDAO extends BaseDAO<Modulos,Integer>{
 	
 	public List<ConsultarModulosDTO> consultarModulos(Integer intSecuenciaUsuario) {
 		
-		StringBuilder strJPQLBase = new StringBuilder();
-		strJPQLBase.append("SELECT m.secuencia_modulo as secuenciaModulo,m.nombre as nombre,m.url as url ,m.img as img ");
-		strJPQLBase.append("from tbl_modulo_x_roles mr,tbl_modulos m ");
-		strJPQLBase.append("where mr.secuencia_modulo=m.secuencia_modulo ");
-		strJPQLBase.append("and   mr.es_activo='S' ");
-		strJPQLBase.append("and   m.es_activo='S' ");
-		strJPQLBase.append("and mr.secuencia_rol in (select distinct r.secuencia_rol from tbl_usuario_x_roles ru, tbl_roles r ");
-		strJPQLBase.append("						where ru.secuencia_rol=r.secuencia_rol " );
-		strJPQLBase.append("						and   ru.secuencia_usuario=:secuenciaUsuario " );
-		strJPQLBase.append("  						and ru.es_activo='S'" );
-		strJPQLBase.append("  						and r.es_activo='S') ");
-		TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
-
-		query.setParameter("secuenciaUsuario", intSecuenciaUsuario);
-
-		return query.getResultList().stream()
-				.map(tuple -> ConsultarModulosDTO.builder()
-				.secuenciaModulo(tuple.get("secuenciaModulo")!=null?tuple.get("secuenciaModulo", Number.class).intValue():null)
-				.nombre(tuple.get("nombre", String.class))
-				.url(tuple.get("url", String.class))
-				.img(tuple.get("img", String.class))
-				.build())
-		.distinct()
-		.collect(Collectors.toList());
+		try {
+			StringBuilder strJPQLBase = new StringBuilder();
+			strJPQLBase.append("SELECT m.secuencia_modulo as secuenciaModulo,m.nombre as nombre,m.url as url ,m.img as img ");
+			strJPQLBase.append("from tbl_modulo_x_roles mr,tbl_modulos m ");
+			strJPQLBase.append("where mr.secuencia_modulo=m.secuencia_modulo ");
+			strJPQLBase.append("and   mr.es_activo='S' ");
+			strJPQLBase.append("and   m.es_activo='S' ");
+			strJPQLBase.append("and mr.secuencia_rol in (select distinct r.secuencia_rol ");
+			strJPQLBase.append("						from tbl_usuario_x_roles ru, tbl_roles r ");
+			strJPQLBase.append("						where ru.secuencia_rol=r.secuencia_rol " );
+			strJPQLBase.append("						and   ru.secuencia_usuario=:secuenciaUsuario " );
+			strJPQLBase.append("  						and ru.es_activo='S'" );
+			strJPQLBase.append("  						and r.es_activo='S') ");
+			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createNativeQuery(strJPQLBase.toString(), Tuple.class);
+	
+			query.setParameter("secuenciaUsuario", intSecuenciaUsuario);
+	
+			return query.getResultList().stream()
+					.map(tuple -> ConsultarModulosDTO.builder()
+					.secuenciaModulo(tuple.get("secuenciaModulo")!=null?tuple.get("secuenciaModulo", Number.class).intValue():null)
+					.nombre(tuple.get("nombre", String.class))
+					.url(tuple.get("url", String.class))
+					.img(tuple.get("img", String.class))
+					.build())
+			.distinct()
+			.collect(Collectors.toList());
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
-
-
+	
 }

@@ -236,7 +236,9 @@ public class UsuariosApi {
 		
 		try {
 			
-			objIUsuariosBO.eliminarUsuario(intIdUsuario);
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			objIUsuariosBO.eliminarUsuario(intIdUsuario,objUserDetails.getUsername());
 			
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),

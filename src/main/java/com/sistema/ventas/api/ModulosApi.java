@@ -10,10 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sistema.ventas.bo.IGeneralBO;
 import com.sistema.ventas.bo.IModulosBO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.exceptions.BOException;

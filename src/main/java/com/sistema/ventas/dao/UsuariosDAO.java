@@ -110,7 +110,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append(" FROM 	Usuarios u");
 			strJPQL.append(" 	JOIN 	u.personas per");
 			strJPQL.append(" WHERE u.esActivo is not null");
-			strJPQL.append(" AND u.usuario != :user");
 			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
@@ -120,12 +119,12 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			else if("INACTIVO".equalsIgnoreCase(strEstado))
 				strJPQL.append(" AND u.esActivo ='N'");
 			
+			strJPQL.append(" ORDER BY primerApellido,segundoApellido,primerNombre,segundoNombre ASC");
+			
 			TypedQuery<Tuple> query = (TypedQuery<Tuple>) em.createQuery(strJPQL.toString(), Tuple.class);
 			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				query.setParameter("valor",strCedulaCodigoUsuario);
-			
-			query.setParameter("user",strUser);
 			
 			query.setFirstResult(intPage * intPerPage - intPerPage).setMaxResults(intPerPage);
 			
@@ -169,8 +168,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			strJPQL.append(" 	JOIN 	u.personas per");
 			strJPQL.append(" WHERE u.esActivo is not null");
 			
-			strJPQL.append(" AND u.usuario != :user");
-			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				strJPQL.append(" AND 	(per.numeroIdentificacion=:valor or u.usuario=:valor)");
 			
@@ -185,8 +182,6 @@ public class UsuariosDAO extends BaseDAO<Usuarios, Integer>{
 			
 			if(!ObjectUtils.isEmpty(strCedulaCodigoUsuario))
 				query.setParameter("valor",strCedulaCodigoUsuario);
-			
-			query.setParameter("user",strUser);
 			
 			Long lonUsuarios=(Long) query.getSingleResult();
 			

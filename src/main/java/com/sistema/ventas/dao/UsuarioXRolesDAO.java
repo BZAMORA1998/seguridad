@@ -62,5 +62,19 @@ public class UsuarioXRolesDAO extends BaseDAO<UsuarioXRoles,UsuarioXRolesCPK>{
 			return null;
 		}
 	}
+	
+	
+	public List<UsuarioXRoles> findRolAllPorRol(Integer intSecuenciaRol) {
+		try {	
+			return em.createQuery(
+						"SELECT t \n" +
+						"  FROM UsuarioXRoles t \n" +
+						"  WHERE t.usuariosXRolesCPK.secuenciaRol = :secuenciaRol",UsuarioXRoles.class)
+						.setParameter("secuenciaRol", intSecuenciaRol)
+						.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 
 }

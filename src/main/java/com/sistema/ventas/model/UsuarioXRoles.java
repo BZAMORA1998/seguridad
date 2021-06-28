@@ -2,12 +2,10 @@ package com.sistema.ventas.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.NoResultException;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
