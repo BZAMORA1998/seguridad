@@ -50,7 +50,7 @@ public class UsuariosApi {
 			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
 			return new ResponseEntity<>(new ResponseOk(
-					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					MensajesUtil.getMensaje("ven.response.usuarioCreado", MensajesUtil.validateSupportedLocale(strLanguage)),
 					objIUsuariosBO.crearUsuario(objUsuariosDTO,objUserDetails.getUsername())), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
@@ -72,7 +72,7 @@ public class UsuariosApi {
 			objIUsuariosBO.actualizarUsuario(objUsuariosDTO,objUserDetails.getUsername());
 
 			return new ResponseEntity<>(new ResponseOk(
-					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					MensajesUtil.getMensaje("ven.response.usuarioActualizado", MensajesUtil.validateSupportedLocale(strLanguage)),
 					null), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));

@@ -181,7 +181,7 @@ public class RolesApi {
 			objIRolesBO.crearRol(objCrearRol,objUserDetails.getUsername());
 			
 			return new ResponseEntity<>(new ResponseOk(
-					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					MensajesUtil.getMensaje("ven.response.rolCreado", MensajesUtil.validateSupportedLocale(strLanguage)),
 					null), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
@@ -238,7 +238,7 @@ public class RolesApi {
 			objIRolesBO.actualizarRol(objRolesDTO,objUserDetails.getUsername());
 			
 			return new ResponseEntity<>(new ResponseOk(
-					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					MensajesUtil.getMensaje("ven.response.rolActualizado", MensajesUtil.validateSupportedLocale(strLanguage)),
 					null), HttpStatus.OK);
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
