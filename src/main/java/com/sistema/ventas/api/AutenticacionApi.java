@@ -47,6 +47,7 @@ public class AutenticacionApi {
 		
 		try {
 			AutenticacionDTO objLogin = objIAutenticacionBO.login(strAuth);
+			System.out.print("Inicia sesion");
 			logger.error("Inicia sesion");
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
