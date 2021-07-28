@@ -301,7 +301,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		objUsuarios.setUsuario(StringUtil.eliminarAcentos(objUsuariosDTO.getUsuario().toUpperCase()));
 		objUsuarios.setPersonas(objPersona);
 		objUsuarios.setEsActivo("S");
-		objUsuarios.setEsActivo("S");
+		objUsuarios.setEsPrimeraVez("S");
 		objUsuarios.setUsuarioIngreso(strUsuario);
 		objUsuarios.setFechaIngreso(datFechaActual);
 		objUsuarios.setContrasenia(StringUtil.base64Encode(strContrasenia));
