@@ -551,10 +551,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
-		
-		if(!("S").equalsIgnoreCase(objUsuario.get().getEsActivo()))
-			throw new BOException("ven.warn.idUsuarioInactivo");
-		
+
 		UsuariosDTO objUsuarioDTO=new UsuariosDTO();
 		if(objUsuario.get().getPersonas()!=null) {
 			objUsuarioDTO.setSecuenciaTipoIdentificacion(objUsuario.get().getPersonas().getTiposIdentificacion().getSecuenciaTipoIdentificacion());
