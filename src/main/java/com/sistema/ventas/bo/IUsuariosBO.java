@@ -124,4 +124,15 @@ public interface IUsuariosBO {
 	 */
 	public void eliminarUsuario(Integer intIdUsuario,String strUsuario)throws BOException;
 
+	/**
+	 * Consulta los modulos que tiene asignado el usuario
+	 * 
+	 * @author Bryan Zamora
+	 * @param incluirModulosParametrizados 
+	 * @param strUsuario
+	 * @return
+	 * @throws BOException
+	 */
+	public Object modulosUsuario(String username, Boolean incluirModulosParametrizados) throws BOException;
+
 }

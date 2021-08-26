@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sistema.ventas.bo.IUsuariosBO;
 import com.sistema.ventas.dao.CiudadDAO;
 import com.sistema.ventas.dao.GenerosDAO;
+import com.sistema.ventas.dao.ModulosDAO;
 import com.sistema.ventas.dao.PaisDAO;
 import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.ProvinciaDAO;
@@ -77,6 +78,8 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private IUsuariosDAO objIUsuariosDAO;
 	@Autowired
 	private IPersonasDAO objIPersonasDAO;
+	@Autowired
+	private ModulosDAO objModulosDAO;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
@@ -880,6 +883,23 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		Personas objPersonas =objUsuario.get().getPersonas();
 		objIUsuariosDAO.delete(objUsuario.get());
 		objIPersonasDAO.delete(objPersonas);
+	}
+
+	@Override
+	public Object modulosUsuario(String username,Boolean incluirModulosNoParametrizados) throws BOException {
+		
+		//Valida que el campo incluirModulosParametrizados sea obligatorio
+		if (ObjectUtils.isEmpty(incluirModulosNoParametrizados)) 
+			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.incluirModulosNoParametrizados"});
+
+		
+		Optional<Usuarios> objUsuario=Optional.ofNullable(objUsuariosDAO.consultarUsuarioSistema(username));
+		
+		//Valida si el usuario existe
+		if(!objUsuario.isPresent())
+			throw new BOException("ven.warn.idUsuarioNoExiste");
+		
+		return objModulosDAO.consultarModulosXUsuario(objUsuario.get().getSecuenciaUsuario(),incluirModulosNoParametrizados);
 	}
 	
 }

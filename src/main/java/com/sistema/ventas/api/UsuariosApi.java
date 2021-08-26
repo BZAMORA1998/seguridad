@@ -250,4 +250,25 @@ public class UsuariosApi {
 		}
 		
 	}
+	
+	@RequestMapping(value="/modulos",method = RequestMethod.GET)
+	public ResponseEntity<?> modulosUsuario(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam("incluirModulosNoParametrizados") Boolean incluirModulosNoParametrizados
+			) throws BOException {
+		
+		try {
+			
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+						
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					objIUsuariosBO.modulosUsuario(objUserDetails.getUsername(),incluirModulosNoParametrizados)), HttpStatus.OK);
+			
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+		
+	}
 }

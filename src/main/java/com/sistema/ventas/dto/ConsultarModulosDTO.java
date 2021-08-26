@@ -14,5 +14,6 @@ public class ConsultarModulosDTO {
 	private String nombre;
 	private String url;
 	private String img;
-	
+	private Boolean esSelect;
+	private String mnemonico;
 }
