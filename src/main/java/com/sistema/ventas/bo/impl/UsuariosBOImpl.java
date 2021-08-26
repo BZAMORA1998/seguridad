@@ -19,15 +19,18 @@ import com.sistema.ventas.bo.IUsuariosBO;
 import com.sistema.ventas.dao.CiudadDAO;
 import com.sistema.ventas.dao.GenerosDAO;
 import com.sistema.ventas.dao.ModulosDAO;
+import com.sistema.ventas.dao.ModulosXUsuarioDAO;
 import com.sistema.ventas.dao.PaisDAO;
 import com.sistema.ventas.dao.PersonasDAO;
 import com.sistema.ventas.dao.ProvinciaDAO;
 import com.sistema.ventas.dao.TiposIdentificacionDAO;
 import com.sistema.ventas.dao.UsuarioXRolesDAO;
 import com.sistema.ventas.dao.UsuariosDAO;
+import com.sistema.ventas.daoRepository.IModulosXUsuarioDAO;
 import com.sistema.ventas.daoRepository.IPersonasDAO;
 import com.sistema.ventas.daoRepository.IUsuarioXRolesDAO;
 import com.sistema.ventas.daoRepository.IUsuariosDAO;
+import com.sistema.ventas.dto.ConsultarModulosDTO;
 import com.sistema.ventas.dto.ConsultarUsuarioDTO;
 import com.sistema.ventas.dto.PersonaDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -39,6 +42,8 @@ import com.sistema.ventas.exceptions.BOException;
 import com.sistema.ventas.model.Ciudad;
 import com.sistema.ventas.model.CiudadCPK;
 import com.sistema.ventas.model.Generos;
+import com.sistema.ventas.model.ModulosXUsuario;
+import com.sistema.ventas.model.ModulosXUsuarioCPK;
 import com.sistema.ventas.model.Pais;
 import com.sistema.ventas.model.Personas;
 import com.sistema.ventas.model.Provincia;
@@ -80,6 +85,10 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	private IPersonasDAO objIPersonasDAO;
 	@Autowired
 	private ModulosDAO objModulosDAO;
+	@Autowired
+	private IModulosXUsuarioDAO objIModulosXUsuarioDAO;
+	@Autowired
+	private ModulosXUsuarioDAO objModulosXUsuarioDAO;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class})
@@ -880,26 +889,80 @@ public class UsuariosBOImpl implements IUsuariosBO{
 				objIUsuarioXRolesDAO.delete(objlsUsuariosXRoles);
 		}
 		
+		List<ModulosXUsuario>lsModulosXUsuario=objModulosXUsuarioDAO.findModuloPorUsuario(intIdUsuario);
+		
+		//Procede a eliminar en la tabla UsuarioXRoles.
+		if (!ObjectUtils.isEmpty(lsUsuariosXRoles)) {
+			for(ModulosXUsuario objlsModulosXUsuario:lsModulosXUsuario) 
+				objIModulosXUsuarioDAO.delete(objlsModulosXUsuario);
+		}
+				
 		Personas objPersonas =objUsuario.get().getPersonas();
 		objIUsuariosDAO.delete(objUsuario.get());
 		objIPersonasDAO.delete(objPersonas);
 	}
 
 	@Override
-	public Object modulosUsuario(String username,Boolean incluirModulosNoParametrizados) throws BOException {
+	public Object modulosUsuario(String username,Boolean incluirModulosNoParametrizados,Integer intSecuenciaUsuario) throws BOException {
 		
 		//Valida que el campo incluirModulosParametrizados sea obligatorio
 		if (ObjectUtils.isEmpty(incluirModulosNoParametrizados)) 
 			throw new BOException("ven.warn.campoObligatorio", new Object[] {"ven.campos.incluirModulosNoParametrizados"});
 
-		
-		Optional<Usuarios> objUsuario=Optional.ofNullable(objUsuariosDAO.consultarUsuarioSistema(username));
-		
+		Optional<Usuarios> objUsuario=null;
+		if(intSecuenciaUsuario==null || intSecuenciaUsuario==0) {
+			objUsuario=Optional.ofNullable(objUsuariosDAO.consultarUsuarioSistema(username));
+		}else {
+			objUsuario=objUsuariosDAO.find(intSecuenciaUsuario);
+		}
 		//Valida si el usuario existe
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
 		
 		return objModulosDAO.consultarModulosXUsuario(objUsuario.get().getSecuenciaUsuario(),incluirModulosNoParametrizados);
+	}
+
+	@Override
+	public void modulosUsuarioActualizar(String username, Integer intSecuenciaUsuario,
+			List<ConsultarModulosDTO> lsModulosDTO) throws BOException {
+		
+
+		Optional<Usuarios> objUsuario=objUsuariosDAO.find(intSecuenciaUsuario);
+		
+		//Valida si el usuario existe
+		if(!objUsuario.isPresent())
+			throw new BOException("ven.warn.idUsuarioNoExiste");
+		
+		lsModulosDTO.removeIf(a->a.getEsSelect()==false);
+		
+		List<ModulosXUsuario>lsModulosXUsuario=objModulosXUsuarioDAO.findModuloPorUsuario(intSecuenciaUsuario);
+		
+		for(ModulosXUsuario objModulosXUsuario:lsModulosXUsuario) {
+			if("S".equalsIgnoreCase(objModulosXUsuario.getEsActivo())) {
+				objModulosXUsuario.setEsActivo("N");
+				objModulosXUsuario.setEsSelect("N");
+				objIModulosXUsuarioDAO.save(objModulosXUsuario);
+			}
+		}
+		
+		Optional<ModulosXUsuario> optModulosXUsuario=null;
+		ModulosXUsuario objModulosXUsuario=null;
+		for(ConsultarModulosDTO objModulosDTO:lsModulosDTO) {
+			optModulosXUsuario=objIModulosXUsuarioDAO.findById(new ModulosXUsuarioCPK(intSecuenciaUsuario,objModulosDTO.getSecuenciaModulo()));
+			
+			if(optModulosXUsuario.isPresent() && "N".equalsIgnoreCase(optModulosXUsuario.get().getEsActivo())) {
+				optModulosXUsuario.get().setEsActivo("S");
+				optModulosXUsuario.get().setEsSelect("S");
+				objIModulosXUsuarioDAO.save(optModulosXUsuario.get());
+			}else if(!optModulosXUsuario.isPresent()){
+				objModulosXUsuario=new ModulosXUsuario();
+				objModulosXUsuario.setModulosXUsuarioCPK(new ModulosXUsuarioCPK(intSecuenciaUsuario,objModulosDTO.getSecuenciaModulo()));
+				objModulosXUsuario.setEsActivo("S");
+				objModulosXUsuario.setEsSelect("S");
+				objIModulosXUsuarioDAO.save(objModulosXUsuario);
+			}
+		
+		}
 	}
 	
 }

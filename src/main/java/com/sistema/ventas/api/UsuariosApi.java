@@ -1,6 +1,7 @@
 package com.sistema.ventas.api;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sistema.ventas.bo.IUsuariosBO;
+import com.sistema.ventas.dto.ConsultarModulosDTO;
 import com.sistema.ventas.dto.ContrasenaDTO;
 import com.sistema.ventas.dto.ResponseOk;
 import com.sistema.ventas.dto.UsuariosDTO;
@@ -254,7 +256,8 @@ public class UsuariosApi {
 	@RequestMapping(value="/modulos",method = RequestMethod.GET)
 	public ResponseEntity<?> modulosUsuario(
 			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
-			@RequestParam("incluirModulosNoParametrizados") Boolean incluirModulosNoParametrizados
+			@RequestParam("incluirModulosNoParametrizados") Boolean incluirModulosNoParametrizados,
+			@RequestParam("secuenciaUsuario") Integer intSecuenciaUsuario
 			) throws BOException {
 		
 		try {
@@ -263,7 +266,29 @@ public class UsuariosApi {
 						
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-					objIUsuariosBO.modulosUsuario(objUserDetails.getUsername(),incluirModulosNoParametrizados)), HttpStatus.OK);
+					objIUsuariosBO.modulosUsuario(objUserDetails.getUsername(),incluirModulosNoParametrizados,intSecuenciaUsuario)), HttpStatus.OK);
+			
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+	}
+	
+	@RequestMapping(value="/modulos",method = RequestMethod.PUT)
+	public ResponseEntity<?> modulosUsuario(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam("secuenciaUsuario") Integer intSecuenciaUsuario,
+			@RequestBody List<ConsultarModulosDTO> objModulosDTO
+			) throws BOException {
+		
+		try {
+			
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			objIUsuariosBO.modulosUsuarioActualizar(objUserDetails.getUsername(),intSecuenciaUsuario,objModulosDTO);
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					null), HttpStatus.OK);
 			
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));

@@ -2,10 +2,12 @@
 package com.sistema.ventas.bo;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sistema.ventas.dto.ConsultarModulosDTO;
 import com.sistema.ventas.dto.UsuariosDTO;
 import com.sistema.ventas.exceptions.BOException;
 
@@ -133,6 +135,17 @@ public interface IUsuariosBO {
 	 * @return
 	 * @throws BOException
 	 */
-	public Object modulosUsuario(String username, Boolean incluirModulosParametrizados) throws BOException;
+	public Object modulosUsuario(String username, Boolean incluirModulosParametrizados,Integer intSecuenciaUsuario) throws BOException;
+
+	/**
+	 * Actualizar los modulos del usuario
+	 * 
+	 * @author Bryan Zamora
+	 * @param intSecuenciaUsuario 
+	 * @param strUsuario
+	 * @return
+	 * @throws BOException
+	 */
+	public void modulosUsuarioActualizar(String username, Integer intSecuenciaUsuario,List<ConsultarModulosDTO> objModulosDTO) throws BOException;
 
 }
