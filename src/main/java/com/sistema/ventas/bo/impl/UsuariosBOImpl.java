@@ -964,5 +964,15 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		
 		}
 	}
+
+	@Override
+	public Boolean consultaPermisoModulo(String username, String strMnemonico) throws BOException {
+		
+		if("GENERAL".equalsIgnoreCase(strMnemonico)) {
+			return true;
+		}
+		
+		return objModulosXUsuarioDAO.consultaPermisoModulo(username, strMnemonico);
+	}
 	
 }

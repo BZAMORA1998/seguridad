@@ -148,4 +148,15 @@ public interface IUsuariosBO {
 	 */
 	public void modulosUsuarioActualizar(String username, Integer intSecuenciaUsuario,List<ConsultarModulosDTO> objModulosDTO) throws BOException;
 
+	/**
+	 * Consulta los si tiene permiso con el modulo
+	 * 
+	 * @author Bryan Zamora
+	 * @param intSecuenciaUsuario 
+	 * @param strUsuario
+	 * @return
+	 * @throws BOException
+	 */
+	public Boolean consultaPermisoModulo(String username, String strMnemonico) throws BOException;
+
 }

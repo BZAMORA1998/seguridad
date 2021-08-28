@@ -296,4 +296,25 @@ public class UsuariosApi {
 		}
 		
 	}
+	
+	@RequestMapping(value="/modulos/permiso",method = RequestMethod.GET)
+	public ResponseEntity<?> consultaPermisoModulo(
+			@RequestHeader(	value = "Accept-Language", 	required = false) String strLanguage,
+			@RequestParam("mnemonico") String strMnemonico
+			) throws BOException {
+		
+		try {
+			
+			UserDetails objUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			return new ResponseEntity<>(new ResponseOk(
+					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
+					objIUsuariosBO.consultaPermisoModulo(objUserDetails.getUsername(),strMnemonico)), HttpStatus.OK);
+			
+		} catch (BOException be) {
+			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));
+			throw new CustomExceptionHandler(be.getTranslatedMessage(strLanguage), be.getData());
+		}
+		
+	}
 }
