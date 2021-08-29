@@ -83,14 +83,15 @@ public class ModulosXUsuarioDAO extends BaseDAO<ModulosXUsuario,ModulosXUsuarioC
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append(" select count(1) ");
+			strJPQLBase.append(" select count(mu.secuencia_modulo) ");
 			strJPQLBase.append(" from tbl_modulos_x_usuario mu ");
 			strJPQLBase.append("	join tbl_usuarios usu ");
 			strJPQLBase.append("		on usu.secuencia_usuario=mu.secuencia_usuario ");
 			strJPQLBase.append("	join tbl_modulos mo ");
 			strJPQLBase.append(" 		on mo.secuencia_modulo=mu.secuencia_modulo ");
 			strJPQLBase.append(" where usu.usuario=:usuario");
-			strJPQLBase.append(" and mo.mnemonico=:mnemonico");
+			strJPQLBase.append(" and mo.mnemonico=:mnemonico ");
+			strJPQLBase.append(" and mu.es_activo='S' ");
 			
 			@SuppressWarnings("unchecked")
 			Query query = em.createNativeQuery(strJPQLBase.toString());
