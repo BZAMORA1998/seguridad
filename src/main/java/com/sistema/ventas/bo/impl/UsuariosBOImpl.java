@@ -903,7 +903,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 	}
 
 	@Override
-	public Object modulosUsuario(String username,Boolean incluirModulosNoParametrizados,Integer intSecuenciaUsuario) throws BOException {
+	public Object modulosUsuario(String username,Boolean incluirModulosNoParametrizados,Integer intSecuenciaUsuario,String strLanguaje) throws BOException {
 		
 		//Valida que el campo incluirModulosParametrizados sea obligatorio
 		if (ObjectUtils.isEmpty(incluirModulosNoParametrizados)) 
@@ -919,7 +919,7 @@ public class UsuariosBOImpl implements IUsuariosBO{
 		if(!objUsuario.isPresent())
 			throw new BOException("ven.warn.idUsuarioNoExiste");
 		
-		return objModulosDAO.consultarModulosXUsuario(objUsuario.get().getSecuenciaUsuario(),incluirModulosNoParametrizados);
+		return objModulosDAO.consultarModulosXUsuario(objUsuario.get().getSecuenciaUsuario(),incluirModulosNoParametrizados,strLanguaje);
 	}
 
 	@Override

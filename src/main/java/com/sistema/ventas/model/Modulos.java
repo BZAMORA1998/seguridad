@@ -29,6 +29,9 @@ public class Modulos {
 	@Column(name = "nombre")
     private String nombre;
 	
+	@Column(name = "nombre_en")
+    private String nombreEn;
+	
 	@Column(name = "es_activo")
     private String esActivo;
 	

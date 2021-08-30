@@ -266,7 +266,7 @@ public class UsuariosApi {
 						
 			return new ResponseEntity<>(new ResponseOk(
 					MensajesUtil.getMensaje("ven.response.ok", MensajesUtil.validateSupportedLocale(strLanguage)),
-					objIUsuariosBO.modulosUsuario(objUserDetails.getUsername(),incluirModulosNoParametrizados,intSecuenciaUsuario)), HttpStatus.OK);
+					objIUsuariosBO.modulosUsuario(objUserDetails.getUsername(),incluirModulosNoParametrizados,intSecuenciaUsuario,strLanguage)), HttpStatus.OK);
 			
 		} catch (BOException be) {
 			logger.error(" ERROR => " + be.getTranslatedMessage(strLanguage));

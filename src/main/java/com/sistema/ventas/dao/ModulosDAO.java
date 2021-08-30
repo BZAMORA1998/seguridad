@@ -83,11 +83,11 @@ public class ModulosDAO extends BaseDAO<Modulos,Integer>{
 		}
 	}
 	
-	public List<ConsultarModulosDTO> consultarModulosXUsuario(Integer intSecuenciaUsuario,Boolean incluirModulosNoParametrizados) {
+	public List<ConsultarModulosDTO> consultarModulosXUsuario(Integer intSecuenciaUsuario,Boolean incluirModulosNoParametrizados,String strLanguaje) {
 		
 		try {
 			StringBuilder strJPQLBase = new StringBuilder();
-			strJPQLBase.append("select distinct m.secuencia_modulo as secuenciaModulo,m.nombre as nombre,IFNULL(mu.es_select,'N') as esSelect,m.url as url,m.mnemonico as mnemonico ");
+			strJPQLBase.append("select distinct m.secuencia_modulo as secuenciaModulo,m.nombre as nombre,m.nombre_en as nombreEn,IFNULL(mu.es_select,'N') as esSelect,m.url as url,m.mnemonico as mnemonico ");
 			strJPQLBase.append("from tbl_modulos m ");
 			
 			if(incluirModulosNoParametrizados!=null && incluirModulosNoParametrizados) {
@@ -107,16 +107,30 @@ public class ModulosDAO extends BaseDAO<Modulos,Integer>{
 	
 			query.setParameter("secuenciaUsuario", intSecuenciaUsuario);
 	
-			return query.getResultList().stream()
-					.map(tuple -> ConsultarModulosDTO.builder()
-					.secuenciaModulo(tuple.get("secuenciaModulo")!=null?tuple.get("secuenciaModulo", Number.class).intValue():null)
-					.nombre(tuple.get("nombre", String.class))
-					.url(tuple.get("url", String.class))
-					.mnemonico(tuple.get("mnemonico", String.class))
-					.esSelect("S".equalsIgnoreCase(tuple.get("esSelect", String.class))?true:false)
-					.build())
-			.distinct()
-			.collect(Collectors.toList());
+			String[] arrLanguaje=strLanguaje.split(",");
+			if(arrLanguaje[0].equals("en-US")) {
+				return query.getResultList().stream()
+						.map(tuple -> ConsultarModulosDTO.builder()
+						.secuenciaModulo(tuple.get("secuenciaModulo")!=null?tuple.get("secuenciaModulo", Number.class).intValue():null)
+						.nombre(tuple.get("nombreEn", String.class))
+						.url(tuple.get("url", String.class))
+						.mnemonico(tuple.get("mnemonico", String.class))
+						.esSelect("S".equalsIgnoreCase(tuple.get("esSelect", String.class))?true:false)
+						.build())
+						.distinct()
+						.collect(Collectors.toList());
+			}else {
+				return query.getResultList().stream()
+						.map(tuple -> ConsultarModulosDTO.builder()
+						.secuenciaModulo(tuple.get("secuenciaModulo")!=null?tuple.get("secuenciaModulo", Number.class).intValue():null)
+						.nombre(tuple.get("nombre", String.class))
+						.url(tuple.get("url", String.class))
+						.mnemonico(tuple.get("mnemonico", String.class))
+						.esSelect("S".equalsIgnoreCase(tuple.get("esSelect", String.class))?true:false)
+						.build())
+						.distinct()
+						.collect(Collectors.toList());
+			}
 		} catch (NoResultException e) {
 			return null;
 		}

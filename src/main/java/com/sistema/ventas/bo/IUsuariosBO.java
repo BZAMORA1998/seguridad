@@ -131,11 +131,12 @@ public interface IUsuariosBO {
 	 * 
 	 * @author Bryan Zamora
 	 * @param incluirModulosParametrizados 
+	 * @param strLanguage 
 	 * @param strUsuario
 	 * @return
 	 * @throws BOException
 	 */
-	public Object modulosUsuario(String username, Boolean incluirModulosParametrizados,Integer intSecuenciaUsuario) throws BOException;
+	public Object modulosUsuario(String username, Boolean incluirModulosParametrizados,Integer intSecuenciaUsuario, String strLanguage) throws BOException;
 
 	/**
 	 * Actualizar los modulos del usuario
